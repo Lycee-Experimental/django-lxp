@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% load crispy_forms_filters %}
+{% load i18n %}
+{% load crispy_forms_tags %}
+
+{% block head-javascript %}
+{% endblock %}
+
+{% block stylesheet %}
+{% endblock stylesheet %}
+  {{ form.media }}
+
+{% block content %}
+<h1 class=text-center >Inscription au Lycée Expérimental</h1>
+        {{ wizard.form.media }}
+<div class="container">
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="formwizard">
+                <p>Étape {{ wizard.steps.step1 }} sur {{ wizard.steps.count }}  -   {{ wizard.form.name }}</p>
+                <form action="" method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                <table>
+                    {{ wizard.management_form }}
+                    {% if wizard.form.forms %}
+                        {{ wizard.form.management_form }}
+                        {% for form in wizard.form.forms %}
+                           {% crispy form %}
+                        {% endfor %}
+                    {% else %}
+                           {% crispy wizard.form %}
+                    {% endif %}
+                </table>
+                {%  comment %} Décommenter pour avoir des indications sur ce qui empèche la soumission de la form
+                {{ wizard.form.non_field_errors }}
+                {{ wizard.form.errors }}
+                {% endcomment %}
+                {% if wizard.steps.prev %}
+                    <button class="btn btn-outline-danger" name="wizard_goto_step" type="submit" value="{{ wizard.steps.prev }}"><span class="fa fa-arrow-left" aria-hidden="true"></span> Précédent</button>
+                {% endif %}
+                <button class="btn btn-outline-success float-end" name="wizard_goto_step" type="submit" > Suivant <span class="fa fa-arrow-right" aria-hidden="true"></span></button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content %}

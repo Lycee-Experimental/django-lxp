@@ -1,0 +1,51 @@
+h1,h2 {text-align: center;}
+p.valeur {font: 32pt 'Comic Sans MS'}
+div.inline { float:left; }
+
+
+@media print {
+    .container {
+    width: auto;
+    }
+    .row {
+        display: flex;
+        flex-direction: row;
+    }
+    .col-md-4 {
+      flex-basis: 33.33%;
+    }
+}
+@page {
+    size: "A4";
+    margin: 3.5cm 1.5cm 3cm 1.5cm;
+
+
+    @top-left {
+    display: inline-block;
+    width: 120px;
+    height: 120px;
+    margin-right: 5px;
+    content: "";
+    background: url("../logolxp.jpeg") no-repeat 0 0;
+    background-size: 100%;
+    }
+    @top-center {
+        white-space: pre;
+        text-align: left;
+        font-size: 8pt;
+        content: element(header, last-except) ;
+    }
+
+    @bottom-center {
+        white-space: pre;
+        text-align: left;
+        font-size: 8pt;
+        content: "Web : https://www.lycee-experimental.org" "\a"
+                 "Email : contact@lycee-experimental.org" "\a"
+                 "Tel : 02 40 66 78 52"
+                 "\a\a"
+                 "Page " counter(page)
+                 " sur " counter(pages);
+    }
+
+}

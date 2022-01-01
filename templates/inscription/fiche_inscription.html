@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+{% load verbose_names %}
+{% load static %}
+ {% load i18n %}
+{% block head-javascript %}
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i,900" rel="stylesheet" />
+    <link href="{% static 'css/pdf.css' %}" rel="stylesheet">
+
+{% endblock %}
+
+{% block content %}
+ {% comment %}
+Pour utiliser le tag créé dans templatetags/verbose_names
+{% get_verbose_field_name fiche "last_name" %} :  {{ fiche.last_name }}
+{% endcomment %}
+
+    <h1 class="header"> Fiche d'inscription </h1>    <h2 class="header"> Année 2022-2023</h2>
+    <div class="container">
+ {# NOM PRENOM #}
+    <div class="border row">
+        <div class="col-10">
+            <h1> {{ fiche.first_name }} {{ fiche.last_name }} </h1>
+            <div> {{ fiche.address }} </div>
+        </div>
+        <div class="col-2">
+            <img width="200px"  src="{{ fiche.photo.url }}"/>
+        </div>
+    </div>
+{% for field, val in fiche %}
+    {% if forloop.first %}<div class="row">{% endif %}
+    <div class="border col-md-4">
+    <p>{{ field }} : </p>
+
+    {% if val.year %}
+        <p class="valeur">{{ val|date:"d/m/Y" }}</p>
+    {% else %}
+        <p class="valeur">{{ val }}</p>
+    {% endif %}
+
+    </div>
+
+    {% if forloop.counter|divisibleby:3 %}</div><div class="row">{% endif %}
+    {% if forloop.last %}</div>{% endif %}
+{% endfor %}
+</div>
+{% endblock %}
