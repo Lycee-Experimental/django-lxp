@@ -84,8 +84,16 @@ def nom_photo(instance, filename):
     return os.path.join(upload_to, filename)
 
 
+def coordonnees(base):
+    """Renvoie un tuple contenant les coordonnées [latitude, longitude] de chaque élève"""
+    adresses=()
+    for eleve in base:
+        adresses += ([eleve.address.latitude, eleve.address.longitude],)
+    return adresses
+
+
 def create_hash():
-    """This function generate 10 character long hash"""
+    """Génère une chaine de 10 caractères aléatoires"""
     hash = hashlib.sha1()
     hash.update(str(time.time()).encode('utf-8'))
     return  hash.hexdigest()[:-10]
@@ -94,6 +102,7 @@ def create_hash():
 class MediaStorage(S3Boto3Storage):
     location = 'media'
     file_overwrite = False
+
 
 class StaticStorage(S3Boto3Storage):
     location = 'static'

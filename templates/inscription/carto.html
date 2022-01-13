@@ -1,0 +1,21 @@
+{% load leaflet_tags %}
+<html>
+<head>
+    {% leaflet_js %}
+    {% leaflet_css %}
+    <style>
+      .leaflet-container { height: 100%; }
+    </style>
+</head>
+
+<body>
+    {% leaflet_map "mymap" callback="window.map_init_basic" %}
+</body>
+
+<script>
+    function map_init_basic (map, options) {
+        {% for address in adresses %}
+            L.marker({{ address }}).addTo(map);
+        {% endfor %}
+    }
+</script>
