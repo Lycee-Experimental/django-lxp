@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'formtools',
     'address',
     'storages',
+    'leaflet',
 ]
 
 MIDDLEWARE = [
@@ -104,6 +105,22 @@ DATABASES = {
     }
 }
 
+LEAFLET_CONFIG = {
+    # Configuration de la cartographie
+# On centre sur la France avec un zoom qui permet de la voir en entier
+'DEFAULT_CENTER': (46.36, 1.52),
+'DEFAULT_ZOOM': 6,
+# On utilise un fond de carte dark
+'TILES': 'http://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}.png',
+# TODO : implémenter les clusters de points
+'PLUGINS': {
+    'markercluster': {
+        'css': ['https://unpkg.com/leaflet.markercluster@1.5.3/dist/MarkerCluster.css'],
+        'js': 'https://unpkg.com/leaflet.markercluster@1.5.3/dist/leaflet.markercluster.js',
+        'auto-include': True,
+        },
+    }
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators

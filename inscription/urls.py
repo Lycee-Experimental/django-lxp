@@ -4,7 +4,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 
 from djangoLxp import settings
-from .views import InscriptionView, FormulaireInscription, form_list, fiche, fiche_pdf
+from .views import InscriptionView, FormulaireInscription, form_list, fiche, fiche_pdf, carto
 
 app_name = 'inscription'
 
@@ -14,6 +14,8 @@ urlpatterns = [
     path('<int:id>/<hash>', FormulaireInscription.as_view(form_list), name='update'),
     path('fiche/<int:id>/<hash>', fiche, name='fiche'),
     path('pdf/<int:id>/<hash>', fiche_pdf, name='pdf'),
+    path('carto', carto, name='carto'),
+
 ]
 
 # Serving the media files in development mode

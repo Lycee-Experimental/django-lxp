@@ -20,7 +20,7 @@ from .models import BaseEleve
 # Tableau des inscrits
 from .tables import ListeEleveTableau
 # Une vue pour afficher les inscriptions filtées
-from .utils import PagedFilteredTableView, MediaStorage
+from .utils import PagedFilteredTableView, MediaStorage, coordonnees
 # Nos différents formulaires
 from .forms import InscriptionForm1, InscriptionForm2, InscriptionForm3, ListeEleveForm
 ### Librairie weasyprint pour la génération de PDF
@@ -114,3 +114,10 @@ class InscriptionView(PagedFilteredTableView):
 
     def get_queryset(self):
         return BaseEleve.objects.filter()
+
+
+def carto(request, **kwargs):
+    """
+    Affichage de la carte des adresses
+    """
+    return render(request, 'inscription/carto.html', {'adresses': coordonnees(BaseEleve.objects.all())})
