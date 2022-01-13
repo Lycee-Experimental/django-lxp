@@ -50,3 +50,4 @@ La visualisation de tableaux est simplifiée par la librairie [django-tables2](h
 
 L'export de pages web sous forme de PDF est réalisé par la librairie [Weasyprint](https://weasyprint.org/).
 
+La cartographie est obtenue avec [django-leaflet](https://github.com/makinacorpus/django-leaflet).
