@@ -1,14 +1,35 @@
 from django.db import models
 from django_countries.fields import CountryField
 from address.models import AddressField
-import hashlib
-import time
 from .utils import nom_photo, create_hash
+
+
+class Departement(models.Model):
+    """Base de donnée des départements avec code INSEE.
+    Le données sont importées depuis le fichier CSV grâce à la commande python manage.py departement"""
+    code = models.CharField(max_length=3, verbose_name="Code INSEE")
+    name = models.CharField(max_length=50, verbose_name="Département")
+
+    def __str__(self):
+        """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
+        return  u'%s - %s' % (self.code, self.name)
+
+
+class Commune(models.Model):
+    """Base de donnée des communes avec code INSEE et département d'appartenance.
+    Le données sont importées depuis le fichier CSV grâce à la commande python manage.py commune"""
+    code = models.CharField(max_length=5, verbose_name="Code INSEE")
+    name = models.CharField(max_length=50, verbose_name="Commune")
+    departement = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département")
+
+    def __str__(self):
+        """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
+        return  u'%s' % (self.name)
 
 
 class BaseEleve(models.Model):
     """
-    Modèle de base de dennée BaseEleve
+    Modèle de base de donnée BaseEleve
     On définit une manière d'itérer le modèle pour faciliter son affichage dans un template
     # https://stackoverflow.com/questions/14496978/fields-verbose-name-in-templates
     J'ai remplacé value_to_string par value_from_object pour filtrer la date dans le template : if val.year ...
@@ -36,6 +57,8 @@ class BaseEleve(models.Model):
         ('Quai', 'Quai')
     )
 
+    commune_naissance = models.ForeignKey(Commune, on_delete=models.CASCADE, verbose_name="Commune de naissance")
+    departement_naissance = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département de naissance")
     address = AddressField(verbose_name="Adresse")
     civility = models.CharField(max_length=3, choices=CIVILITY_CHOICES,
                                 default='M.', verbose_name="Civilité")

@@ -5,6 +5,8 @@ from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Fieldset, Layout, Submit
 from .models import BaseEleve
 from .utils import CaptchaWizardField
+# Pour l'autocomplétion de la commune en fonction du département choisi
+from dal import autocomplete
 
 
 class ListeEleveForm(FormHelper):
@@ -66,6 +68,8 @@ class InscriptionForm1(forms.ModelForm):
             'civility',
             'last_name',
             'first_name',
+            'departement_naissance',
+            'commune_naissance',
             'birth_date',
             'birth_place',
             'birth_country',
@@ -92,13 +96,19 @@ class InscriptionForm1(forms.ModelForm):
         # Modèle utilisé et entrées à renseigner
         model = BaseEleve
         fields = ['address', 'civility', 'last_name', 'first_name', 'birth_date', 'birth_place', 'birth_country',
-                  'photo',]
+                  'photo', 'commune_naissance', 'departement_naissance']
         # Ajout d'un date picker au format='%Y-%m-%d' pour qu'il affiche les valeurs initiales lors des update
         # https://stackoverflow.com/questions/58294769/django-forms-dateinput-not-populating-from-instance
         widgets = {
-            'birth_date': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'})
+            'birth_date': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
+            'commune_naissance': autocomplete.ModelSelect2(url='linked_data',
+                                              forward=('departement_naissance',))
         }
 
+    class Media:
+        js = (
+            'linked_data.js',
+        )
 
 class InscriptionForm2(forms.ModelForm):
     name = 'Adresse'

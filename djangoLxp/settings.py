@@ -56,6 +56,8 @@ INSTALLED_APPS = [
     'address',
     'storages',
     'leaflet',
+    'dal_select2',
+    'dal',
 ]
 
 MIDDLEWARE = [
@@ -147,7 +149,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if USE_S3:
 # Si stockage des fichiers statiques et média sur AWS S3
-
     # Les codes secrets sont dans les variables d'environnement
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
