@@ -13,7 +13,7 @@ class Command(BaseCommand):
         with open('inscription/data/departement.csv', "r") as csv_file:
             data = list(csv.reader(csv_file, delimiter=";"))
             for row in data:
-                Departement.objects.create(code=row[0], nom=row[1])
+                Departement.objects.create(code=row[0], name=row[1])
         end_time = timezone.now()
         self.stdout.write(
             self.style.SUCCESS(

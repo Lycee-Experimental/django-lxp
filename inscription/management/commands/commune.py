@@ -20,7 +20,7 @@ class Command(BaseCommand):
                 departement = Departement.objects.get(code=dep_code)
                 Commune.objects.create(
                     code=row[0],
-                    nom=row[1],
+                    name=row[1],
                     departement=departement
                 )
         end_time = timezone.now()
