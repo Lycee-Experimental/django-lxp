@@ -33,7 +33,7 @@ class PagedFilteredTableView(SingleTableView):
 
 
 class CaptchaWizardField(CaptchaField):
-    """## Une classe pour redéfinir le captcha pour qu'il marche avec le wizard (double vérif)
+    """Une classe pour redéfinir le captcha pour qu'il marche avec le wizard (double vérif)
     """
 
     def __init__(self, *args, **kwargs):
@@ -72,6 +72,7 @@ class CaptchaWizardField(CaptchaField):
 
 
 def nom_photo(instance, filename):
+    """"Définit le nom de la photo uploadée à partir du nom/prénom de l'élève."""
     upload_to = 'photos'
     ext = filename.split('.')[-1]
     # get filename
@@ -85,7 +86,8 @@ def nom_photo(instance, filename):
 
 
 def coordonnees(base):
-    """Renvoie un tuple contenant les coordonnées [latitude, longitude] de chaque élève"""
+    """Renvoie un tuple contenant les coordonnées [latitude, longitude] de chaque élève.
+    Pour affichage avec leaflet."""
     adresses=()
     for eleve in base:
         adresses += ([eleve.address.latitude, eleve.address.longitude],)

@@ -1,6 +1,8 @@
 from __future__ import unicode_literals
 
 import os
+
+from dal import autocomplete
 from django.core.files.storage import FileSystemStorage
 from django.http import HttpResponse
 from django.template.loader import render_to_string
@@ -121,3 +123,14 @@ def carto(request, **kwargs):
     Affichage de la carte des adresses
     """
     return render(request, 'inscription/carto.html', {'adresses': coordonnees(BaseEleve.objects.all())})
+
+
+class Autocomplete(autocomplete.Select2QuerySetView):
+    """Une vue pour permettre l'autocomplétion de recherche de commune par département."""
+    def get_queryset(self):
+        qs = super(Autocomplete, self).get_queryset()
+        dep = self.forwarded.get('departement_naissance', None)
+
+        if dep:
+            qs = qs.filter(departement_id=dep)
+        return qs
