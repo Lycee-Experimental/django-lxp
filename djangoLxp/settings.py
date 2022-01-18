@@ -14,7 +14,7 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_URL='/admin/login/'
 
 ALLOWED_HOSTS = ['davy39.pythonanywhere.com', '127.0.0.1', 'https://lxp-app.herokuapp.com', 'inscription.cf']
-CSRF_TRUSTED_ORIGINS = ['https://inscription.cf','http://lxp-app.herokuapp.com','http://127.0.0.1','https://lxp-app.herokuapp.com','https://127.0.0.1',]
+CSRF_TRUSTED_ORIGINS = ['https://inscription.cf','https://main.inscription.cf','http://127.0.0.1', 'https://127.0.0.1',]
 
 MIGRATION_MODULES = {'captcha': 'migrations.captcha', 'address': 'migrations.address', 'inscription': 'migrations.inscription'}
 
