@@ -7,7 +7,7 @@ from .utils import nom_photo, create_hash
 class Departement(models.Model):
     """Base de donnée des départements avec code INSEE.
     Le données sont importées depuis le fichier CSV grâce à la commande python manage.py departement"""
-    code = models.CharField(max_length=3, verbose_name="Code INSEE")
+    code = models.CharField(max_length=4, verbose_name="Code INSEE")
     name = models.CharField(max_length=50, verbose_name="Département")
 
     def __str__(self):
@@ -18,7 +18,7 @@ class Departement(models.Model):
 class Commune(models.Model):
     """Base de donnée des communes avec code INSEE et département d'appartenance.
     Le données sont importées depuis le fichier CSV grâce à la commande python manage.py commune"""
-    code = models.CharField(max_length=5, verbose_name="Code INSEE")
+    code = models.CharField(max_length=6, verbose_name="Code INSEE")
     name = models.CharField(max_length=50, verbose_name="Commune")
     departement = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département")
 
