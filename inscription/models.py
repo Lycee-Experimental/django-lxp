@@ -8,7 +8,7 @@ class Sociopro(models.Model):
     """Base de donnée des codes socioprofessionnels.
     Le données sont importées depuis le fichier CSV grâce à la commande python manage.py sociopro"""
     code = models.CharField(max_length=4, verbose_name="Code Sociopro")
-    name = models.CharField(max_length=50, verbose_name="Catégorie sociopro")
+    name = models.CharField(max_length=100, verbose_name="Catégorie sociopro")
 
     def __str__(self):
         """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
