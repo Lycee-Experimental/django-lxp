@@ -130,6 +130,9 @@ class InscriptionForm1(forms.ModelForm):
         }
 
     class Media:
+        css = {
+                  'screen': ('css/custom-dark.css',),
+              }
         js = (
             'linked_data.js',
         )
