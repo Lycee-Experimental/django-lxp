@@ -18,7 +18,7 @@ from formtools.wizard.views import SessionWizardView
 from djangoLxp import settings
 from .filters import ListeEleveFiltre
 # Base BaseEleve
-from .models import BaseEleve
+from .models import BaseEleve, Pays
 # Tableau des inscrits
 from .tables import ListeEleveTableau
 # Une vue pour afficher les inscriptions filtées
@@ -52,7 +52,7 @@ def fiche_pdf(request, **kwargs):
     response = HttpResponse(content_type="application/pdf")
     response['Content-Disposition'] = "inline; filename=fiche-{name}-{date}.pdf".format(
         date=timezone.now().strftime('%Y-%m-%d'),
-        name=slugify(eleve.first_name),
+        name=slugify(eleve.prenom),
     )
     html = render_to_string("inscription/fiche_inscription.html", {
         'fiche': eleve,
@@ -125,12 +125,20 @@ def carto(request, **kwargs):
     return render(request, 'inscription/carto.html', {'adresses': coordonnees(BaseEleve.objects.all())})
 
 
-class Autocomplete(autocomplete.Select2QuerySetView):
+class AutocompleteCommune(autocomplete.Select2QuerySetView):
     """Une vue pour permettre l'autocomplétion de recherche de commune par département."""
     def get_queryset(self):
-        qs = super(Autocomplete, self).get_queryset()
+        qs = super(AutocompleteCommune, self).get_queryset()
         dep = self.forwarded.get('departement_naissance', None)
 
         if dep:
             qs = qs.filter(departement_id=dep)
+        return qs
+
+
+class AutocompletePays(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Pays.objects.all().order_by('name')
+        if self.q:
+            qs = qs.filter(name__istartswith=self.q)
         return qs
