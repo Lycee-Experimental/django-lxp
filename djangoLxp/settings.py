@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'leaflet',
     'dal_select2',
     'dal',
+    "phonenumber_field",
 ]
 
 MIDDLEWARE = [

@@ -28,8 +28,8 @@ class ListeEleveForm(FormHelper):
                 Div(
                     # les champs à chercher suivi de __filtre avec le nom du filtre déclaré pour chaque champ dans filter.py
                     # InlineField("birth_name__icontains", css_class='form-group col-4'),
-                    InlineField("first_name", wrapper_class='col'),
-                    InlineField("last_name__icontains", wrapper_class='col'),
+                    InlineField("prenom_name", wrapper_class='col'),
+                    InlineField("nom__icontains", wrapper_class='col'),
                     css_class="row",
                 ),
                 css_class="col-10 border p-3",
@@ -49,7 +49,8 @@ class InscriptionForm1(forms.ModelForm):
     """
     ### Le nom du formulaire, affiché dans le template (wizard.form.name)
     name = 'Identité'
-
+    # mail de confirmation
+    confirmation_email = forms.EmailField(label="Confirmation de l'email", required=False)
     def __init__(self, *args, **kwargs):
         """
         Surcharge de l'initialisation du formulaire
@@ -66,43 +67,66 @@ class InscriptionForm1(forms.ModelForm):
         # Liste des champs du modèle à afficher
         self.helper.layout = Layout(
             'civility',
-            'last_name',
-            'first_name',
+            'genre',
+            'nom',
+            'prenom',
+            'pays_naissance',
             'departement_naissance',
             'commune_naissance',
-            'birth_date',
-            'birth_place',
-            'birth_country',
+            'date_naissance',
             'address',
+            'telephone',
             'photo',
+            'email',
+            'confirmation_email',
         )
 
     def clean(self):
         """Fonction pour contrôler les entrées"""
-        last_name = self.cleaned_data['last_name']
-        first_name = self.cleaned_data['first_name']
+        nom = self.cleaned_data['nom']
+        prenom = self.cleaned_data['prenom']
         # On vérifie que le couple Nom/Prénom n'est pas déjà dans la base
-        check = BaseEleve.objects.filter(first_name=first_name).filter(last_name=last_name)
+        check = BaseEleve.objects.filter(nom=nom).filter(prenom=prenom)
         # On exlut l'entrée en cours de cette recherche pour permettre les updates
         if self.instance:
             check = check.exclude(id=self.instance.id)
         # On affiche le message d'erreur
         if check.exists():
-            msg = "{} {} est déjà dans la base.".format(first_name, last_name)
-            self.add_error('last_name', msg)
-            self.add_error('first_name', msg)
+            msg = "{} {} est déjà dans la base.".format(nom, prenom)
+            self.add_error('nom', msg)
+            self.add_error('prenom', msg)
+
+    def clean_confirmation_mail(self):
+        """
+        Méthode pour vérifier que le mail correspond bien au
+        mail de confirmation lors de la validation du formulaire
+        """
+        confirmation_email = self.cleaned_data['confirmation_email']
+        mail = self.cleaned_data['email']
+        # Si l'instance (model) a déjà une ID c'est à dire que c'est un Update d'une entrée existante
+        if self.instance.id:
+            # On vérifie juste que l'email n'a pas été changé
+            if mail == self.instance.email:
+                return confirmation_email
+        # Si c'est une nouvelle entrée ou si l'email à changé, on compare l'email et la confirmation
+        if mail != confirmation_email:
+            raise forms.ValidationError(
+                "Le mail et le mail de confirmation ne sont pas identiques")
+        return confirmation_email
+
 
     class Meta:
         # Modèle utilisé et entrées à renseigner
         model = BaseEleve
-        fields = ['address', 'civility', 'last_name', 'first_name', 'birth_date', 'birth_place', 'birth_country',
-                  'photo', 'commune_naissance', 'departement_naissance']
+        fields = ['address', 'civility', 'genre', 'nom', 'prenom', 'date_naissance', 'pays_naissance',
+                  'photo', 'commune_naissance', 'departement_naissance', 'telephone', 'email', 'confirmation_email']
         # Ajout d'un date picker au format='%Y-%m-%d' pour qu'il affiche les valeurs initiales lors des update
         # https://stackoverflow.com/questions/58294769/django-forms-dateinput-not-populating-from-instance
         widgets = {
-            'birth_date': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
+            'date_naissance': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'commune_naissance': autocomplete.ModelSelect2(url='linked_data',
-                                              forward=('departement_naissance',))
+                                              forward=('departement_naissance',)),
+            'pays_naissance': autocomplete.ModelSelect2(url='pays')
         }
 
     class Media:
@@ -111,7 +135,7 @@ class InscriptionForm1(forms.ModelForm):
         )
 
 class InscriptionForm2(forms.ModelForm):
-    name = 'Adresse'
+    name = 'Responsables légaux'
 
     def __init__(self, *args, **kwargs):
         """
@@ -129,38 +153,26 @@ class InscriptionForm2(forms.ModelForm):
         # Affichage de ton formulaire
         self.helper.layout = Layout(
             # Liste des champs à afficher
-            'street_number',
-            'street_type',
-            'street',
-            'comp_1',
-            'comp_2',
-            'city',
-            'zip_code',
-            'country',
-            'phone',
+            'type_resp1', 'nom_resp1', 'prenom_resp1', 'adresse_resp1', 'tel_resp1', 'email_resp1', 'sociopro_resp1',
+            'resp2', 'type_resp2','nom_resp2', 'prenom_resp2', 'adresse_resp2', 'tel_resp2', 'email_resp2',
+            'sociopro_resp2',
+
         )
 
     class Meta:
         # Modèle utilisé et entrées à renseigner
         model = BaseEleve
-        fields = ['street_number',
-                  'street_type',
-                  'street',
-                  'comp_1',
-                  'comp_2',
-                  'city',
-                  'zip_code',
-                  'country',
-                  'phone', ]
+        fields = ['nom_resp1','prenom_resp1', 'nom_resp2', 'prenom_resp2', 'adresse_resp1', 'adresse_resp2',
+                  'tel_resp1', 'tel_resp2', 'email_resp1', 'email_resp2', 'sociopro_resp1', 'sociopro_resp2',
+                  'type_resp1', 'type_resp2', 'resp2']
 
 
 class InscriptionForm3(forms.ModelForm):
-    name = 'Validation'
+    name = 'Scolarité'
     # Ajout des champs supplémentaires au modèle
     # captcha
     captcha = CaptchaWizardField()
-    # mail de confirmation
-    confirmation_mail = forms.EmailField(label="Mail de confirmation", required=False)
+
 
     def __init__(self, *args, **kwargs):
         """
@@ -179,34 +191,14 @@ class InscriptionForm3(forms.ModelForm):
         # Affichage du formulaire
         self.helper.layout = Layout(
             # Liste des champs à afficher dont les champs supplémentaires
-            'mail',
-            'confirmation_mail',
             'comments',
             'captcha',
         )
-
-    def clean_confirmation_mail(self):
-        """
-        Méthode pour vérifier que le mail correspond bien au
-        mail de confirmation lors de la validation du formulaire
-        """
-        confirmation_mail = self.cleaned_data['confirmation_mail']
-        mail = self.cleaned_data['mail']
-        # Si l'instance (model) a déjà une ID c'est à dire que c'est un Update d'une entrée existante
-        if self.instance.id:
-            # On vérifie juste que l'email n'a pas été changé
-            if mail == self.instance.mail:
-                return confirmation_mail
-        # Si c'est une nouvelle entrée ou si l'email à changé, on compare l'email et la confirmation
-        if mail != confirmation_mail:
-            raise forms.ValidationError(
-                "Le mail et le mail de confirmation ne sont pas identiques")
-        return confirmation_mail
 
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = [
-            'mail',
+            'email',
             'comments',
         ]

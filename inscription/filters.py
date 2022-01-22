@@ -6,7 +6,7 @@ class ListeEleveFiltre(django_filters.FilterSet):
     class Meta:
         model = BaseEleve
         fields = {
-            "last_name": ["icontains"],
-            "first_name": ["exact"],
+            "nom": ["icontains"],
+            "prenom": ["exact"],
         }
-        order_by = ["last_name"]
+        order_by = ["nom"]
