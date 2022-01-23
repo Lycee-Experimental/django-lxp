@@ -105,3 +105,6 @@
 .pac-target-input:not(:-webkit-autofill) {
     animation-name:endBrowserAutofill
 }
+.custom-file-label::after {
+    content: "Rechercher" !important;
+}
