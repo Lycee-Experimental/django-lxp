@@ -64,6 +64,7 @@ class InscriptionForm1(forms.ModelForm):
         # Largeur des labels et des champs sur la grille
         self.helper.label_class = 'col-md-4'
         self.helper.field_class = 'col-md-8'
+        self.helper.use_custom_control = True
         # Liste des champs du modèle à afficher
         self.helper.layout = Layout(
             'civility',
@@ -123,6 +124,7 @@ class InscriptionForm1(forms.ModelForm):
         # Ajout d'un date picker au format='%Y-%m-%d' pour qu'il affiche les valeurs initiales lors des update
         # https://stackoverflow.com/questions/58294769/django-forms-dateinput-not-populating-from-instance
         widgets = {
+            'photo': forms.widgets.FileInput(),
             'date_naissance': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'commune_naissance': autocomplete.ModelSelect2(url='linked_data',
                                               forward=('departement_naissance',)),
