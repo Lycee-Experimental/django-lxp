@@ -201,7 +201,8 @@ class InscriptionForm2(forms.ModelForm):
         else:
             msg = forms.ValidationError("Veuillez renseigner ce champs SVP.")
             for field in required:
-                self.add_error(field, msg)
+                if self.cleaned_data.get(field) is None:
+                    self.add_error(field, msg)
         return self.cleaned_data
 
     class Meta:
