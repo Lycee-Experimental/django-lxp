@@ -83,8 +83,7 @@ class BaseEleve(models.Model):
     nom_usage = models.CharField(max_length=255, verbose_name="Nom d'usage",
         help_text="Comment souhaites-tu qu'on t'appelle au lycée ?")
     email = models.EmailField(max_length=255, verbose_name="Email")
-    telephone = models.CharField(max_length=255, blank=True, null=True,
-                                 verbose_name="Téléphone")
+    telephone = PhoneNumberField(verbose_name="Téléphone")
     comments = models.TextField(blank=True, null=True, verbose_name="Commentaires")
     hash = models.CharField(max_length=30, default=create_hash, unique=True)
     photo = models.ImageField(upload_to=nom_photo, null=True)

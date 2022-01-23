@@ -10,13 +10,16 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
 LOGIN_URL='/admin/login/'
 
 ALLOWED_HOSTS = ['davy39.pythonanywhere.com', '127.0.0.1', 'https://lxp-app.herokuapp.com', 'inscription.cf']
 CSRF_TRUSTED_ORIGINS = ['https://inscription.cf','https://main.inscription.cf','http://127.0.0.1', 'https://127.0.0.1',]
 
 MIGRATION_MODULES = {'captcha': 'migrations.captcha', 'address': 'migrations.address', 'inscription': 'migrations.inscription'}
+
+# Format des numeros de téléphone avec django-phonenumber-field
+PHONENUMBER_DB_FORMAT = 'NATIONAL'
+PHONENUMBER_DEFAULT_REGION = 'FR'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
@@ -173,6 +176,10 @@ else:
     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
 
 STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+
+
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
 import django_heroku
 
