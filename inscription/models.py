@@ -70,8 +70,10 @@ class BaseEleve(models.Model):
         ('iel', 'iel')
     )
     date_naissance = models.DateField(verbose_name="Date de naissance")
-    commune_naissance = models.ForeignKey(Commune, on_delete=models.CASCADE, verbose_name="Commune de naissance")
-    departement_naissance = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département de naissance")
+    commune_naissance = models.ForeignKey(Commune, on_delete=models.CASCADE, verbose_name="Commune de naissance",
+                                          blank=True, null=True)
+    ville_natale = models.CharField(max_length=50, verbose_name="Ville natale",blank=True, null=True)
+    departement_naissance = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département de naissance", blank=True, null=True)
     pays_naissance = models.ForeignKey(Pays, on_delete=models.CASCADE, verbose_name="Pays de naissance")
     nationalite = models.ForeignKey(Pays, on_delete=models.CASCADE, verbose_name="Nationalité", related_name='nationalite',)
     address = AddressField(verbose_name="Adresse", related_name='eleve')

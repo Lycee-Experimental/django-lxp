@@ -74,6 +74,7 @@ class InscriptionForm1(forms.ModelForm):
             'prenom',
             'nom_usage',
             'pays_naissance',
+            'ville_natale',
             'departement_naissance',
             'commune_naissance',
             'date_naissance',
@@ -99,6 +100,25 @@ class InscriptionForm1(forms.ModelForm):
             msg = "{} {} est déjà dans la base.".format(nom, prenom)
             self.add_error('nom', msg)
             self.add_error('prenom', msg)
+        # On s'assure que le champs ville_natale ou communes et département sont remplis
+        msg = forms.ValidationError("Veuillez renseigner ce champs SVP.")
+        if self.cleaned_data.get('pays_naissance').name == 'FRANCE':
+            self.cleaned_data['ville_natale'] = None
+            if self.cleaned_data.get('departement_naissance', None) is None:
+                self.add_error('departement_naissance', msg)
+                if self.cleaned_data.get('commune_naissance', None) is None:
+                    self.add_error('commune_naissance', msg)
+                return
+            if self.cleaned_data.get('commune_naissance', None) is None:
+                self.add_error('commune_naissance', msg)
+                return
+        else:
+            self.cleaned_data['commune_naissance'] = None
+            self.cleaned_data['departement_naissance'] = None
+            if self.cleaned_data.get('ville_natale', None) is None:
+                self.add_error('ville_natale', msg)
+                return
+        return self.cleaned_data
 
     def clean_confirmation_mail(self):
         """
@@ -122,7 +142,7 @@ class InscriptionForm1(forms.ModelForm):
         # Modèle utilisé et entrées à renseigner
         model = BaseEleve
         fields = ['address', 'civility', 'genre', 'nom', 'prenom', 'nom_usage', 'date_naissance', 'pays_naissance',
-                  'photo', 'commune_naissance', 'departement_naissance', 'telephone', 'email', 'confirmation_email', 'nationalite']
+                  'photo', 'commune_naissance', 'departement_naissance', 'telephone', 'email', 'confirmation_email', 'nationalite', 'ville_natale']
         # Ajout d'un date picker au format='%Y-%m-%d' pour qu'il affiche les valeurs initiales lors des update
         # https://stackoverflow.com/questions/58294769/django-forms-dateinput-not-populating-from-instance
         widgets = {
@@ -141,7 +161,7 @@ class InscriptionForm1(forms.ModelForm):
             'screen': ('css/custom-dark.css',),
         }
         js = (
-            'linked_data.js',
+            'js/form1.js',
         )
 
 
