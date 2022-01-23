@@ -73,6 +73,7 @@ class BaseEleve(models.Model):
     commune_naissance = models.ForeignKey(Commune, on_delete=models.CASCADE, verbose_name="Commune de naissance")
     departement_naissance = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département de naissance")
     pays_naissance = models.ForeignKey(Pays, on_delete=models.CASCADE, verbose_name="Pays de naissance")
+    nationalite = models.ForeignKey(Pays, on_delete=models.CASCADE, verbose_name="Nationalité", related_name='nationalite',)
     address = AddressField(verbose_name="Adresse", related_name='eleve')
     civility = models.CharField(max_length=3, choices=CIVILITY_CHOICES, default='M.', verbose_name="Civilité",
                                 help_text="Quel sexe t'est attribué dans les documents administratifs ?")
