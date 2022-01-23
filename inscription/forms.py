@@ -190,6 +190,9 @@ class InscriptionForm2(forms.ModelForm):
 
     class Media:
         js = ('js/hide_resp2.js',)
+        css = {
+            'screen': ('css/custom-dark.css',),
+        }
 
 
 class InscriptionForm3(forms.ModelForm):

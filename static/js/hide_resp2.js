@@ -16,7 +16,8 @@ function Hide() {
         document.getElementById('div_id_1-sociopro_resp2').style.display = '';
     }
 }
-// Vérifie id_1-resp2 est à aucun (fonction Hide après le cargement du document
+// Vérifie id_1-resp2 est à aucun (fonction Hide) après le chargement du document.
+// Utile lors du retour en arrière dans le formulaire
 document.addEventListener("DOMContentLoaded", function() {
     Hide();
 });
