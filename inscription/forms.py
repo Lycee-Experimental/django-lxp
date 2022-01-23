@@ -71,6 +71,7 @@ class InscriptionForm1(forms.ModelForm):
             'genre',
             'nom',
             'prenom',
+            'nom_usage',
             'pays_naissance',
             'departement_naissance',
             'commune_naissance',
@@ -119,7 +120,7 @@ class InscriptionForm1(forms.ModelForm):
     class Meta:
         # Modèle utilisé et entrées à renseigner
         model = BaseEleve
-        fields = ['address', 'civility', 'genre', 'nom', 'prenom', 'date_naissance', 'pays_naissance',
+        fields = ['address', 'civility', 'genre', 'nom', 'prenom', 'nom_usage','date_naissance', 'pays_naissance',
                   'photo', 'commune_naissance', 'departement_naissance', 'telephone', 'email', 'confirmation_email']
         # Ajout d'un date picker au format='%Y-%m-%d' pour qu'il affiche les valeurs initiales lors des update
         # https://stackoverflow.com/questions/58294769/django-forms-dateinput-not-populating-from-instance

@@ -74,13 +74,14 @@ class BaseEleve(models.Model):
     departement_naissance = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département de naissance")
     pays_naissance = models.ForeignKey(Pays, on_delete=models.CASCADE, verbose_name="Pays de naissance")
     address = AddressField(verbose_name="Adresse", related_name='eleve')
-    civility = models.CharField(max_length=3, choices=CIVILITY_CHOICES,
-                                default='M.', verbose_name="Civilité")
+    civility = models.CharField(max_length=3, choices=CIVILITY_CHOICES, default='M.', verbose_name="Civilité",
+                                help_text="Quel sexe t'est attribué dans les documents administratifs ?")
     genre = models.CharField(max_length=5, choices=GENRE, verbose_name='Pronom', default='Iel',
                              help_text="Veux-tu que l'on parle de toi en disant il, elle ou iel ?")
     nom = models.CharField(max_length=255, verbose_name="Nom de famille")
     prenom = models.CharField(max_length=255, verbose_name="Prénom")
-    nom_usage = models.CharField(max_length=255, verbose_name="Nom d'usage")
+    nom_usage = models.CharField(max_length=255, verbose_name="Nom d'usage",
+        help_text="Comment souhaites-tu qu'on t'appelle au lycée ?")
     email = models.EmailField(max_length=255, verbose_name="Email")
     telephone = models.CharField(max_length=255, blank=True, null=True,
                                  verbose_name="Téléphone")
