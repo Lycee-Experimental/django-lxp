@@ -65,9 +65,9 @@ class BaseEleve(models.Model):
     )
 
     GENRE = (
-        ('Il', 'Il'),
-        ('Elle', 'Elle'),
-        ('Iel', 'Iel')
+        ('il', 'il'),
+        ('elle', 'elle'),
+        ('iel', 'iel')
     )
     date_naissance = models.DateField(verbose_name="Date de naissance")
     commune_naissance = models.ForeignKey(Commune, on_delete=models.CASCADE, verbose_name="Commune de naissance")
