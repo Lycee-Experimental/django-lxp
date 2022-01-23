@@ -54,6 +54,9 @@
 .hdpi.pac-logo::after {
     background-image: none;
 }
+.pac-logo::after {
+    background-image: none;
+}
 .pac-container {
     background-color: #3b3b3b;
     position: absolute !important;
