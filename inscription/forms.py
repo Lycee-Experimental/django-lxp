@@ -51,6 +51,7 @@ class InscriptionForm1(forms.ModelForm):
     name = 'Identité'
     # mail de confirmation
     confirmation_email = forms.EmailField(label="Confirmation de l'email", required=False)
+
     def __init__(self, *args, **kwargs):
         """
         Surcharge de l'initialisation du formulaire
@@ -116,11 +117,10 @@ class InscriptionForm1(forms.ModelForm):
                 "Le mail et le mail de confirmation ne sont pas identiques")
         return confirmation_email
 
-
     class Meta:
         # Modèle utilisé et entrées à renseigner
         model = BaseEleve
-        fields = ['address', 'civility', 'genre', 'nom', 'prenom', 'nom_usage','date_naissance', 'pays_naissance',
+        fields = ['address', 'civility', 'genre', 'nom', 'prenom', 'nom_usage', 'date_naissance', 'pays_naissance',
                   'photo', 'commune_naissance', 'departement_naissance', 'telephone', 'email', 'confirmation_email']
         # Ajout d'un date picker au format='%Y-%m-%d' pour qu'il affiche les valeurs initiales lors des update
         # https://stackoverflow.com/questions/58294769/django-forms-dateinput-not-populating-from-instance
@@ -128,18 +128,19 @@ class InscriptionForm1(forms.ModelForm):
             'photo': forms.widgets.FileInput(),
             'date_naissance': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'commune_naissance': autocomplete.ModelSelect2(url='linked_data',
-                                              forward=('departement_naissance',)),
+                                                           forward=('departement_naissance',)),
             'departement_naissance': autocomplete.ModelSelect2(url='departement'),
             'pays_naissance': autocomplete.ModelSelect2(url='pays')
         }
 
     class Media:
         css = {
-                  'screen': ('css/custom-dark.css',),
-              }
+            'screen': ('css/custom-dark.css',),
+        }
         js = (
             'linked_data.js',
         )
+
 
 class InscriptionForm2(forms.ModelForm):
     name = 'Responsables légaux'
@@ -160,18 +161,35 @@ class InscriptionForm2(forms.ModelForm):
         # Affichage de ton formulaire
         self.helper.layout = Layout(
             # Liste des champs à afficher
-            'type_resp1', 'nom_resp1', 'prenom_resp1', 'adresse_resp1', 'tel_resp1', 'email_resp1', 'sociopro_resp1',
-            'resp2', 'type_resp2','nom_resp2', 'prenom_resp2', 'adresse_resp2', 'tel_resp2', 'email_resp2',
+            'resp1', 'nom_resp1', 'prenom_resp1', 'adresse_resp1', 'tel_resp1', 'email_resp1', 'sociopro_resp1',
+            'resp2', 'nom_resp2', 'prenom_resp2', 'adresse_resp2', 'tel_resp2', 'email_resp2',
             'sociopro_resp2',
 
         )
 
+    def clean(self):
+        resp2 = self.cleaned_data.get('resp2')
+        required = ['nom_resp2', 'prenom_resp2', 'adresse_resp2', 'tel_resp2', 'email_resp2',
+                    'sociopro_resp2']
+        if resp2 == 'aucun':
+            for field in required:
+                self.cleaned_data[field] = None
+                return
+        else:
+            msg = forms.ValidationError("Veuillez renseigner ce champs SVP.")
+            for field in required:
+                self.add_error(field, msg)
+        return self.cleaned_data
+
     class Meta:
         # Modèle utilisé et entrées à renseigner
         model = BaseEleve
-        fields = ['nom_resp1','prenom_resp1', 'nom_resp2', 'prenom_resp2', 'adresse_resp1', 'adresse_resp2',
+        fields = ['nom_resp1', 'prenom_resp1', 'nom_resp2', 'prenom_resp2', 'adresse_resp1', 'adresse_resp2',
                   'tel_resp1', 'tel_resp2', 'email_resp1', 'email_resp2', 'sociopro_resp1', 'sociopro_resp2',
-                  'type_resp1', 'type_resp2', 'resp2']
+                  'resp1', 'resp2', ]
+
+    class Media:
+        js = ('js/hide_resp2.js',)
 
 
 class InscriptionForm3(forms.ModelForm):
@@ -179,7 +197,6 @@ class InscriptionForm3(forms.ModelForm):
     # Ajout des champs supplémentaires au modèle
     # captcha
     captcha = CaptchaWizardField()
-
 
     def __init__(self, *args, **kwargs):
         """
@@ -206,5 +223,5 @@ class InscriptionForm3(forms.ModelForm):
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = [
-           'comments',
+            'comments',
         ]

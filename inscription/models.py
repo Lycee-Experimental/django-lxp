@@ -88,28 +88,33 @@ class BaseEleve(models.Model):
     hash = models.CharField(max_length=30, default=create_hash, unique=True)
     photo = models.ImageField(upload_to=nom_photo, null=True)
     # RESPONSABLES
-    RESP = (
+    RESP1 = (
         ('pere','Père'),
         ('mere', 'Mère'),
-        ('autre', 'Autre responsable légal ou référent')
+        ('autre', 'Autre responsable légal ou référent'),
     )
-    resp2 = models.BooleanField(verbose_name="Deuxième responsable")
+    RESP2 = (
+        ('pere','Père'),
+        ('mere', 'Mère'),
+        ('autre', 'Autre responsable légal ou référent'),
+        ('aucun', 'Aucun')
+    )
+    resp1 = models.CharField(max_length=5, choices=RESP1,
+                             default='mere', verbose_name="Responsable 1")
     nom_resp1 = models.CharField(max_length=255, verbose_name="Nom de famille")
-    nom_resp2 = models.CharField(max_length=255, verbose_name="Nom de famille")
     prenom_resp1 = models.CharField(max_length=255, verbose_name="Prénom")
-    prenom_resp2 = models.CharField(max_length=255, verbose_name="Prénom")
-    type_resp1 = models.CharField(max_length=5, choices=RESP,
-                                default='mere', verbose_name="Lien de parenté")
-    type_resp2 = models.CharField(max_length=5, choices=RESP,
-                                default='mere', verbose_name="Lien de parenté")
-    adresse_resp1 = AddressField(verbose_name="Adresse", related_name='rep1')
-    adresse_resp2 = AddressField(verbose_name="Adresse", related_name='rep2')
+    adresse_resp1 = AddressField(verbose_name="Adresse", related_name='resp1')
     email_resp1 = models.EmailField(max_length=255, verbose_name="Email")
-    email_resp2 = models.EmailField(max_length=255, verbose_name="Email")
     tel_resp1 = PhoneNumberField(verbose_name="Numéro de téléphone")
-    tel_resp2 = PhoneNumberField(verbose_name="Numéro de téléphone")
-    sociopro_resp1 = models.ForeignKey(Sociopro, related_name='rep1',
+    sociopro_resp1 = models.ForeignKey(Sociopro, related_name='resp1',
                                        on_delete=models.CASCADE, verbose_name="Profession")
+    resp2 = models.CharField(max_length=5, choices=RESP2,
+                                default='pere', verbose_name="Responsable 2")
+    nom_resp2 = models.CharField(max_length=255, verbose_name="Nom de famille", blank=True, null=True)
+    prenom_resp2 = models.CharField(max_length=255, verbose_name="Prénom", blank=True, null=True)
+    adresse_resp2 = AddressField(verbose_name="Adresse", related_name='resp2', blank=True, null=True)
+    email_resp2 = models.EmailField(max_length=255, verbose_name="Email", blank=True, null=True)
+    tel_resp2 = PhoneNumberField(verbose_name="Numéro de téléphone", blank=True, null=True)
     sociopro_resp2 = models.ForeignKey(Sociopro, related_name='resp2',
-                                       on_delete=models.CASCADE, verbose_name="Profession")
+                                       on_delete=models.CASCADE, verbose_name="Profession", blank=True, null=True)
 
