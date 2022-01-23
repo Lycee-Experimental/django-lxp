@@ -206,6 +206,5 @@ class InscriptionForm3(forms.ModelForm):
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = [
-            'email',
-            'comments',
+           'comments',
         ]
