@@ -128,6 +128,7 @@ class InscriptionForm1(forms.ModelForm):
             'date_naissance': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'commune_naissance': autocomplete.ModelSelect2(url='linked_data',
                                               forward=('departement_naissance',)),
+            'departement_naissance': autocomplete.ModelSelect2(url='departement'),
             'pays_naissance': autocomplete.ModelSelect2(url='pays')
         }
 

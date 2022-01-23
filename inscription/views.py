@@ -4,6 +4,7 @@ import os
 
 from dal import autocomplete
 from django.core.files.storage import FileSystemStorage
+from django.db.models import Q
 from django.http import HttpResponse
 from django.template.loader import render_to_string
 from django.urls import reverse
@@ -18,7 +19,7 @@ from formtools.wizard.views import SessionWizardView
 from djangoLxp import settings
 from .filters import ListeEleveFiltre
 # Base BaseEleve
-from .models import BaseEleve, Pays
+from .models import BaseEleve, Pays, Departement
 # Tableau des inscrits
 from .tables import ListeEleveTableau
 # Une vue pour afficher les inscriptions filtées
@@ -133,6 +134,14 @@ class AutocompleteCommune(autocomplete.Select2QuerySetView):
 
         if dep:
             qs = qs.filter(departement_id=dep)
+        return qs
+
+
+class AutocompleteDepartement(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Departement.objects.all().order_by('code')
+        if self.q:
+            qs = qs.filter(Q(name__istartswith=self.q)|Q(code__icontains=self.q))
         return qs
 
 
