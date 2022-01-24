@@ -1,5 +1,6 @@
 from django.db import models
 from address.models import AddressField
+from multiselectfield import MultiSelectField
 from phonenumber_field.modelfields import PhoneNumberField
 from .utils import nom_photo, create_hash
 
@@ -69,6 +70,7 @@ class BaseEleve(models.Model):
         ('elle', 'elle'),
         ('iel', 'iel')
     )
+
     date_naissance = models.DateField(verbose_name="Date de naissance")
     commune_naissance = models.ForeignKey(Commune, on_delete=models.CASCADE, verbose_name="Commune de naissance",
                                           blank=True, null=True)
@@ -121,3 +123,11 @@ class BaseEleve(models.Model):
     sociopro_resp2 = models.ForeignKey(Sociopro, related_name='resp2',
                                        on_delete=models.CASCADE, verbose_name="Profession", blank=True, null=True)
 
+    DYS = (
+        ('DL', 'Dyslexie'),
+        ('DC', 'Dyscalculie'),
+        ('DP', 'Dyspraxie'),
+        ('DG', 'Dysgraphie'),
+        ('DO', 'Dysorthographie')
+    )
+    dys = MultiSelectField(choices=DYS,verbose_name='Troubles cognitifs', blank=True, null=True)

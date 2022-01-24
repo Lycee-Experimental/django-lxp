@@ -1,6 +1,6 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from crispy_forms.bootstrap import FormActions, InlineField
+from crispy_forms.bootstrap import FormActions, InlineField, InlineCheckboxes
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Fieldset, Layout, Submit
 from .models import BaseEleve
@@ -51,7 +51,6 @@ class InscriptionForm1(forms.ModelForm):
     name = 'Identité'
     # mail de confirmation
     confirmation_email = forms.EmailField(label="Confirmation de l'email", required=False)
-
     def __init__(self, *args, **kwargs):
         """
         Surcharge de l'initialisation du formulaire
@@ -243,6 +242,7 @@ class InscriptionForm3(forms.ModelForm):
         self.helper.layout = Layout(
             # Liste des champs à afficher dont les champs supplémentaires
             'comments',
+            InlineCheckboxes('dys'),
             'captcha',
         )
 
@@ -250,5 +250,5 @@ class InscriptionForm3(forms.ModelForm):
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = [
-            'comments',
+            'comments', 'dys',
         ]
