@@ -144,3 +144,10 @@ class BaseEleve(models.Model):
     spe1 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '1'}, blank=True, related_name='spe1')
     spe2 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '2'}, blank=True, related_name='spe2')
     spe3 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '3'}, blank=True, related_name='spe3')
+    NIVEAU = (
+        ('premiere', 'Première'),
+        ('deter', 'Détermination (2nde)'),
+        ('term', 'Terminale'),
+        ('crepa','CREPA'),
+    )
+    niveau = models.CharField(max_length=10, choices=NIVEAU, verbose_name="Niveau d'inscription", default='deter')
