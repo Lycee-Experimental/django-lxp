@@ -96,8 +96,8 @@ class BaseEleve(models.Model):
                              help_text="Veux-tu que l'on parle de toi en disant il, elle ou iel ?")
     nom = models.CharField(max_length=255, verbose_name="Nom de famille")
     prenom = models.CharField(max_length=255, verbose_name="Prénom")
-    nom_usage = models.CharField(max_length=255, verbose_name="Nom d'usage",
-        help_text="Comment souhaites-tu qu'on t'appelle au lycée ?")
+    nom_usage = models.CharField(max_length=255, verbose_name="Nom d'usage", blank=True, null=True,
+        help_text="Souhaites-tu être appelé par un nom différent de ton prénom ?")
     email = models.EmailField(max_length=255, verbose_name="Email")
     telephone = PhoneNumberField(verbose_name="Téléphone")
     comments = models.TextField(blank=True, null=True, verbose_name="Commentaires")
