@@ -55,10 +55,10 @@ class Migration(migrations.Migration):
             name='Spe',
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('code', models.CharField(max_length=9, verbose_name='Code Spé')),
-                ('intitule', models.CharField(max_length=9, verbose_name='Intitulé Spé')),
-                ('groupe', models.CharField(max_length=100, verbose_name='Groupe Spé', blank=True, null=True)),
-                ('type', models.CharField(blank=True, max_length=100, null=True, verbose_name='Type Spé')),
+                ('code', models.CharField(max_length=10, verbose_name='Code Spé')),
+                ('intitule', models.CharField(max_length=50, verbose_name='Intitulé Spé')),
+                ('groupe', models.CharField(max_length=2, verbose_name='Groupe Spé', blank=True, null=True)),
+                ('type', models.CharField(blank=True, max_length=10, null=True, verbose_name='Type Spé')),
             ],
         ),
         migrations.AddField(
