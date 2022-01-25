@@ -5,6 +5,17 @@ from phonenumber_field.modelfields import PhoneNumberField
 from .utils import nom_photo, create_hash
 
 
+class Spe(models.Model):
+    code = models.CharField(max_length=9, verbose_name="Code Spé")
+    intitule = models.CharField(max_length=9, verbose_name="Intitulé Spé")
+    groupe = models.CharField(max_length=100, verbose_name="Groupe Spé", null=True, blank=True)
+    type = models.CharField(max_length=100, verbose_name="Type Spé", null=True, blank=True)
+
+    def __str__(self):
+        """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
+        return  u'%s' % self.intitule
+
+
 class Sociopro(models.Model):
     """Base de donnée des codes socioprofessionnels.
     Le données sont importées depuis le fichier CSV grâce à la commande python manage.py sociopro"""
@@ -122,7 +133,6 @@ class BaseEleve(models.Model):
     tel_resp2 = PhoneNumberField(verbose_name="Numéro de téléphone", blank=True, null=True)
     sociopro_resp2 = models.ForeignKey(Sociopro, related_name='resp2',
                                        on_delete=models.CASCADE, verbose_name="Profession", blank=True, null=True)
-
     DYS = (
         ('DL', 'Dyslexie'),
         ('DC', 'Dyscalculie'),
@@ -130,4 +140,7 @@ class BaseEleve(models.Model):
         ('DG', 'Dysgraphie'),
         ('DO', 'Dysorthographie')
     )
-    dys = MultiSelectField(choices=DYS,verbose_name='Troubles cognitifs', blank=True, null=True)
+    dys = MultiSelectField(choices=DYS, verbose_name='Troubles cognitifs', blank=True, null=True)
+    spe1 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '1'}, blank=True, related_name='spe1')
+    spe2 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '2'}, blank=True, related_name='spe2')
+    spe3 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '3'}, blank=True, related_name='spe3')

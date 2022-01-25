@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.bootstrap import FormActions, InlineField, InlineCheckboxes
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Fieldset, Layout, Submit
+from crispy_forms.layout import Div, Fieldset, Layout, Submit, Column, Field, HTML
 from .models import BaseEleve
 from .utils import CaptchaWizardField
 # Pour l'autocomplétion de la commune en fonction du département choisi
@@ -141,7 +141,8 @@ class InscriptionForm1(forms.ModelForm):
         # Modèle utilisé et entrées à renseigner
         model = BaseEleve
         fields = ['address', 'civility', 'genre', 'nom', 'prenom', 'nom_usage', 'date_naissance', 'pays_naissance',
-                  'photo', 'commune_naissance', 'departement_naissance', 'telephone', 'email', 'confirmation_email', 'nationalite', 'ville_natale']
+                  'photo', 'commune_naissance', 'departement_naissance', 'telephone', 'email', 'confirmation_email',
+                  'nationalite', 'ville_natale',]
         # Ajout d'un date picker au format='%Y-%m-%d' pour qu'il affiche les valeurs initiales lors des update
         # https://stackoverflow.com/questions/58294769/django-forms-dateinput-not-populating-from-instance
         widgets = {
@@ -233,15 +234,24 @@ class InscriptionForm3(forms.ModelForm):
         # FormHelper pour customiser ton formulaire
         self.helper = FormHelper()
         # Id et classe bootstrap de ton formulaire
-        self.helper.form_class = 'form-horizontal'
+        #self.helper.form_class = 'form-horizontal'
         self.helper.form_id = 'BaseEleve-form'
         # Largeur des labels et des champs sur la grille
-        self.helper.label_class = 'col-md-4'
-        self.helper.field_class = 'col-md-6'
+        #self.helper.label_class = 'col-md-4'
+        #self.helper.field_class = 'col-md-6'
+        self.fields['spe1'].label = False
+        self.fields['spe2'].label = False
+        self.fields['spe3'].label = False
         # Affichage du formulaire
         self.helper.layout = Layout(
             # Liste des champs à afficher dont les champs supplémentaires
             'comments',
+            HTML("""<label>Spécialités</label>"""),
+            Div(
+                Field('spe1', wrapper_class='col'),
+                Field('spe2', wrapper_class='col'),
+                Field('spe3', wrapper_class='col'),
+                css_class='row'),
             InlineCheckboxes('dys'),
             'captcha',
         )
@@ -250,5 +260,5 @@ class InscriptionForm3(forms.ModelForm):
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = [
-            'comments', 'dys',
+            'comments', 'dys','spe1', 'spe2', 'spe3',
         ]
