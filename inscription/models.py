@@ -6,10 +6,10 @@ from .utils import nom_photo, create_hash
 
 
 class Spe(models.Model):
-    code = models.CharField(max_length=9, verbose_name="Code Spé")
-    intitule = models.CharField(max_length=9, verbose_name="Intitulé Spé")
-    groupe = models.CharField(max_length=100, verbose_name="Groupe Spé", null=True, blank=True)
-    type = models.CharField(max_length=100, verbose_name="Type Spé", null=True, blank=True)
+    code = models.CharField(max_length=10, verbose_name="Code Spé")
+    intitule = models.CharField(max_length=50, verbose_name="Intitulé Spé")
+    groupe = models.CharField(max_length=2, verbose_name="Groupe Spé", null=True, blank=True)
+    type = models.CharField(max_length=10, verbose_name="Type Spé", null=True, blank=True)
 
     def __str__(self):
         """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
