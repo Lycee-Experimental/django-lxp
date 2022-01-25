@@ -267,12 +267,14 @@ class InscriptionForm4(forms.ModelForm):
             # Liste des champs à afficher dont les champs supplémentaires
             'comments',
             'niveau',
-            HTML("""<label>Spécialités</label>"""),
             Div(
-                Field('spe1', wrapper_class='col'),
-                Field('spe2', wrapper_class='col'),
-                Field('spe3', wrapper_class='col'),
-                css_class='row'),
+                HTML("""<label>Spécialités</label>"""),
+                Div(
+                    Field('spe1', wrapper_class='col'),
+                    Field('spe2', wrapper_class='col'),
+                    Field('spe3', wrapper_class='col'),
+                    css_class='row'),
+                css_id='champ-spe'),
             InlineCheckboxes('dys'),
             'captcha',
         )
