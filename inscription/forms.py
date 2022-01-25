@@ -2,7 +2,9 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.bootstrap import FormActions, InlineField, InlineCheckboxes
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Fieldset, Layout, Submit, Column, Field, HTML
+from crispy_forms.layout import Div, Fieldset, Layout, Submit, Column, Field, HTML, MultiField
+
+import inscription.models
 from .models import BaseEleve
 from .utils import CaptchaWizardField
 # Pour l'autocomplétion de la commune en fonction du département choisi
@@ -218,6 +220,7 @@ class InscriptionForm2(forms.ModelForm):
             'screen': ('css/custom-dark.css',),
         }
 
+
 class InscriptionForm3(forms.ModelForm):
     name = 'Scolarité'
 
@@ -244,7 +247,8 @@ class InscriptionForm4(forms.ModelForm):
     # Ajout des champs supplémentaires au modèle
     # captcha
     captcha = CaptchaWizardField()
-
+    confirm = forms.BooleanField(label="Je comprends et accepte que mes spécialités aient lieu en même temps",
+                                 required=False, widget=forms.HiddenInput)
     def __init__(self, *args, **kwargs):
         """
         Surcharge de l'initialisation du formulaire
@@ -267,17 +271,86 @@ class InscriptionForm4(forms.ModelForm):
             # Liste des champs à afficher dont les champs supplémentaires
             'comments',
             'niveau',
-            Div(
-                HTML("""<label>Spécialités</label>"""),
-                Div(
-                    Field('spe1', wrapper_class='col'),
-                    Field('spe2', wrapper_class='col'),
-                    Field('spe3', wrapper_class='col'),
-                    css_class='row'),
-                css_id='champ-spe'),
+            Fieldset(
+                #HTML("""<label>Spécialités</label>"""),
+                'Spécialités',
+                    Field('spe1', wrapper_class='col-4'),
+                    Field('spe2', wrapper_class='col-4'),
+                    Field('spe3', wrapper_class='col-4'),
+                    css_class='row', css_id='champ-spe'),
+            'confirm',
             InlineCheckboxes('dys'),
             'captcha',
         )
+
+    def check_spe(self,spes):
+        if spes is not None:
+            if len(spes) < 2:
+                return False
+            else:
+                list_type = []
+                for spe in spes:
+                    if inscription.models.Spe.objects.filter(intitule=spe).values_list('type', flat=True).first() is not None:
+                        list_type.append(inscription.models.Spe.objects.filter(intitule=spe).values_list('type', flat=True).first())
+                for elem in list_type:
+                    if list_type.count(elem) > 1:
+                        return True
+        return False
+
+    def clean(self):
+        niveau = self.cleaned_data.get('niveau')
+        confirm = self.cleaned_data.get('confirm')
+        groupe_spe = ['spe1', 'spe2', 'spe3']
+        spe1 = self.cleaned_data.get('spe1')
+        spe2 = self.cleaned_data.get('spe2')
+        spe3 = self.cleaned_data.get('spe3')
+        if niveau == 'crepa' or niveau == 'deter' :
+            self.cleaned_data['spe1'] = None
+            self.cleaned_data['spe2'] = None
+            self.cleaned_data['spe3'] = None
+        elif niveau == 'premiere' :
+            if len(spe1)+len(spe2)+len(spe3) == 3:
+                if len(spe1) ==1 and len(spe2) == 1 and len(spe3) == 1:
+                    return self.cleaned_data
+                else:
+                    for spe in groupe_spe:
+                        if self.check_spe(self.cleaned_data.get(spe)):
+                            msg = forms.ValidationError("Vous ne pouvez-pas prendre 2 spé du même type (arts et langues).")
+                            self.add_error(spe, msg)
+                            return
+                    if not confirm:
+                        msg = forms.ValidationError("Il est fortement déconseillé de choisir 2 spés dans la même colonne. Ces 2 spés auront systématiquement lieux en même temps. Ne faire ce choix qu'après discussion avec un·e membre de l'équipe éducative.")
+                        self.fields['confirm'].widget = forms.CheckboxInput()
+                        self.fields['confirm'].required = True
+                        self.add_error('confirm', msg)
+                    else:
+                        return self.cleaned_data
+            else:
+                msg = forms.ValidationError("Vous devez choisir 3 spécialités.")
+                self.add_error('spe1', msg)
+                self.add_error('spe2', msg)
+                self.add_error('spe3', msg)
+        else:
+            if len(spe1)+len(spe2)+len(spe3) == 2:
+                if len(spe1) > 1 or len(spe2) > 1 or len(spe3) > 1:
+                    for spe in groupe_spe:
+                        if self.check_spe(self.cleaned_data.get(spe)):
+                            msg = forms.ValidationError("Vous ne pouvez-pas prendre 2 spé du même type (arts et langues).")
+                            self.add_error(spe, msg)
+                            return
+                    if not confirm:
+                        msg = forms.ValidationError("Il est fortement déconseillé de choisir 2 spés dans la même colonne. Ces 2 spés auront systématiquement lieux en même temps. Ne faire ce choix qu'après discussion avec un·e membre de l'équipe éducative.")
+                        self.fields['confirm'].widget = forms.CheckboxInput()
+                        self.fields['confirm'].required = True
+                        self.add_error('confirm', msg)
+                else:
+                    return self.cleaned_data
+            else:
+                msg = forms.ValidationError("Vous devez choisir 2 spécialités.")
+                self.add_error('spe1', msg)
+                self.add_error('spe2', msg)
+                self.add_error('spe3', msg)
+
 
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer
@@ -287,4 +360,5 @@ class InscriptionForm4(forms.ModelForm):
         ]
 
     class Media:
+        pass
         js = ('js/form4.js',)
