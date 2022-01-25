@@ -218,9 +218,29 @@ class InscriptionForm2(forms.ModelForm):
             'screen': ('css/custom-dark.css',),
         }
 
-
 class InscriptionForm3(forms.ModelForm):
     name = 'Scolarité'
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # FormHelper pour customiser ton formulaire
+        self.helper = FormHelper()
+        # Id et classe bootstrap de ton formulaire
+        self.helper.form_class = 'form-horizontal'
+        self.helper.form_id = 'BaseEleve-form'
+        # Largeur des labels et des champs sur la grille
+        self.helper.label_class = 'col-md-4'
+        self.helper.field_class = 'col-md-6'
+        self.helper.layout = Layout()
+
+    class Meta:
+        # Définis le modèle utilisé et des données à enregistrer
+        model = BaseEleve
+        fields = []
+
+
+class InscriptionForm4(forms.ModelForm):
+    name = 'Projet au Lycée'
     # Ajout des champs supplémentaires au modèle
     # captcha
     captcha = CaptchaWizardField()
@@ -246,6 +266,7 @@ class InscriptionForm3(forms.ModelForm):
         self.helper.layout = Layout(
             # Liste des champs à afficher dont les champs supplémentaires
             'comments',
+            'niveau',
             HTML("""<label>Spécialités</label>"""),
             Div(
                 Field('spe1', wrapper_class='col'),
@@ -260,5 +281,8 @@ class InscriptionForm3(forms.ModelForm):
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = [
-            'comments', 'dys','spe1', 'spe2', 'spe3',
+            'comments', 'dys','spe1', 'spe2', 'spe3','niveau',
         ]
+
+    class Media:
+        js = ('js/form4.js',)

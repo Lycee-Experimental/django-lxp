@@ -25,7 +25,7 @@ from .tables import ListeEleveTableau
 # Une vue pour afficher les inscriptions filtées
 from .utils import PagedFilteredTableView, MediaStorage, coordonnees
 # Nos différents formulaires
-from .forms import InscriptionForm1, InscriptionForm2, InscriptionForm3, ListeEleveForm
+from .forms import InscriptionForm1, InscriptionForm2, InscriptionForm3, InscriptionForm4, ListeEleveForm
 ### Librairie weasyprint pour la génération de PDF
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
@@ -69,7 +69,7 @@ def fiche_pdf(request, **kwargs):
 #
 
 # Liste des formulaires à inclure dans le wizard
-form_list = [InscriptionForm1, InscriptionForm2, InscriptionForm3]
+form_list = [InscriptionForm1, InscriptionForm2, InscriptionForm3, InscriptionForm4]
 
 
 class FormulaireInscription(SessionWizardView):
