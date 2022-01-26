@@ -3,19 +3,25 @@ Un site élaboré avec Django pour gérer les inscriptions au Lycée Expériment
 
 A tester ici : https://inscription.cf
 ## TODO
-### Travail sur le formulaire d'inscription
-- Renseigner l'ensemble des **champs nécessaires** dans `models.py`
-- Mise en forme des étapes du **formulaire** : `forms.py` avec les Layout de Crispy
-### Travail sur le graphisme
-- Travailler le html+css des différents `templates` pour l'affichage des différentes pages web et PDF.
-- Générer d'autres vues `views.py` qui nous sont utiles (fiches d'inscription,liste par Spé, niveau, GB, anciens-nouveau...) : _views.py et templates_
-et ainsi les PDF correspondants.
-- Modifier l'interface `admin` pour avoir accès à différents menus (liste d'élèves, génération de divers PDF, 
-statistiques...)
-### Travail sur l'utilisation et les exports de la base de donnée
-- Exporter la base sous forme de **CSV** et **xml** pour que cela convienne à Cyclade + Siecle : https://docs.djangoproject.com/fr/4.0/topics/serialization/
-- Utilisation des données pour créer des graphiques (évolution du nombre d'inscriptions, diagrammes par genre, par niveau, géolocalisation...), dans l'interface admin.
-------
+- **Formulaire d'inscription [[#1]](https://github.com/Lycee-Experimental/django-lxp/issues/1)** :
+Aboutir à un formulaire permettant le renseignement de toutes les données nécessaires à l'inscription.
+
+- **Fiche d'inscription [[#9]](https://github.com/Lycee-Experimental/django-lxp/issues/9)** :
+Générer un PDF de fiche d'inscription qu'il ne restera plus qu'à imprimer et faire signer par élève et familles.
+
+- **Recherche dans les inscriptions** : 
+Travailler à une interface permettant de faire des recherches dans la base.
+
+- **Génération d'autres fichiers utiles au secret** : 
+Générer différentes vues (`views.py`) qui nous seront utiles (liste d'élèves par Spé, par niveau, par GB, GECCO...) et ainsi les PDF correspondants.
+Traitement des données pour créer des graphiques (évolution du nombre d'inscriptions, diagrammes par genre, par niveau, géolocalisation...), dans l'interface admin.
+
+- **Menu d'administration** : 
+Modifier l'interface `admin` pour y intégrer différents menus pour accéder aux différentes fonctionalités : modification de fiches, validation des inscriptions, assignation à un groupe de base/ecco, désinscriptions, recherche élèves, génération de divers PDF, 
+statistiques, cartographie...)
+
+- **Exports de la base** :
+Exporter la base élève dans les formats convenant à un import dans les bases Siecle et Cyclade du rectorat.
 
 ## Informations techniques
 
@@ -23,16 +29,15 @@ statistiques...)
 
 Le **code** est hébergé sur **Github**, et l'intégration et le déploiement continu (**CI/CD**) est assuré par les **[Github Actions](https://github.com/features/actions)**.
 
-L'**application** est automatiquement déployée sur **[Heroku](https://www.heroku.com/)** et les **fichiers statiques** sont hébergés sur **[AWS S3](https://aws.amazon.com/fr/s3/)**, par la librarie storages (backends s3boto3)
+L'**application** est automatiquement déployée sur **[Heroku](https://www.heroku.com/)**, les **fichiers statiques** sont hébergés sur **[AWS S3](https://aws.amazon.com/fr/s3/)**, par la librarie storages (backends s3boto3), la **base de donnée Posgresql** sur **[AWS RDS]**(https://aws.amazon.com/fr/rds).
 
-Le **nom de domaine** inscription.cf a été reservé chez **[Freenom](https://www.freenom.com/fr/index.html)** et transite par le **CDN** (content delivery network) **[Cloudflare](https://www.cloudflare.com/fr-fr/)** qui fournit le **SSL** (https) ainsi qu'une protection du site contre d'éventuelles attaques.
+Le **nom de domaine** `inscription.cf` a été reservé chez **[Freenom](https://www.freenom.com/fr/index.html)** et transite par le **CDN** (content delivery network) **[Cloudflare](https://www.cloudflare.com/fr-fr/)** qui fournit le **SSL** (https) ainsi qu'une protection du site contre d'éventuelles attaques.
 
 Les js et css sont hébergés par [jsdelivr](https://www.jsdelivr.com/) :
 
   - [Jquery 3.6](https://jquery.com) (à déclarer dans le template avant le js de bootstrap)
-  - [Bootstrap 5](https://getbootstrap.com/)
+  - [Bootstrap 4](https://getbootstrap.com/)
   - Les icones de [Fontawesome](https://fontawesome.com)
-  - Le thème dark de bootstrap de [Vino Rodrigues](https://vinorodrigues.github.io/bootstrap-dark-5/)
 
 L'ensemble de ces services sont gratuits pour une utilisation basique.
 
@@ -51,3 +56,14 @@ La visualisation de tableaux est simplifiée par la librairie [django-tables2](h
 L'export de pages web sous forme de PDF est réalisé par la librairie [Weasyprint](https://weasyprint.org/).
 
 La cartographie est obtenue avec [django-leaflet](https://github.com/makinacorpus/django-leaflet).
+
+L'autompletion de certains champs (commune naissance, département...) est obtenue avec [django-autocomplete-light](https://github.com/yourlabs/django-autocomplete-light).
+
+La vérification du format des numéros de téléphone se fait avec [django-phonenumber-field](https://github.com/stefanfoulis/django-phonenumber-field)
+
+La possibilité d'avoir une sélection multiple de checkboxes est obtenue avec la librairie [django-multiselectfield](https://github.com/goinnn/django-multiselectfield).
+
+### Boostrap
+Bootstrap est un framwork css / js développé initialement pour twitter qui permet l'afficahge de site web responsive. 
+On utilise ici un thème dark de bootstrap mis au point par [Vino Rodrigues](https://github.com/vinorodrigues/bootstrap-dark/)
+
