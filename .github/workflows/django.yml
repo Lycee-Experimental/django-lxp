@@ -37,4 +37,4 @@ jobs:
 
     - name: Make migrations
       run: |
-        python manage.py migrate
+        pipenv run manage.py migrate
