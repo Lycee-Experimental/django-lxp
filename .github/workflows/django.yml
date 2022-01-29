@@ -25,6 +25,9 @@ jobs:
         sudo apt-get install gdal-bin libgdal-dev libpq-dev
     - name: Run image
       uses: abatilo/actions-poetry@v2.0.0
+    - name: Poetry install
+      run: |
+        poetry install
     - name: Try to make migrations
       run: |
         poetry run python manage.py migrate
