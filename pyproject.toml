@@ -1,9 +1,11 @@
-[[source]]
-url = "https://pypi.org/simple"
-verify_ssl = true
-name = "pypi"
+[tool.poetry]
+name = "django-lxp"
+version = "0.1.0"
+description = ""
+authors = ["Davy39"]
 
-[packages]
+[tool.poetry.dependencies]
+python = "3.9"
 asgiref = "*"
 "backports.zoneinfo" = "*"
 beautifulsoup4 = "*"
@@ -61,7 +63,5 @@ Brotli = "*"
 Django = "*"
 Pillow = "*"
 
-[dev-packages]
-
-[requires]
-python_version = "3.9"
+[tool.poetry.dev-dependencies]
+pytest = "^3.4"
