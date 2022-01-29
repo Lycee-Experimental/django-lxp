@@ -5,6 +5,9 @@
     },
     {
       "url": "https://github.com/heroku/heroku-geo-buildpack"
+    },
+    {
+      "url": "https://github.com/moneymeets/python-poetry-buildpack"
     }
   ]
 }
