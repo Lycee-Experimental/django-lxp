@@ -244,20 +244,6 @@ brotli = "*"
 django = "*"
 
 [[package]]
-name = "django-countries"
-version = "7.2.1"
-description = "Provides a country field for Django models."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.extras]
-dev = ["tox", "black", "django", "pytest", "pytest-django", "djangorestframework", "graphene-django"]
-maintainer = ["transifex-client", "zest.releaser", "django"]
-pyuca = ["pyuca"]
-test = ["pytest", "pytest-django", "pytest-cov", "graphene-django"]
-
-[[package]]
 name = "django-crispy-forms"
 version = "1.14.0"
 description = "Best way to have Django DRY forms"
@@ -786,8 +772,8 @@ python-versions = "*"
 
 [metadata]
 lock-version = "1.1"
-python-versions = "^3.9"
-content-hash = "f4fa08e6c9d2d5ab7a2a724e9202698b66b357403ff1b5c3982d9cd1b1646440"
+python-versions = "3.9.5"
+content-hash = "d7c0311e955e0f905df703e29b23a1ab66a4dd108bf04677bd987e75a8ca62a5"
 
 [metadata.files]
 asgiref = [
@@ -1017,10 +1003,6 @@ django-brotli = [
     {file = "django-brotli-0.2.0.tar.gz", hash = "sha256:f98067814c6265d3d8c9edf43a30dde5e13fca274b887f2145f5ff1da4adeeab"},
     {file = "django_brotli-0.2.0-py2.py3-none-any.whl", hash = "sha256:ee45ac889e13ad1df21e55d2d18cf1db4c6e385938d78ade3168e17be65d4331"},
     {file = "django_brotli-0.2.0-py3-none-any.whl", hash = "sha256:a57e9f9350d78b60d95e59faf4c5c5e2c9d34aef50c12b95dd19a92cb67810e0"},
-]
-django-countries = [
-    {file = "django-countries-7.2.1.tar.gz", hash = "sha256:26878b54d36bedff30b4535ceefcb8af6784741a8b30b1b8a662fb14a936a4ab"},
-    {file = "django_countries-7.2.1-py3-none-any.whl", hash = "sha256:adc965f1d348124274b7d918fc1aad5e29609758af999e1822baa9f2cc06d1b8"},
 ]
 django-crispy-forms = [
     {file = "django-crispy-forms-1.14.0.tar.gz", hash = "sha256:35887b8851a931374dd697207a8f56c57a9c5cb9dbf0b9fa54314da5666cea5b"},
