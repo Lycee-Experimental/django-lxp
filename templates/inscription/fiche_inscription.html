@@ -16,31 +16,64 @@ Pour utiliser le tag créé dans templatetags/verbose_names
 
     <h1 class="header"> Fiche d'inscription </h1>    <h2 class="header"> Année 2022-2023</h2>
     <div class="container">
- {# NOM PRENOM #}
-    <div class="border row">
-        <div class="col-10">
-            <h1> {{ fiche.prenom }} {{ fiche.nom }} </h1>
-            <div> {{ fiche.address }} </div>
+        <div class="border row">
+            <div class="col-10 align-self-center">
+                <h1> {{ fiche.prenom }} {{ fiche.nom }} </h1>
+            </div>
+            <div class="col-2">
+                <img width="170px"  src="{{ fiche.photo.url }}"/>
+            </div>
         </div>
-        <div class="col-2">
-            <img width="200px"  src="{{ fiche.photo.url }}"/>
+        <div class="border row">
+            <div class="border col-4">
+                <h4>Civilité</h4>
+                <p><u>Sexe (administratif):</u><span class="float-right">{{ fiche.civility}}</span></p>
+                <p><u>Pronom:</u><span class="float-right">{{ fiche.genre}}</span></p>
+                <p><u>Nom:</u><span class="float-right">{{ fiche.nom}}</span></p>
+                <p><u>Prénom:</u><span class="float-right">{{ fiche.prenom}}</span></p>
+                <p><u>Prénom d'usage:</u><span class="float-right">{{ fiche.nom_usage}}</span></p>
+            </div>
+            <div class="border col-md-8">
+                <h4>Coordonnées</h4>
+                <p><u>Adresse:</u><span class="float-right">{{ fiche.address}}</span></p>
+                <p><u>Téléphone:</u><span class="float-right">{{ fiche.telephone.as_national}}</span></p>
+                <p><u>Email:</u><span class="float-right">{{ fiche.email}}</span></p>
+            </div>
         </div>
-    </div>
-{% for field, val in fiche %}
-    {% if forloop.first %}<div class="row">{% endif %}
-    <div class="border col-md-4">
-    <p>{{ field }} : </p>
-
-    {% if val.year %}
-        <p class="valeur">{{ val|date:"d/m/Y" }}</p>
-    {% else %}
-        <p class="valeur">{{ val }}</p>
-    {% endif %}
-
-    </div>
-
-    {% if forloop.counter|divisibleby:3 %}</div><div class="row">{% endif %}
-    {% if forloop.last %}</div>{% endif %}
-{% endfor %}
+        <div class="border row">
+            <div class="border col-4">
+                <h4>Naissance</h4>
+                <p><u>Date de naissance:</u><span class="float-right">{{ fiche.date_naissance}}</span></p>
+                <p><u>Ville de naissance:</u>
+                    <span class="float-right">
+                        {% if fiche.pays_naissance_id == 1 %} {{ fiche.commune_naissance}}
+                        {% else %} {{ fiche.ville_natale}}
+                        {% endif %}
+                    </span>
+                </p>
+                {% if fiche.pays_naissance_id == 1 %}
+                    <p><u>Département de naissance:</u>
+                        <span class="float-right">{{ fiche.departement_naissance.name}}</span>
+                    </p>
+                {% endif %}
+                <p><u>Pays de naissance:</u><span class="float-right">{{ fiche.pays_naissance}}</span></p>
+                <p><u>Nationalité:</u><span class="float-right">{{ fiche.nationalite}}</span></p>
+            </div>
+            <div class="border col-md-8">
+                <h4>Responsables</h4>
+                <h5>{{ fiche.get_resp1_display}} : {{ fiche.nom_resp1}}  {{ fiche.prenom_resp1}} </h5>
+                <p><u>Adresse:</u><span class="float-right">{{ fiche.adresse_resp1}}</span></p>
+                <p><u>Téléphone:</u><span class="float-right">{{ fiche.tel_resp1.as_national}}</span></p>
+                <p><u>Email:</u><span class="float-right">{{ fiche.email_resp1}}</span></p>
+                <p><u>Profession:</u><span class="float-right">{{ fiche.sociopro_resp1}}</span></p>
+                {% if fiche.resp2 != 'aucun' %}
+                    <h5>{{ fiche.get_resp2_display}} :  {{ fiche.nom_resp2}}  {{ fiche.prenom_resp2}}  </h5>
+                    <p><u>Adresse:</u><span class="float-right">{{ fiche.adresse_resp2}}</span></p>
+                    <p><u>Téléphone:</u><span class="float-right">{{ fiche.tel_resp2.as_national}}</span></p>
+                    <p><u>Email:</u><span class="float-right">{{ fiche.email_resp2}}</span></p>
+                    <p><u>Profession:</u><span class="float-right">{{ fiche.sociopro_resp2}}</span></p>
+                {% endif %}
+            </div>
+        </div>
 </div>
 {% endblock %}

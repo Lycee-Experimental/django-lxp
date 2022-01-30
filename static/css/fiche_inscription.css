@@ -1,20 +1,19 @@
 h1,h2 {text-align: center;}
-p.valeur {font: 32pt 'Comic Sans MS'}
 div.inline { float:left; }
-
 
 @media print {
     .container {
-    width: auto;
+        width: auto;
     }
     .row {
         display: flex;
         flex-direction: row;
     }
     .col-md-4 {
-      flex-basis: 33.33%;
+        flex-basis: 33.33%;
     }
 }
+
 @page {
     size: "A4";
     margin: 3.5cm 1.5cm 3cm 1.5cm;
