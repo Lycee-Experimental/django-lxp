@@ -60,7 +60,7 @@ def fiche_pdf(request, **kwargs):
     })
     font_config = FontConfiguration()
     HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response, stylesheets=[
-        'https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css'], font_config=font_config, presentational_hints=True)
+        'https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css'], font_config=font_config, presentational_hints=True)
     return response
 
 
@@ -102,7 +102,9 @@ class FormulaireInscription(SessionWizardView):
         # On sauvegarde les données
         self.instance.save()
         # On redirige vers le PDF
-        url = reverse('inscription:pdf', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
+        #url = reverse('inscription:pdf', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
+        # On redirige vers la fiche html
+        url = reverse('inscription:fiche', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
         return HttpResponseRedirect(url)
 
 
