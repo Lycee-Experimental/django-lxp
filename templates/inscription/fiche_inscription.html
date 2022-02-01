@@ -1,11 +1,33 @@
-{% extends "base.html" %}
 {% load verbose_names %}
 {% load static %}
  {% load i18n %}
 {% block head-javascript %}
-    <link href="https://fonts.googleapis.com/css?family=Playfair+Display:400,400i,700,700i,900" rel="stylesheet" />
     <link href="{% static 'css/fiche_inscription.css' %}" rel="stylesheet">
+<style>
+  table {
+      overflow-wrap: break-word;
+      table-layout: fixed;
+      margin: 0 auto; /* or margin: 0 auto 0 auto */
+      width: 90%;
+  }
+  p {
+    margin: 0 auto;
+  }
+td {
+    vertical-align: top;
+    border: 1px solid black;
+    padding: 10px;
+    overflow-wrap: break-word;     /* Renamed property in CSS3 draft spec */
+    width: 50%;
+}
+p span.gauche {
+	  float: left;
+	}
 
+p span.float-right {
+	  float: right;
+	}
+</style>
 {% endblock %}
 
 {% block content %}
@@ -16,33 +38,37 @@ Pour utiliser le tag créé dans templatetags/verbose_names
 
     <h1 class="header"> Fiche d'inscription </h1>    <h2 class="header"> Année 2022-2023</h2>
     <div class="container">
-        <div class="border row">
-            <div class="col-10 align-self-center">
-                <h1> {{ fiche.prenom }} {{ fiche.nom }} </h1>
-            </div>
-            <div class="col-2">
-                <img width="170px"  src="{{ fiche.photo.url }}"/>
-            </div>
-        </div>
-        <div class="border row">
-            <div class="border col-4">
-                <h4>Civilité</h4>
+    <table>
+    <tbody>
+    <tr>
+        <td>
+            <h1> {{ fiche.prenom }} {{ fiche.nom }} </h1>
+        </td>
+        <td>
+            <img width="170px"  src="{{ fiche.photo.url }}"/>
+
+        </td>
+    </tr>
+
+    <tr>
+      <td>
+          <h4>Civilité</h4>
                 <p><u>Sexe (administratif):</u><span class="float-right">{{ fiche.civility}}</span></p>
                 <p><u>Pronom:</u><span class="float-right">{{ fiche.genre}}</span></p>
                 <p><u>Nom:</u><span class="float-right">{{ fiche.nom}}</span></p>
                 <p><u>Prénom:</u><span class="float-right">{{ fiche.prenom}}</span></p>
                 <p><u>Prénom d'usage:</u><span class="float-right">{{ fiche.nom_usage}}</span></p>
-            </div>
-            <div class="border col-md-8">
-                <h4>Coordonnées</h4>
+      </td>
+      <td>
+           <h4>Coordonnées</h4>
                 <p><u>Adresse:</u><span class="float-right">{{ fiche.address}}</span></p>
                 <p><u>Téléphone:</u><span class="float-right">{{ fiche.telephone.as_national}}</span></p>
                 <p><u>Email:</u><span class="float-right">{{ fiche.email}}</span></p>
-            </div>
-        </div>
-        <div class="border row">
-            <div class="border col-4">
-                <h4>Naissance</h4>
+      </td>
+    </tr>
+    <tr>
+      <td>
+          <h4>Naissance</h4>
                 <p><u>Date de naissance:</u><span class="float-right">{{ fiche.date_naissance}}</span></p>
                 <p><u>Ville de naissance:</u>
                     <span class="float-right">
@@ -58,9 +84,9 @@ Pour utiliser le tag créé dans templatetags/verbose_names
                 {% endif %}
                 <p><u>Pays de naissance:</u><span class="float-right">{{ fiche.pays_naissance}}</span></p>
                 <p><u>Nationalité:</u><span class="float-right">{{ fiche.nationalite}}</span></p>
-            </div>
-            <div class="border col-md-8">
-                <h4>Responsables</h4>
+      </td>
+      <td>
+          <h4>Responsables</h4>
                 <h5>{{ fiche.get_resp1_display}} : {{ fiche.nom_resp1}}  {{ fiche.prenom_resp1}} </h5>
                 <p><u>Adresse:</u><span class="float-right">{{ fiche.adresse_resp1}}</span></p>
                 <p><u>Téléphone:</u><span class="float-right">{{ fiche.tel_resp1.as_national}}</span></p>
@@ -73,7 +99,10 @@ Pour utiliser le tag créé dans templatetags/verbose_names
                     <p><u>Email:</u><span class="float-right">{{ fiche.email_resp2}}</span></p>
                     <p><u>Profession:</u><span class="float-right">{{ fiche.sociopro_resp2}}</span></p>
                 {% endif %}
-            </div>
-        </div>
+      </td>
+    </tr>
+
+  </tbody>
+    </table>
 </div>
 {% endblock %}
