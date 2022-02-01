@@ -104,7 +104,7 @@ class FormulaireInscription(SessionWizardView):
         # On redirige vers le PDF
         #url = reverse('inscription:pdf', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
         # On redirige vers la fiche html
-        url = reverse('inscription:fiche', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
+        url = reverse('inscription:pdf', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
         return HttpResponseRedirect(url)
 
 
