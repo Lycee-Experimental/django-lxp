@@ -184,3 +184,4 @@ import django_heroku
 
 # Attention : s'il n'y a pas staticfiles=False le dossier par défaut static_root ou AWS n'est pas utilisé
 django_heroku.settings(locals(), staticfiles=False)
+del DATABASES['default']['OPTIONS']['sslmode']
