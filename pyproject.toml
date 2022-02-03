@@ -61,6 +61,7 @@ zopfli = "*"
 Brotli = "*"
 Django = "*"
 Pillow = "*"
+mysqlclient = "^2.1.0"
 
 [tool.poetry.dev-dependencies]
 pytest = "^3.4"
