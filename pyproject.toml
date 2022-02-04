@@ -5,12 +5,12 @@ description = ""
 authors = ["Davy39"]
 
 [tool.poetry.dependencies]
-python = "3.9.5"
+python =  ">=3.9,<4"
 asgiref = "*"
 "backports.zoneinfo" = "*"
 beautifulsoup4 = "*"
 boto3 = "*"
-botocore = "*"
+botocore = ">=1.23.48"
 certifi = "*"
 cffi = "*"
 charset-normalizer = "*"
@@ -61,7 +61,4 @@ zopfli = "*"
 Brotli = "*"
 Django = "*"
 Pillow = "*"
-mysqlclient = "^2.1.0"
-
-[tool.poetry.dev-dependencies]
-pytest = "^3.4"
+mysqlclient = "*"
