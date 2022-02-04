@@ -12,7 +12,7 @@ class Spe(models.Model):
     type = models.CharField(max_length=10, verbose_name="Type Spé", null=True, blank=True)
 
     def __str__(self):
-        """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
+        """Indique ce que donne l'affichege de la classe, notamment dans les menus déroulants"""
         return  u'%s' % self.intitule
 
 
