@@ -5,12 +5,12 @@ description = ""
 authors = ["Davy39"]
 
 [tool.poetry.dependencies]
-python =  "^3.9"
+python =  "^3.8"
 asgiref = "*"
 "backports.zoneinfo" = "*"
 beautifulsoup4 = "*"
 boto3 = "*"
-botocore = ">=1.23.48"
+botocore = "*"
 certifi = "*"
 cffi = "*"
 charset-normalizer = "*"
