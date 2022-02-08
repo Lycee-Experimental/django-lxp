@@ -185,11 +185,12 @@ class InscriptionForm2(forms.ModelForm):
         self.helper.field_class = 'col-md-8'
         # Affichage de ton formulaire
         self.helper.layout = Layout(
-            # Liste des champs à afficher
-            'resp1', 'nom_resp1', 'prenom_resp1', 'adresse_resp1', 'tel_resp1', 'email_resp1', 'sociopro_resp1',
-            'resp2', 'nom_resp2', 'prenom_resp2', 'adresse_resp2', 'tel_resp2', 'email_resp2',
-            'sociopro_resp2',
-
+            Fieldset("Responsable 1",
+                'resp1', 'nom_resp1', 'prenom_resp1', 'adresse_resp1', 'tel_resp1', 'email_resp1', 'sociopro_resp1'
+                     ),
+            Fieldset("Responsable 2",
+                'resp2', 'nom_resp2', 'prenom_resp2', 'adresse_resp2', 'tel_resp2', 'email_resp2','sociopro_resp2'
+                     ),
         )
 
     def clean(self):

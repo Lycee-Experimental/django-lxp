@@ -1,3 +1,10 @@
 .asteriskField {
     display: none;
 }
+
+fieldset {
+    padding: 20px;
+    margin: 0 0 30px 0;
+    border: 1px solid #515151;
+    border-radius: 10px;
+}
