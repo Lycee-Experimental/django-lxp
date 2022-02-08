@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% load crispy_forms_filters %}
 {% load i18n %}
 {% load crispy_forms_tags %}
@@ -7,6 +8,7 @@
 {% endblock %}
 
 {% block stylesheet %}
+    <link href="{% static 'css/formulaire_inscription.css' %}" rel="stylesheet">
 {% endblock stylesheet %}
   {{ form.media }}
 
