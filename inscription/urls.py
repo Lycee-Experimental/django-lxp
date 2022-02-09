@@ -13,8 +13,8 @@ urlpatterns = [
     path('fiche/<int:id>/<hash>', fiche, name='fiche'),
     path('pdf/<int:id>/<hash>', fiche_pdf, name='pdf'),
     path('carto', carto, name='carto'),
+    path('allergie', ajout_allergie, name='allergie'),
 ]
-
 # Serving the media files in development mode
 #if settings.DEBUG:
 #    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

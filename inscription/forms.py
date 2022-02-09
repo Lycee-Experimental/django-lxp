@@ -151,7 +151,7 @@ class InscriptionForm1(forms.ModelForm):
         widgets = {
             'photo': forms.widgets.FileInput(),
             'date_naissance': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
-            'commune_naissance': autocomplete.ModelSelect2(url='linked_data',
+            'commune_naissance': autocomplete.ModelSelect2(url='commune',
                                                            forward=('departement_naissance',)),
             'departement_naissance': autocomplete.ModelSelect2(url='departement'),
             'pays_naissance': autocomplete.ModelSelect2(url='pays'),
@@ -363,7 +363,6 @@ class InscriptionForm4(forms.ModelForm):
                 self.add_error('spe1', msg)
                 self.add_error('spe2', msg)
                 self.add_error('spe3', msg)
-
 
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer
