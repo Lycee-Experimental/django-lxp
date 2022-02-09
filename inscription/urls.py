@@ -2,14 +2,14 @@ from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
-from .views import InscriptionView, FormulaireInscription, form_list, fiche, fiche_pdf, carto
+from .views import InscriptionView, FormulaireInscription, fiche, fiche_pdf, carto, ajout_allergie
 
 app_name = 'inscription'
 
 urlpatterns = [
     path('inscriptions', login_required(InscriptionView.as_view()), name="inscriptions"),
-    path('', FormulaireInscription.as_view(form_list), name='formulaire'),
-    path('<int:id>/<hash>', FormulaireInscription.as_view(form_list), name='update'),
+    path('', FormulaireInscription.as_view(), name='formulaire'),
+    path('<int:id>/<hash>', FormulaireInscription.as_view(), name='update'),
     path('fiche/<int:id>/<hash>', fiche, name='fiche'),
     path('pdf/<int:id>/<hash>', fiche_pdf, name='pdf'),
     path('carto', carto, name='carto'),
