@@ -61,6 +61,13 @@ class Commune(models.Model):
         return  u'%s' % (self.name)
 
 
+class Allergie(models.Model):
+    allergene = models.CharField(max_length=100)
+
+    def __str__(self):
+        return '%s' % self.allergene
+
+
 class BaseEleve(models.Model):
     """
     Modèle de base de donnée BaseEleve
@@ -116,7 +123,7 @@ class BaseEleve(models.Model):
         ('aucun', 'Aucun')
     )
     resp1 = models.CharField(max_length=5, choices=RESP1,
-                             default='mere', verbose_name="Responsable 1")
+                             default='mere', verbose_name="Lien de parenté")
     nom_resp1 = models.CharField(max_length=255, verbose_name="Nom de famille")
     prenom_resp1 = models.CharField(max_length=255, verbose_name="Prénom")
     adresse_resp1 = AddressField(verbose_name="Adresse", related_name='resp1')
@@ -125,7 +132,7 @@ class BaseEleve(models.Model):
     sociopro_resp1 = models.ForeignKey(Sociopro, related_name='resp1',
                                        on_delete=models.CASCADE, verbose_name="Profession")
     resp2 = models.CharField(max_length=5, choices=RESP2,
-                                default='pere', verbose_name="Responsable 2")
+                                default='pere', verbose_name="Lien de parenté")
     nom_resp2 = models.CharField(max_length=255, verbose_name="Nom de famille", blank=True, null=True)
     prenom_resp2 = models.CharField(max_length=255, verbose_name="Prénom", blank=True, null=True)
     adresse_resp2 = AddressField(verbose_name="Adresse", related_name='resp2', blank=True, null=True)
@@ -141,6 +148,7 @@ class BaseEleve(models.Model):
         ('DO', 'Dysorthographie')
     )
     dys = MultiSelectField(choices=DYS, verbose_name='Troubles cognitifs', blank=True, null=True)
+    allergie = models.ManyToManyField(Allergie, blank=True, null=True)
     spe1 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '1'}, blank=True, related_name='spe1')
     spe2 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '2'}, blank=True, related_name='spe2')
     spe3 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '3'}, blank=True, related_name='spe3')

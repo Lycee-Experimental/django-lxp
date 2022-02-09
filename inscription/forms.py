@@ -1,11 +1,11 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from crispy_forms.bootstrap import FormActions, InlineField, InlineCheckboxes
+from crispy_forms.bootstrap import FormActions, InlineField, InlineCheckboxes, FieldWithButtons, StrictButton
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Fieldset, Layout, Submit, Column, Field, HTML, MultiField
+from crispy_forms.layout import Div, Fieldset, Layout, Submit, Field
 
 import inscription.models
-from .models import BaseEleve
+from .models import BaseEleve, Allergie
 from .utils import CaptchaWizardField
 # Pour l'autocomplétion de la commune en fonction du département choisi
 from dal import autocomplete
@@ -53,6 +53,7 @@ class InscriptionForm1(forms.ModelForm):
     name = 'Identité'
     # mail de confirmation
     confirmation_email = forms.EmailField(label="Confirmation de l'email", required=False)
+
     def __init__(self, *args, **kwargs):
         """
         Surcharge de l'initialisation du formulaire
@@ -224,6 +225,12 @@ class InscriptionForm2(forms.ModelForm):
 
 class InscriptionForm3(forms.ModelForm):
     name = 'Scolarité'
+    ajout_allergie = forms.CharField(label="Ajouter une allergie", required=False)
+    allergie = forms.ModelMultipleChoiceField(
+        queryset=Allergie.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -234,13 +241,19 @@ class InscriptionForm3(forms.ModelForm):
         self.helper.form_id = 'BaseEleve-form'
         # Largeur des labels et des champs sur la grille
         self.helper.label_class = 'col-md-4'
-        self.helper.field_class = 'col-md-6'
-        self.helper.layout = Layout()
+        self.helper.field_class = 'col-md-8 d-flex flex-wrap justify-content-between'
+        self.helper.layout = Layout(
+            Field('allergie', id='allergie'),
+            FieldWithButtons('ajout_allergie', StrictButton('Enregistrer', id='allergie-btn', css_class='btn-outline-success',
+                                                                                    onclick="ajoutAllergie()")),
+            InlineCheckboxes('dys'),
+
+        )
 
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
-        fields = []
+        fields = ['allergie', 'dys']
 
 
 class InscriptionForm4(forms.ModelForm):
@@ -280,7 +293,6 @@ class InscriptionForm4(forms.ModelForm):
                     Field('spe3', wrapper_class='col-4'),
                     css_class='row', css_id='champ-spe'),
             'confirm',
-            InlineCheckboxes('dys'),
             'captcha',
         )
 
@@ -357,7 +369,7 @@ class InscriptionForm4(forms.ModelForm):
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = [
-            'comments', 'dys','spe1', 'spe2', 'spe3','niveau',
+            'comments','spe1', 'spe2', 'spe3','niveau',
         ]
 
     class Media:

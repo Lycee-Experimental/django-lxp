@@ -19,7 +19,7 @@ from formtools.wizard.views import SessionWizardView
 from djangoLxp import settings
 from .filters import ListeEleveFiltre
 # Base BaseEleve
-from .models import BaseEleve, Pays, Departement
+from .models import BaseEleve, Pays, Departement, Allergie
 # Tableau des inscrits
 from .tables import ListeEleveTableau
 # Une vue pour afficher les inscriptions filtées
@@ -64,24 +64,28 @@ def fiche_pdf(request, **kwargs):
     return response
 
 
-#
-# Vue du formulaire wizard, cad en plusieurs étapes
-#
-
-# Liste des formulaires à inclure dans le wizard
-form_list = [InscriptionForm1, InscriptionForm2, InscriptionForm3, InscriptionForm4]
+def ajout_allergie(request):
+    """Une vue pour ajouter une allergie en jquery depuis le formulaire Wizard"""
+    if request.POST:
+        p, created = Allergie.objects.get_or_create(
+            allergene=request.POST.get('allergene').capitalize(),
+        )
+        return HttpResponse('success')
 
 
 class FormulaireInscription(SessionWizardView):
     """
     Vue du formulaire wizard (en plusieurs étapes)
     """
+    # Liste des formulaires à inclure dans le wizard
+    form_list = [InscriptionForm1, InscriptionForm2, InscriptionForm3, InscriptionForm4]
     template_name = 'inscription/formulaire_inscription.html'
     instance = None
     if settings.USE_S3:
         file_storage = MediaStorage(location='tmp')
     else:
         file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
+
     def get_form_instance(self, step):
         """Connection du wizard à une instance de la base de donnée
         Soit nouvelle, soit existante à partir de l' id envoyé en kwargs, par l'entrée url.py :
@@ -102,8 +106,6 @@ class FormulaireInscription(SessionWizardView):
         # On sauvegarde les données
         self.instance.save()
         # On redirige vers le PDF
-        #url = reverse('inscription:pdf', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
-        # On redirige vers la fiche html
         url = reverse('inscription:pdf', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
         return HttpResponseRedirect(url)
 

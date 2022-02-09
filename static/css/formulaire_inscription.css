@@ -1,7 +1,18 @@
+/* Retrait de asterisk des champs requis */
+
 .asteriskField {
     display: none;
 }
 
+/* Customisation des checkboxes (alergie, dys...)*/
+.custom-control.custom-checkbox {
+    display: inline-block;
+}
+.custom-control.custom-checkbox label.custom-control-label {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+/* Pour encadrer des zones de formulaire (ex Responsables) */
 fieldset {
     padding: 20px;
     margin: 0 0 30px 0;
