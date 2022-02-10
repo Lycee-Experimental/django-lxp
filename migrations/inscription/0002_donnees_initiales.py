@@ -9,8 +9,10 @@ def forwards_func(apps, schema_editor):
     print(data_list)
     for data in data_list:
         print(data)
-        call_command('loaddata', data, verbosity=2)
-
+        try:
+            call_command('loaddata', data, verbosity=2)
+        except:
+            print("Erreur de l'import des données initiales. Commencer par les télécharger.")
 
 def reverse_func(apps, schema_editor):
     print('reverse')
