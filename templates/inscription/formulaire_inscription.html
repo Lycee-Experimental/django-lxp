@@ -80,13 +80,10 @@
                 //XHR.addEventListener('error', function(event) {
                 //    alert('Oups! Quelque chose s\'est mal passé.');
                 //});
-
                 // Configurez la requête
                 XHR.open('POST', 'allergie');
-
                 // Ajoutez l'en-tête HTTP requise pour requêtes POST de données de formulaire
                 XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
                 // Finalement, envoyez les données.
                 XHR.send(urlEncodedData);
                 setTimeout(function () {
@@ -95,9 +92,24 @@
                     //location.load();
                     document.getElementById('id_2-ajout_allergie').value = '';
                 }, 500);
-
             }
         }
-
+        function ajoutDys() {
+            if(document.getElementById('id_2-ajout_dys').value) {
+                var XHR = new XMLHttpRequest();
+                var urlEncodedData = "";
+                var urlEncodedDataPairs = [];
+                urlEncodedDataPairs.push(encodeURIComponent('trouble') + '=' + encodeURIComponent(document.getElementById('id_2-ajout_dys').value));
+                urlEncodedDataPairs.push(encodeURIComponent('csrfmiddlewaretoken') + '=' + encodeURIComponent("{{ csrf_token }}"));
+                urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
+                XHR.open('POST', 'dys');
+                XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                XHR.send(urlEncodedData);
+                setTimeout(function () {
+                    $('#dys').load(' #dys', {"csrfmiddlewaretoken":"{{ csrf_token }}", "wizard_goto_step": '2'}, function(){$(this).children().unwrap()});
+                    document.getElementById('id_2-ajout_dys').value = '';
+                }, 500);
+            }
+        }
     </script>
 {% endblock %}

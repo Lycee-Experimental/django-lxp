@@ -1,11 +1,9 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
-from crispy_forms.bootstrap import FormActions, InlineField, InlineCheckboxes, FieldWithButtons, StrictButton
+from crispy_forms.bootstrap import FormActions, InlineField, FieldWithButtons, StrictButton
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Div, Fieldset, Layout, Submit, Field
-
-import inscription.models
-from .models import BaseEleve, Allergie
+from .models import BaseEleve, Allergie, TroubleCognitif, Spe
 from .utils import CaptchaWizardField
 # Pour l'autocomplétion de la commune en fonction du département choisi
 from dal import autocomplete
@@ -229,8 +227,17 @@ class InscriptionForm3(forms.ModelForm):
     allergie = forms.ModelMultipleChoiceField(
         queryset=Allergie.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        required=False
+        required=False,
+        label="Allergies"
     )
+    dys = forms.ModelMultipleChoiceField(
+        queryset=TroubleCognitif.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        required=False,
+        label="Troubles de l'apprentissage"
+    )
+    ajout_dys = forms.CharField(label="Ajouter un trouble", required=False)
+    nouvelle = forms.BooleanField(label="Première inscription au LXP", required=False)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -242,13 +249,24 @@ class InscriptionForm3(forms.ModelForm):
         # Largeur des labels et des champs sur la grille
         self.helper.label_class = 'col-md-4'
         self.helper.field_class = 'col-md-8 d-flex flex-wrap justify-content-between'
+        self.helper.use_custom_control = True
+        self.helper.form_show_labels = True
         self.helper.layout = Layout(
+            Field('dys', id='dys'),
+            FieldWithButtons('ajout_dys', StrictButton('Enregistrer', id='dys-btn', css_class='btn-outline-success',
+                                                       onclick="ajoutDys()")),
             Field('allergie', id='allergie'),
             FieldWithButtons('ajout_allergie', StrictButton('Enregistrer', id='allergie-btn', css_class='btn-outline-success',
                                                                                     onclick="ajoutAllergie()")),
             InlineCheckboxes('dys'),
 
         )
+
+    class Media:
+        js = ('js/hide_lxp_an_passe.js',)
+        css = {
+            'screen': ('css/custom-dark.css',),
+        }
 
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer
@@ -303,8 +321,8 @@ class InscriptionForm4(forms.ModelForm):
             else:
                 list_type = []
                 for spe in spes:
-                    if inscription.models.Spe.objects.filter(intitule=spe).values_list('type', flat=True).first() is not None:
-                        list_type.append(inscription.models.Spe.objects.filter(intitule=spe).values_list('type', flat=True).first())
+                    if Spe.objects.filter(intitule=spe).values_list('type', flat=True).first() is not None:
+                        list_type.append(Spe.objects.filter(intitule=spe).values_list('type', flat=True).first())
                 for elem in list_type:
                     if list_type.count(elem) > 1:
                         return True

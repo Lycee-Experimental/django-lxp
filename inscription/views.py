@@ -19,7 +19,7 @@ from formtools.wizard.views import SessionWizardView
 from djangoLxp import settings
 from .filters import ListeEleveFiltre
 # Base BaseEleve
-from .models import BaseEleve, Pays, Departement, Allergie
+from .models import BaseEleve, Pays, Departement, Allergie, TroubleCognitif
 # Tableau des inscrits
 from .tables import ListeEleveTableau
 # Une vue pour afficher les inscriptions filtées
@@ -69,6 +69,15 @@ def ajout_allergie(request):
     if request.POST:
         p, created = Allergie.objects.get_or_create(
             allergene=request.POST.get('allergene').capitalize(),
+        )
+        return HttpResponse('success')
+
+
+def ajout_dys(request):
+    """Une vue pour ajouter un trouble en jquery depuis le formulaire Wizard"""
+    if request.POST:
+        p, created = TroubleCognitif.objects.get_or_create(
+            trouble=request.POST.get('trouble').capitalize(),
         )
         return HttpResponse('success')
 

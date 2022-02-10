@@ -8,6 +8,15 @@
     color: #b1b1b1;
     line-height: 24px;
 }
+
+.is-invalid {
+    border-color: #e74c3c !important;
+}
+
+.select2-container--default {
+    width: 100% !important;
+}
+
 .select2-container--default .select2-selection--single .select2-selection__rendered {
     color: #b1b1b1;
     line-height: 24px;

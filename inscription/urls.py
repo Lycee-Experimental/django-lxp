@@ -2,7 +2,7 @@ from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
-from .views import InscriptionView, FormulaireInscription, fiche, fiche_pdf, carto, ajout_allergie
+from .views import InscriptionView, FormulaireInscription, fiche, fiche_pdf, carto, ajout_allergie, ajout_dys
 
 app_name = 'inscription'
 
@@ -14,6 +14,7 @@ urlpatterns = [
     path('pdf/<int:id>/<hash>', fiche_pdf, name='pdf'),
     path('carto', carto, name='carto'),
     path('allergie', ajout_allergie, name='allergie'),
+    path('dys', ajout_dys, name='dys'),
 ]
 # Serving the media files in development mode
 #if settings.DEBUG:

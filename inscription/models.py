@@ -61,6 +61,13 @@ class Commune(models.Model):
         return  u'%s' % (self.name)
 
 
+class TroubleCognitif(models.Model):
+    trouble = models.CharField(max_length=100)
+
+    def __str__(self):
+        return '%s' % self.trouble
+
+
 class Allergie(models.Model):
     allergene = models.CharField(max_length=100)
 
@@ -140,22 +147,18 @@ class BaseEleve(models.Model):
     tel_resp2 = PhoneNumberField(verbose_name="Numéro de téléphone", blank=True, null=True)
     sociopro_resp2 = models.ForeignKey(Sociopro, related_name='resp2',
                                        on_delete=models.CASCADE, verbose_name="Profession", blank=True, null=True)
-    DYS = (
-        ('DL', 'Dyslexie'),
-        ('DC', 'Dyscalculie'),
-        ('DP', 'Dyspraxie'),
-        ('DG', 'Dysgraphie'),
-        ('DO', 'Dysorthographie')
-    )
-    dys = MultiSelectField(choices=DYS, verbose_name='Troubles cognitifs', blank=True, null=True)
-    allergie = models.ManyToManyField(Allergie, blank=True, null=True)
+
     spe1 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '1'}, blank=True, related_name='spe1')
     spe2 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '2'}, blank=True, related_name='spe2')
     spe3 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '3'}, blank=True, related_name='spe3')
     NIVEAU = (
         ('premiere', 'Première'),
         ('deter', 'Détermination (2nde)'),
+        ('premiere', 'Première'),
         ('term', 'Terminale'),
         ('crepa','CREPA'),
     )
     niveau = models.CharField(max_length=10, choices=NIVEAU, verbose_name="Niveau d'inscription", default='deter')
+    # Scolarité passée
+    dys = models.ManyToManyField(TroubleCognitif, verbose_name="Troubles de l'apprentissage")
+    allergie = models.ManyToManyField(Allergie, verbose_name="Allergies")
