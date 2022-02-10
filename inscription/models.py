@@ -4,6 +4,13 @@ from multiselectfield import MultiSelectField
 from phonenumber_field.modelfields import PhoneNumberField
 from .utils import nom_photo, create_hash
 
+GB = (
+    (1, 'G1'),
+    (2, 'G2'),
+    (3, 'G3'),
+    (4, 'G4'),
+    (5, 'G5'),
+)
 
 class Spe(models.Model):
     code = models.CharField(max_length=10, verbose_name="Code Spé")
@@ -73,6 +80,20 @@ class Allergie(models.Model):
 
     def __str__(self):
         return '%s' % self.allergene
+
+
+class MEE(models.Model):
+    nom = models.CharField(max_length=20, verbose_name="Nom")
+    prenom = models.CharField(max_length=20, verbose_name="Prénom")
+    gb_an_passe = models.IntegerField(choices=GB,
+                                      verbose_name="GB de l'an passé", blank=True, null=True)
+    gb_annee_en_cours = models.IntegerField(choices=GB,
+                                            verbose_name="GB de cette année", blank=True, null=True)
+    email = models.EmailField(verbose_name="Email", max_length=30,  blank=True, null=True)
+    telephone = PhoneNumberField(verbose_name="Téléphone",  blank=True, null=True)
+
+    def __str__(self):
+        return '%s' % self.prenom
 
 
 class BaseEleve(models.Model):
@@ -162,3 +183,14 @@ class BaseEleve(models.Model):
     # Scolarité passée
     dys = models.ManyToManyField(TroubleCognitif, verbose_name="Troubles de l'apprentissage")
     allergie = models.ManyToManyField(Allergie, verbose_name="Allergies")
+
+    nouvelle = models.BooleanField(verbose_name='Première inscription au LXP', default=True)
+    niveau_an_passe = models.CharField(max_length=10, choices=NIVEAU,
+                                       verbose_name="Niveau d'inscription l'an passé", blank=True, null=True)
+    gb_an_passe = models.IntegerField(choices=GB,
+                                       verbose_name="Groupe de base", blank=True, null=True)
+    ecco_an_passe = models.ForeignKey(MEE, on_delete=models.CASCADE,
+                                      verbose_name="MEE d'ECCO", blank=True, null=True)
+
+    gb_annee_en_cours = models.IntegerField(choices=GB,
+                                      verbose_name="Groupe de base", blank=True, null=True)

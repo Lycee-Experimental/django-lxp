@@ -11,4 +11,5 @@ urlpatterns = [
     url('^commune/$', AutocompleteCommune.as_view(model=Commune), name='commune'),
     url('^pays/$', AutocompletePays.as_view(), name='pays'),
     url('^departement/$', AutocompleteDepartement.as_view(), name='departement'),
+    url('^mee/$', AutocompleteMEE.as_view(), name='mee'),
 ]

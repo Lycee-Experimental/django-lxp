@@ -19,8 +19,7 @@ from formtools.wizard.views import SessionWizardView
 from djangoLxp import settings
 from .filters import ListeEleveFiltre
 # Base BaseEleve
-from .models import BaseEleve, Pays, Departement, Allergie, TroubleCognitif
-# Tableau des inscrits
+from .models import BaseEleve, Pays, Departement, Allergie, TroubleCognitif, MEE
 from .tables import ListeEleveTableau
 # Une vue pour afficher les inscriptions filtées
 from .utils import PagedFilteredTableView, MediaStorage, coordonnees
@@ -163,4 +162,15 @@ class AutocompletePays(autocomplete.Select2QuerySetView):
         qs = Pays.objects.all().order_by('name')
         if self.q:
             qs = qs.filter(name__istartswith=self.q)
+        return qs
+
+
+class AutocompleteMEE(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = MEE.objects.all().order_by('prenom')
+        gb = self.forwarded.get('gb_an_passe', None)
+        if gb:
+            qs = qs.filter(gb_an_passe=gb)
+        if self.q:
+            qs = qs.filter(prenom__istartswith=self.q)
         return qs

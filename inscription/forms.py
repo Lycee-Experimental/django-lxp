@@ -258,8 +258,11 @@ class InscriptionForm3(forms.ModelForm):
             Field('allergie', id='allergie'),
             FieldWithButtons('ajout_allergie', StrictButton('Enregistrer', id='allergie-btn', css_class='btn-outline-success',
                                                                                     onclick="ajoutAllergie()")),
-            InlineCheckboxes('dys'),
-
+            Field('nouvelle', id='nouvelle', wrapper_class="custom-control custom-switch custom-switch-lg",
+                  template='inscription/custom-field.html'),
+            'niveau_an_passe',
+            'gb_an_passe',
+            'ecco_an_passe',
         )
 
     class Media:
@@ -271,7 +274,29 @@ class InscriptionForm3(forms.ModelForm):
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
-        fields = ['allergie', 'dys']
+        fields = ['allergie', 'dys', 'nouvelle',  'niveau_an_passe', 'gb_an_passe', 'ecco_an_passe']
+        widgets = {
+            'ecco_an_passe': autocomplete.ModelSelect2(url='mee',
+                                                           forward=('gb_an_passe',)),
+        }
+
+    def clean(self):
+        nouvelle = self.cleaned_data.get('nouvelle')
+        if nouvelle:
+            self.cleaned_data['ecco_an_passe'] = None
+            self.cleaned_data['gb_an_passe'] = None
+            self.cleaned_data['niveau_an_passe'] = None
+        else:
+            if not self.cleaned_data.get('ecco_an_passe'):
+                msg = forms.ValidationError("Indique ton MEE de groupe ECCO de l'an passé.")
+                self.add_error('ecco_an_passe', msg)
+            if not self.cleaned_data.get('gb_an_passe'):
+                msg = forms.ValidationError("Indique ton groupe de base de l'an passé.")
+                self.add_error('gb_an_passe', msg)
+            if not self.cleaned_data.get('niveau_an_passe'):
+                msg = forms.ValidationError("Indique le niveau dans lequel tu étais inscrit l'an passé.")
+                self.add_error('niveau_an_passe', msg)
+        return self.cleaned_data
 
 
 class InscriptionForm4(forms.ModelForm):

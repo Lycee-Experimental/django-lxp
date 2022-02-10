@@ -80,7 +80,9 @@
 .asteriskField {
     display: none;
 }
-
+input#nouvelle.checkboxinput.custom-control-input {
+    margin-left: 50px;
+}
 /* Customisation des checkboxes (alergie, dys...)*/
 .custom-control.custom-checkbox {
     display: inline-block;
@@ -95,4 +97,25 @@ fieldset {
     margin: 0 0 30px 0;
     border: 1px solid #515151;
     border-radius: 10px;
+}
+
+.custom-switch.custom-switch-lg .custom-control-label {
+    padding-left: 3rem;
+    padding-bottom: 2rem;
+}
+
+.custom-switch.custom-switch-lg .custom-control-label::before {
+    height: 2rem;
+    width: calc(3rem + 0.75rem);
+    border-radius: 4rem;
+}
+
+.custom-switch.custom-switch-lg .custom-control-label::after {
+    width: calc(2rem - 4px);
+    height: calc(2rem - 4px);
+    border-radius: calc(3rem - (2rem / 2));
+}
+
+.custom-switch.custom-switch-lg .custom-control-input:checked ~ .custom-control-label::after {
+    transform: translateX(calc(2rem - 0.25rem));
 }
