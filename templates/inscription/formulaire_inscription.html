@@ -13,14 +13,24 @@
   {{ form.media }}
 
 {% block content %}
+    <br>
 <h1 class=text-center >Inscription au Lycée Expérimental</h1>
         {{ wizard.form.media }}
+    <br>
 <div class="container">
-
+    <ul id="progressbar" class="text-center" style="padding: 0;">
+        <li class="active" id="identite"><strong>Identité</strong></li>
+        <li {% if wizard.steps.step1 >= 2 %} class="active" {% endif %} id="responsables"><strong>Responsables</strong></li>
+        <li {% if wizard.steps.step1 >= 3 %} class="active" {% endif %} id="scolarite"><strong>Scolarité</strong></li>
+        <li {% if wizard.steps.step1 >= 4 %} class="active" {% endif %} id="projet"><strong>Projet</strong></li>
+    </ul>
+    <div class="progress">
+        <div class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" aria-valuemin="0" aria-valuemax="100" style="width: calc({{ wizard.steps.step1}} / {{ wizard.steps.count }} * 100%);"></div>
+    </div>
+<br>
     <div class="row">
         <div class="col-md-10 offset-md-1">
             <div class="formwizard">
-                <p>Étape {{ wizard.steps.step1 }} sur {{ wizard.steps.count }}  -   {{ wizard.form.name }}</p>
                 <form action="" method="post" enctype="multipart/form-data">
                     {% csrf_token %}
                 <table>
