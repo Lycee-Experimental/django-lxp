@@ -1,4 +1,7 @@
 {% load crispy_forms_field %}
+{% if field.is_hidden %}
+{{ field }}
+{% else %}
 <div class="form-group row">
         {% if field.label and form_show_labels %}
         {# not field|is_radioselect in row below can be removed once Django 3.2 is no longer supported #}
@@ -31,4 +34,4 @@
             </div>
 
         </div>
-
+{% endif %}

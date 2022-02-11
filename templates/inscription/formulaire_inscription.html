@@ -111,5 +111,11 @@
                 }, 500);
             }
         }
+        // Enleve le switch de validation des 2 spé dans la même colonne quand on change les spé
+        $('[id^="div_id_3-spe"]').change(function() {
+            $("[id=switch]").hide();
+            $(".invalid-feedback").empty();
+            $(".is-invalid").removeClass('is-invalid');
+        });
     </script>
 {% endblock %}

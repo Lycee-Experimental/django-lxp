@@ -2,7 +2,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.bootstrap import FormActions, InlineField, FieldWithButtons, StrictButton
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Fieldset, Layout, Submit, Field
+from crispy_forms.layout import Div, Fieldset, Layout, Submit, Field, HTML, MultiField
 from .models import BaseEleve, Allergie, TroubleCognitif, Spe
 from .utils import CaptchaWizardField
 # Pour l'autocomplétion de la commune en fonction du département choisi
@@ -304,8 +304,23 @@ class InscriptionForm4(forms.ModelForm):
     # Ajout des champs supplémentaires au modèle
     # captcha
     captcha = CaptchaWizardField()
-    confirm = forms.BooleanField(label="Je comprends et accepte que mes spécialités aient lieu en même temps",
+    confirm = forms.BooleanField(label= "Je comprends et accepte que mes spécialités aient lieu en même temps",
                                  required=False, widget=forms.HiddenInput)
+    spe1 = forms.ModelMultipleChoiceField(
+        queryset=Spe.objects.filter(groupe='1'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+    spe2 = forms.ModelMultipleChoiceField(
+        queryset=Spe.objects.filter(groupe='2'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
+    spe3 = forms.ModelMultipleChoiceField(
+        queryset=Spe.objects.filter(groupe='3'),
+        widget=forms.CheckboxSelectMultiple,
+        required=False
+    )
     def __init__(self, *args, **kwargs):
         """
         Surcharge de l'initialisation du formulaire
@@ -331,11 +346,12 @@ class InscriptionForm4(forms.ModelForm):
             Fieldset(
                 #HTML("""<label>Spécialités</label>"""),
                 'Spécialités',
-                    Field('spe1', wrapper_class='col-4'),
-                    Field('spe2', wrapper_class='col-4'),
-                    Field('spe3', wrapper_class='col-4'),
-                    css_class='row', css_id='champ-spe'),
-            'confirm',
+                Fieldset( 'Spé 1 ','spe1', css_class='col-4'),
+                Fieldset( 'Spé 2 ','spe2', css_class='col-4'),
+                Fieldset( 'Spé 3 ','spe3', css_class='col-4'),
+                Div(Field('confirm', wrapper_class="custom-control custom-switch custom-switch-lg",
+                      template='inscription/custom-field.html'), css_id='switch'),
+            css_class='row justify-content-center', css_id='champ-spe'),
             'captcha',
         )
 
@@ -353,59 +369,54 @@ class InscriptionForm4(forms.ModelForm):
                         return True
         return False
 
+    def nb_spe(self, data_spe, groupe_spe):
+        nb = 0
+        for spe in groupe_spe:
+            print(data_spe[spe])
+            print(len(data_spe[spe]))
+            nb += len(data_spe[spe])
+        return nb
+
     def clean(self):
         niveau = self.cleaned_data.get('niveau')
         confirm = self.cleaned_data.get('confirm')
         groupe_spe = ['spe1', 'spe2', 'spe3']
-        spe1 = self.cleaned_data.get('spe1')
-        spe2 = self.cleaned_data.get('spe2')
-        spe3 = self.cleaned_data.get('spe3')
+        data_spe={}
+        for spe in groupe_spe:
+            data_spe[spe] = self.cleaned_data.get(spe) or []
         if niveau == 'crepa' or niveau == 'deter' :
             self.cleaned_data['spe1'] = None
             self.cleaned_data['spe2'] = None
             self.cleaned_data['spe3'] = None
-        elif niveau == 'premiere' :
-            if len(spe1)+len(spe2)+len(spe3) == 3:
-                if len(spe1) ==1 and len(spe2) == 1 and len(spe3) == 1:
-                    return self.cleaned_data
-                else:
-                    for spe in groupe_spe:
-                        if self.check_spe(self.cleaned_data.get(spe)):
-                            msg = forms.ValidationError("Vous ne pouvez-pas prendre 2 spé du même type (arts et langues).")
-                            self.add_error(spe, msg)
-                            return
-                    if not confirm:
-                        msg = forms.ValidationError("Il est fortement déconseillé de choisir 2 spés dans la même colonne. Ces 2 spés auront systématiquement lieux en même temps. Ne faire ce choix qu'après discussion avec un·e membre de l'équipe éducative.")
-                        self.fields['confirm'].widget = forms.CheckboxInput()
-                        self.fields['confirm'].required = True
-                        self.add_error('confirm', msg)
-                    else:
-                        return self.cleaned_data
-            else:
-                msg = forms.ValidationError("Vous devez choisir 3 spécialités.")
-                self.add_error('spe1', msg)
-                self.add_error('spe2', msg)
-                self.add_error('spe3', msg)
+            return self.cleaned_data
         else:
-            if len(spe1)+len(spe2)+len(spe3) == 2:
-                if len(spe1) > 1 or len(spe2) > 1 or len(spe3) > 1:
-                    for spe in groupe_spe:
-                        if self.check_spe(self.cleaned_data.get(spe)):
-                            msg = forms.ValidationError("Vous ne pouvez-pas prendre 2 spé du même type (arts et langues).")
-                            self.add_error(spe, msg)
-                            return
-                    if not confirm:
-                        msg = forms.ValidationError("Il est fortement déconseillé de choisir 2 spés dans la même colonne. Ces 2 spés auront systématiquement lieux en même temps. Ne faire ce choix qu'après discussion avec un·e membre de l'équipe éducative.")
+            # On vérifie qu'il n'y a pas de Spé incompatibles car du même type.
+            for spe in groupe_spe:
+                if self.check_spe(self.cleaned_data.get(spe)):
+                    msg = forms.ValidationError("Vous ne pouvez-pas prendre 2 spé du même type (arts et langues).")
+                    self.add_error(spe, msg)
+                    return
+                if len(data_spe[spe]) > 1 and not confirm:
+                        msg = forms.ValidationError("Il est fortement déconseillé de choisir plusieurs spés dans la même colonne. Ces 2 spés auront systématiquement lieu en même temps. Ne faire ce choix qu'après discussion avec un·e membre de l'équipe éducative.")
                         self.fields['confirm'].widget = forms.CheckboxInput()
-                        self.fields['confirm'].required = True
-                        self.add_error('confirm', msg)
-                else:
-                    return self.cleaned_data
+                        self.add_error(spe, msg)
+                        return
+            if niveau == 'premiere':
+                if not self.nb_spe(data_spe, groupe_spe) == 3:
+                    msg = forms.ValidationError("Vous devez choisir 3 spécialités et non "+str(self.nb_spe(data_spe, groupe_spe))+'.')
+                    self.add_error('spe1', msg)
+                    self.add_error('spe2', msg)
+                    self.add_error('spe3', msg)
             else:
-                msg = forms.ValidationError("Vous devez choisir 2 spécialités.")
-                self.add_error('spe1', msg)
-                self.add_error('spe2', msg)
-                self.add_error('spe3', msg)
+                if not self.nb_spe(data_spe, groupe_spe) == 2:
+                    msg = forms.ValidationError("Vous devez choisir 2 spécialités et non "+str(self.nb_spe(data_spe, groupe_spe))+".")
+                    self.add_error('spe1', msg)
+                    self.add_error('spe2', msg)
+                    self.add_error('spe3', msg)
+
+
+        return self.cleaned_data
+
 
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer

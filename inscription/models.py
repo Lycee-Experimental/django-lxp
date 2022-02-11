@@ -169,9 +169,9 @@ class BaseEleve(models.Model):
     sociopro_resp2 = models.ForeignKey(Sociopro, related_name='resp2',
                                        on_delete=models.CASCADE, verbose_name="Profession", blank=True, null=True)
 
-    spe1 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '1'}, blank=True, related_name='spe1')
-    spe2 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '2'}, blank=True, related_name='spe2')
-    spe3 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '3'}, blank=True, related_name='spe3')
+    spe1 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '1'}, blank=True, null=True, related_name='spe1')
+    spe2 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '2'}, blank=True, null=True, related_name='spe2')
+    spe3 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '3'}, blank=True, null=True, related_name='spe3')
     NIVEAU = (
         ('premiere', 'Première'),
         ('deter', 'Détermination (2nde)'),
