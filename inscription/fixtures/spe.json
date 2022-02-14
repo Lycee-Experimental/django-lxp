@@ -1,0 +1,182 @@
+[
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "ARTCIN",
+            "intitule": "Cinéma",
+            "groupe": "1",
+            "type": "art"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "ARTTHEA",
+            "intitule": "Théâtre",
+            "groupe": "1",
+            "type": "art"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "ARTMUS",
+            "intitule": "Musique",
+            "groupe": "1",
+            "type": "art"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "ARTPLA",
+            "intitule": "Arts plastiques",
+            "groupe": "1",
+            "type": "art"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "HISTGEO",
+            "intitule": "Histoire-Géo-Pol",
+            "groupe": "1",
+            "type": null
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "MATH",
+            "intitule": "Mathématiques",
+            "groupe": "1",
+            "type": null
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "HUMPHI",
+            "intitule": "Humanités, littérature et philosophie",
+            "groupe": "2",
+            "type": null
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "PHYCHI",
+            "intitule": "Physique-Chimie",
+            "groupe": "2",
+            "type": null
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "ECOSOC",
+            "intitule": "Sciences économiques et sociales",
+            "groupe": "2",
+            "type": null
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "SVT",
+            "intitule": "Sciences de la vie et de la terre",
+            "groupe": "3",
+            "type": null
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "LLCERANG",
+            "intitule": "Anglais",
+            "groupe": "3",
+            "type": "LLCE"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "LLCERESP ",
+            "intitule": "Espagnol",
+            "groupe": "3",
+            "type": "LLCE"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "ARTCIRQ",
+            "intitule": "Arts du cirque",
+            "groupe": null,
+            "type": "art"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "ARTHIST",
+            "intitule": "Histoire des arts",
+            "groupe": null,
+            "type": "art"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "ARTDAN",
+            "intitule": "Danse",
+            "groupe": null,
+            "type": "art"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "BIOLO",
+            "intitule": "Biologie - écologie",
+            "groupe": null,
+            "type": null
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "SCING",
+            "intitule": "Sciences de l'ingénieur",
+            "groupe": null,
+            "type": null
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "LLCERANGMC",
+            "intitule": "Anglais monde contemporain",
+            "groupe": null,
+            "type": "LLCE"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "LLCERALL",
+            "intitule": "Allemand",
+            "groupe": null,
+            "type": "LLCE"
+        }
+    },
+    {
+        "model": "inscription.spe",
+        "fields": {
+            "code": "NUMINF",
+            "intitule": "Numérique et sciences informatiques",
+            "groupe": null,
+            "type": null
+        }
+    }
+]

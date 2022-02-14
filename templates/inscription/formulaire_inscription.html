@@ -60,57 +60,6 @@
 {% endblock content %}
 {% block foot-javascript %}
     <script>
-        function ajoutAllergie() {
-            if(document.getElementById('id_2-ajout_allergie').value) {
-                var XHR = new XMLHttpRequest();
-                var urlEncodedData = "";
-                var urlEncodedDataPairs = [];
-                // Transformez l'objet data en un tableau de paires clé/valeur codées URL.
-                urlEncodedDataPairs.push(encodeURIComponent('allergene') + '=' + encodeURIComponent(document.getElementById('id_2-ajout_allergie').value));
-                urlEncodedDataPairs.push(encodeURIComponent('csrfmiddlewaretoken') + '=' + encodeURIComponent("{{ csrf_token }}"));
-                // Combinez les paires en une seule chaîne de caractères et remplacez tous
-                // les espaces codés en % par le caractère'+' ; cela correspond au comportement
-                // des soumissions de formulaires de navigateur.
-                urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
-                // Définissez ce qui se passe en cas de succès de soumission de données
-                //XHR.addEventListener('load', function(event) {
-                //    alert('Ouais ! Données envoyées et réponse chargée.');
-                //});
-                // Définissez ce qui arrive en cas d'erreur
-                //XHR.addEventListener('error', function(event) {
-                //    alert('Oups! Quelque chose s\'est mal passé.');
-                //});
-                // Configurez la requête
-                XHR.open('POST', 'allergie');
-                // Ajoutez l'en-tête HTTP requise pour requêtes POST de données de formulaire
-                XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                // Finalement, envoyez les données.
-                XHR.send(urlEncodedData);
-                setTimeout(function () {
-                    //on ne recharge que le div id allergie (de la step 2)
-                    $('#allergie').load(' #allergie', {"csrfmiddlewaretoken":"{{ csrf_token }}", "wizard_goto_step": '2'}, function(){$(this).children().unwrap()});
-                    //location.load();
-                    document.getElementById('id_2-ajout_allergie').value = '';
-                }, 500);
-            }
-        }
-        function ajoutDys() {
-            if(document.getElementById('id_2-ajout_dys').value) {
-                var XHR = new XMLHttpRequest();
-                var urlEncodedData = "";
-                var urlEncodedDataPairs = [];
-                urlEncodedDataPairs.push(encodeURIComponent('trouble') + '=' + encodeURIComponent(document.getElementById('id_2-ajout_dys').value));
-                urlEncodedDataPairs.push(encodeURIComponent('csrfmiddlewaretoken') + '=' + encodeURIComponent("{{ csrf_token }}"));
-                urlEncodedData = urlEncodedDataPairs.join('&').replace(/%20/g, '+');
-                XHR.open('POST', 'dys');
-                XHR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-                XHR.send(urlEncodedData);
-                setTimeout(function () {
-                    $('#dys').load(' #dys', {"csrfmiddlewaretoken":"{{ csrf_token }}", "wizard_goto_step": '2'}, function(){$(this).children().unwrap()});
-                    document.getElementById('id_2-ajout_dys').value = '';
-                }, 500);
-            }
-        }
         // Enleve le switch de validation des 2 spé dans la même colonne quand on change les spé
         $('[id^="div_id_3-spe"]').change(function() {
             $("[id=switch]").hide();

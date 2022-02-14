@@ -132,3 +132,4 @@ dmypy.json
 # Pyre type checker
 .pyre/
 /inscription/migrations/
+/inscription/fixtures/mee.json

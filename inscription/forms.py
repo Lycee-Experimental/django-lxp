@@ -143,7 +143,7 @@ class InscriptionForm1(forms.ModelForm):
         model = BaseEleve
         fields = ['address', 'civility', 'genre', 'nom', 'prenom', 'nom_usage', 'date_naissance', 'pays_naissance',
                   'photo', 'commune_naissance', 'departement_naissance', 'telephone', 'email', 'confirmation_email',
-                  'nationalite', 'ville_natale',]
+                  'nationalite', 'ville_natale']
         # Ajout d'un date picker au format='%Y-%m-%d' pour qu'il affiche les valeurs initiales lors des update
         # https://stackoverflow.com/questions/58294769/django-forms-dateinput-not-populating-from-instance
         widgets = {
@@ -223,20 +223,6 @@ class InscriptionForm2(forms.ModelForm):
 
 class InscriptionForm3(forms.ModelForm):
     name = 'Scolarité'
-    ajout_allergie = forms.CharField(label="Ajouter une allergie", required=False)
-    allergie = forms.ModelMultipleChoiceField(
-        queryset=Allergie.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        label="Allergies"
-    )
-    dys = forms.ModelMultipleChoiceField(
-        queryset=TroubleCognitif.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        label="Troubles de l'apprentissage"
-    )
-    ajout_dys = forms.CharField(label="Ajouter un trouble", required=False)
     nouvelle = forms.BooleanField(label="Première inscription au LXP", required=False)
 
     def __init__(self, *args, **kwargs):
@@ -251,15 +237,13 @@ class InscriptionForm3(forms.ModelForm):
         self.helper.field_class = 'col-md-8 d-flex flex-wrap justify-content-between'
         self.helper.use_custom_control = True
         self.helper.form_show_labels = True
+        self.helper.use_custom_control = True
         self.helper.layout = Layout(
             Field('dys', id='dys'),
-            FieldWithButtons('ajout_dys', StrictButton('Enregistrer', id='dys-btn', css_class='btn-outline-success',
-                                                       onclick="ajoutDys()")),
-            Field('allergie', id='allergie'),
-            FieldWithButtons('ajout_allergie', StrictButton('Enregistrer', id='allergie-btn', css_class='btn-outline-success',
-                                                                                    onclick="ajoutAllergie()")),
+            Field('allergie', id='allerg'),
+            Field('etablissement_origine', id='etab'),
             Field('nouvelle', id='nouvelle', wrapper_class="custom-control custom-switch custom-switch-lg",
-                  template='inscription/custom-field.html'),
+                 template='inscription/custom-field.html'),
             'niveau_an_passe',
             'gb_an_passe',
             'ecco_an_passe',
@@ -274,10 +258,14 @@ class InscriptionForm3(forms.ModelForm):
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
-        fields = ['allergie', 'dys', 'nouvelle',  'niveau_an_passe', 'gb_an_passe', 'ecco_an_passe']
+        fields = ['allergie', 'dys', 'nouvelle',  'niveau_an_passe', 'gb_an_passe', 'ecco_an_passe',
+                  'etablissement_origine']
         widgets = {
             'ecco_an_passe': autocomplete.ModelSelect2(url='mee',
                                                            forward=('gb_an_passe',)),
+            'allergie': autocomplete.ModelSelect2Multiple('allergie_auto'),
+            'dys': autocomplete.ModelSelect2Multiple('dys_auto'),
+            'etablissement_origine': autocomplete.ModelSelect2(url='etablissement'),
         }
 
     def clean(self):

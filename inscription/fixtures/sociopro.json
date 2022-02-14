@@ -1,0 +1,303 @@
+[
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "11",
+            "name": "Agriculteurs sur petite exploitation"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "12",
+            "name": "Agriculteurs sur moyenne exploitation"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "13",
+            "name": "Agriculteurs sur grande exploitation"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "21",
+            "name": "Artisans"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "22",
+            "name": "Commerçants et assimilés"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "23",
+            "name": "Chefs d'entreprise de 10 salariés ou plus"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "31",
+            "name": "Professions libérales"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "33",
+            "name": "Cadres de la fonction publique"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "34",
+            "name": "Professeurs, professions scientifiques"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "35",
+            "name": "Professions de l'information, des arts et des spectacles"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "37",
+            "name": "Cadres administratifs et commerciaux d'entreprise"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "38",
+            "name": "Ingénieurs et cadres techniques d'entreprise"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "42",
+            "name": "Professeurs des écoles, instituteurs et assimilés"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "43",
+            "name": "Professions intermédiaires de la santé et  du travail social"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "44",
+            "name": "Clergé, religieux"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "45",
+            "name": "Professions intermédiaires administratives de la fonction publique"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "46",
+            "name": "Professions intermédiaires administratives et commerciales des entreprises"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "47",
+            "name": "Techniciens"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "48",
+            "name": "Contremaîtres, agents de maîtrise"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "52",
+            "name": "Employés civils et agents de service de la fonction publique"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "53",
+            "name": "Policiers et militaires"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "54",
+            "name": "Employés administratifs d'entreprise"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "55",
+            "name": "Employés de commerce"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "56",
+            "name": "Personnels des services directs aux particuliers"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "62",
+            "name": "Ouvriers qualifiés de type industriel"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "63",
+            "name": "Ouvriers qualifiés de type artisanal"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "64",
+            "name": "Chauffeurs"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "65",
+            "name": "Ouvriers qualifiés de la manutention, du magasinage et du transport"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "67",
+            "name": "Ouvriers non qualifiés de type industriel"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "68",
+            "name": "Ouvriers non qualifiés de type artisanal"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "69",
+            "name": "Ouvriers agricoles"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "71",
+            "name": "Anciens agriculteurs exploitants"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "72",
+            "name": "Anciens artisans, commerçants, chefs d'entreprise"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "74",
+            "name": "Anciens cadres"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "75",
+            "name": "Anciennes professions intermédiaires"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "77",
+            "name": "Anciens employés"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "78",
+            "name": "Anciens ouvriers"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "81",
+            "name": "Chômeurs n'ayant jamais travaillé"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "83",
+            "name": "Militaires du contingent"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "84",
+            "name": "Elèves, étudiants"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "85",
+            "name": "Personnes diverses sans activité  professionnelle de moins de 60 ans (sauf retraités)"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "86",
+            "name": "Personnes diverses sans activité professionnelle de 60 ans et plus (sauf retraités)"
+        }
+    },
+    {
+        "model": "inscription.sociopro",
+        "fields": {
+            "code": "99",
+            "name": "Inconnue"
+        }
+    }
+]

@@ -18,7 +18,7 @@ class Command(BaseCommand):
                 else:
                     dep_code = '0'+row[0][:2]
                 departement = Departement.objects.get(code=dep_code)
-                Commune.objects.create(
+                Commune.objects.get_or_create(
                     code=row[0],
                     name=row[1],
                     departement=departement

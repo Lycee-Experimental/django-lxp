@@ -12,26 +12,50 @@ GB = (
     (5, 'G5'),
 )
 
+
+class SpeManager(models.Manager):
+    def get_by_natural_key(self, code):
+        return self.get(code=code)
+
+
 class Spe(models.Model):
-    code = models.CharField(max_length=10, verbose_name="Code Spé")
+    code = models.CharField(max_length=10, verbose_name="Code Spé", unique=True)
     intitule = models.CharField(max_length=50, verbose_name="Intitulé Spé")
     groupe = models.CharField(max_length=2, verbose_name="Groupe Spé", null=True, blank=True)
     type = models.CharField(max_length=10, verbose_name="Type Spé", null=True, blank=True)
+    objects = SpeManager()
+
+    def natural_key(self):
+        return [self.code]
 
     def __str__(self):
         """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
-        return  u'%s' % self.intitule
+        return u'%s' % self.intitule
+
+
+class SocioproManager(models.Manager):
+    def get_by_natural_key(self, code):
+        return self.get(code=code)
 
 
 class Sociopro(models.Model):
     """Base de donnée des codes socioprofessionnels.
     Le données sont importées depuis le fichier CSV grâce à la commande python manage.py sociopro"""
-    code = models.CharField(max_length=4, verbose_name="Code Sociopro")
+    code = models.CharField(max_length=4, verbose_name="Code Sociopro", unique=True)
     name = models.CharField(max_length=100, verbose_name="Catégorie sociopro")
+    objects = SocioproManager()
+
+    def natural_key(self):
+        return [self.code]
 
     def __str__(self):
         """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
         return  u'%s' % self.name
+
+
+class PaysManager(models.Manager):
+    def get_by_natural_key(self, code, name):
+        return self.get(code=code, name=name)
 
 
 class Pays(models.Model):
@@ -39,21 +63,42 @@ class Pays(models.Model):
     Le données sont importées depuis le fichier CSV grâce à la commande python manage.py pays"""
     code = models.CharField(max_length=4, verbose_name="Code INSEE")
     name = models.CharField(max_length=50, verbose_name="Département")
+    objects = PaysManager()
+    def natural_key(self):
+        return [self.code, self.name]
 
     def __str__(self):
         """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
         return  u'%s' % (self.name)
 
+    class Meta:
+        unique_together = ('code', 'name',)
+
+
+
+class DepartementManager(models.Manager):
+    def get_by_natural_key(self, code):
+        return self.get(code=code)
+
 
 class Departement(models.Model):
     """Base de donnée des départements avec code INSEE.
     Le données sont importées depuis le fichier CSV grâce à la commande python manage.py departement"""
-    code = models.CharField(max_length=4, verbose_name="Code INSEE")
+    code = models.CharField(max_length=4, verbose_name="Code INSEE", unique=True)
     name = models.CharField(max_length=50, verbose_name="Département")
+    objects = DepartementManager()
 
     def __str__(self):
         """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
         return  u'%s - %s' % (self.code, self.name)
+
+    def natural_key(self):
+        return [self.code]
+
+
+class CommuneManager(models.Manager):
+    def get_by_natural_key(self, code, name):
+        return self.get(code=code, name=name)
 
 
 class Commune(models.Model):
@@ -61,25 +106,55 @@ class Commune(models.Model):
     Le données sont importées depuis le fichier CSV grâce à la commande python manage.py commune"""
     code = models.CharField(max_length=6, verbose_name="Code INSEE")
     name = models.CharField(max_length=50, verbose_name="Commune")
-    departement = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département")
+    departement = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département", to_field='code')
+    objects = CommuneManager()
+
+    def natural_key(self):
+        return [self.code, self.name]
+
+    class Meta:
+        unique_together = [['code', 'name']]
 
     def __str__(self):
         """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
         return  u'%s' % (self.name)
 
 
+class TroubleManager(models.Manager):
+    def get_by_natural_key(self, trouble):
+        return self.get(trouble=trouble)
+
+
 class TroubleCognitif(models.Model):
-    trouble = models.CharField(max_length=100)
+    trouble = models.CharField(max_length=100, unique=True)
+    objects = TroubleManager()
+
+    def natural_key(self):
+        return [self.trouble]
 
     def __str__(self):
         return '%s' % self.trouble
 
 
+class AllergieManager(models.Manager):
+    def get_by_natural_key(self, allergene):
+        return self.get(allergene=allergene)
+
+
 class Allergie(models.Model):
-    allergene = models.CharField(max_length=100)
+    allergene = models.CharField(max_length=100, unique=True)
+    objects = AllergieManager()
+
+    def natural_key(self):
+        return [self.allergene]
 
     def __str__(self):
         return '%s' % self.allergene
+
+
+class MeeManager(models.Manager):
+    def get_by_natural_key(self, prenom, nom):
+        return self.get(prenom=prenom, nom=nom)
 
 
 class MEE(models.Model):
@@ -91,10 +166,86 @@ class MEE(models.Model):
                                             verbose_name="GB de cette année", blank=True, null=True)
     email = models.EmailField(verbose_name="Email", max_length=30,  blank=True, null=True)
     telephone = PhoneNumberField(verbose_name="Téléphone",  blank=True, null=True)
+    objects = MeeManager()
 
+    def natural_key(self):
+        return [self.prenom, self.nom]
     def __str__(self):
         return '%s' % self.prenom
+    class Meta:
+        unique_together = [['prenom', 'nom']]
 
+class Etablissement(models.Model):
+    nom_commune = models.CharField(max_length=50, null=True)
+    code_commune = models.CharField(max_length=6, null=True)
+    #commune = models.ForeignKey(Commune, on_delete=models.CASCADE, verbose_name="Commune", null=True)
+    appartenance_education_prioritaire = models.CharField(max_length=50, null=True, blank=True)
+    longitude = models.FloatField( null=True)
+    latitude = models.FloatField(null=True,)
+    code_nature = models.IntegerField(null=True)
+    nombre_d_eleves = models.CharField(max_length=50, null=True, blank=True)
+    type_etablissement = models.CharField(max_length=50, null=True)
+    libelle_nature = models.CharField(max_length=50, null=True)
+    nom_etablissement = models.CharField(max_length=50, null=True)
+    identifiant_de_l_etablissement = models.CharField(max_length=10, null=True)
+    statut_public_prive = models.CharField(max_length=10, null=True)
+
+    def __str__(self):
+        return '%s - %s' % (self.nom_etablissement, self.nom_commune)
+    #section_europeenne  = models.CharField(max_length=50, null=True, blank=True)
+    #lycee_militaire = models.CharField(max_length=50, null=True, blank=True)
+    #voie_generale= models.CharField(max_length=50, null=True, blank=True)
+    #voie_professionnelle = models.CharField(max_length=50, null=True, blank=True)
+    #section_arts = models.CharField(max_length=50, null=True, blank=True)
+    #lycee_agricole = models.CharField(max_length=50, null=True, blank=True)
+    #section_internationale =  models.CharField(max_length=50, null=True, blank=True)
+    #post_bac =  models.CharField(max_length=50, null=True, blank=True)
+    #section_cinema =  models.CharField(max_length=50, null=True, blank=True)
+    #apprentissage  =  models.CharField(max_length=50, null=True, blank=True)
+    #section_theatre =  models.CharField(max_length=50, null=True, blank=True)
+    #voie_technologique =  models.CharField(max_length=50, null=True, blank=True)
+    #section_sport =  models.CharField(max_length=50, null=True, blank=True)
+    #fiche_onisep =  models.CharField(max_length=50, null=True, blank=True)
+    #fax  =  models.CharField(max_length=50, null=True, blank=True)
+    #web =  models.CharField(max_length=50, null=True, blank=True)
+    #code_region = models.CharField(max_length=3, verbose_name="Région")
+    #nom_circonscription =  models.CharField(max_length=50, null=True, blank=True)
+    #pial = models.CharField(max_length=10, null=True)
+    #adresse_1 = models.CharField(max_length=50, null=True)
+    #adresse_2 =  models.CharField(max_length=50, null=True, blank=True)
+    #libelle_zone_animation_pedagogique = models.CharField(max_length=10, null=True)
+    #adresse_3 = models.CharField(max_length=50, null=True)
+    #code_type_contrat_prive = models.CharField(max_length=5, null=True)
+    #code_departement = models.CharField(max_length=5, null=True)
+    #libelle_region = models.CharField(max_length=50, null=True)
+    #precision_localisation = models.CharField(max_length=50, null=True)
+    #type_contrat_prive = models.CharField(max_length=50, null=True)
+    #code_academie = models.CharField(max_length=5, null=True)
+    #ulis = models.BooleanField(null=True)
+    #greta = models.CharField(max_length=5)
+    #siren_siret = models.CharField(max_length=20, null=True)
+    #telephone = models.CharField(max_length=20, null=True)
+    #position = models.CharField(max_length=100, null=True)
+    #coordy_origine = models.FloatField(null=True)
+    #etat = models.CharField(max_length=20, null=True)
+    #ministere_tutelle = models.CharField(max_length=50, null=True)
+    #code_zone_animation_pedagogique = models.CharField(max_length=20, null=True)
+    #coordx_origine = models.FloatField(null=True)
+    #lycee_des_metiers = models.CharField(max_length=1, null=True)
+    #libelle_departement = models.CharField(max_length=20, null=True)
+    #hebergement = models.CharField(max_length=1, null=True)
+    #segpa = models.CharField(max_length=1, null=True)
+    #restauration = models.BooleanField(null=True)
+    #multi_uai = models.BooleanField(null=True)
+    #code_postal = models.CharField(max_length=10, null=True)
+    #libelle_academie = models.CharField(max_length=20, null=True)
+    #date_maj_ligne = models.DateField(null=True)
+    #rpi_concentre = models.BooleanField(null=True)
+    #epsg_origine = models.CharField(max_length=20, null=True)
+    #date_ouverture = models.DateField(null=True)
+    #mail = models.CharField(max_length=50, null=True)
+    #type_rattachement_etablissement_mere = models.CharField(max_length=50, null=True, blank=True)
+    #etablissement_mere = models.CharField(max_length=50, null=True, blank=True)
 
 class BaseEleve(models.Model):
     """
@@ -169,9 +320,9 @@ class BaseEleve(models.Model):
     sociopro_resp2 = models.ForeignKey(Sociopro, related_name='resp2',
                                        on_delete=models.CASCADE, verbose_name="Profession", blank=True, null=True)
 
-    spe1 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '1'}, blank=True, null=True, related_name='spe1')
-    spe2 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '2'}, blank=True, null=True, related_name='spe2')
-    spe3 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '3'}, blank=True, null=True, related_name='spe3')
+    spe1 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '1'}, blank=True, related_name='spe1')
+    spe2 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '2'}, blank=True, related_name='spe2')
+    spe3 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '3'}, blank=True, related_name='spe3')
     NIVEAU = (
         ('premiere', 'Première'),
         ('deter', 'Détermination (2nde)'),
@@ -181,8 +332,8 @@ class BaseEleve(models.Model):
     )
     niveau = models.CharField(max_length=10, choices=NIVEAU, verbose_name="Niveau d'inscription", default='deter')
     # Scolarité passée
-    dys = models.ManyToManyField(TroubleCognitif, verbose_name="Troubles de l'apprentissage")
-    allergie = models.ManyToManyField(Allergie, verbose_name="Allergies")
+    dys = models.ManyToManyField(TroubleCognitif, verbose_name="Troubles de l'apprentissage",blank=True, null=True)
+    allergie = models.ManyToManyField(Allergie, verbose_name="Allergies", blank=True, null=True )
 
     nouvelle = models.BooleanField(verbose_name='Première inscription au LXP', default=True)
     niveau_an_passe = models.CharField(max_length=10, choices=NIVEAU,
@@ -194,3 +345,7 @@ class BaseEleve(models.Model):
 
     gb_annee_en_cours = models.IntegerField(choices=GB,
                                       verbose_name="Groupe de base", blank=True, null=True)
+
+    etablissement_origine = models.ForeignKey(Etablissement,  on_delete=models.CASCADE,
+                                              verbose_name="Etablissement d'origine", blank=True, null=True,
+                                              help_text="Où étiez-vous avant de vous inscrire au Lycée Expérimental ?")

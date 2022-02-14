@@ -1,3 +1,16 @@
+.select2-container--default .select2-selection--multiple {
+    background-color: #3b3b3b;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    cursor: default;
+    float: left;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding: 0 5px;
+    color: #3b3b3b
+}
+
+
 .select2-container--default .select2-selection--single .select2-selection__arrow {
     visibility: collapse;
 }
@@ -7,6 +20,7 @@
     border-radius: .25rem;
     color: #b1b1b1;
     line-height: 24px;
+
 }
 
 .is-invalid {

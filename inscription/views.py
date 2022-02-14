@@ -19,7 +19,7 @@ from formtools.wizard.views import SessionWizardView
 from djangoLxp import settings
 from .filters import ListeEleveFiltre
 # Base BaseEleve
-from .models import BaseEleve, Pays, Departement, Allergie, TroubleCognitif, MEE
+from .models import BaseEleve, Pays, Departement, Allergie, TroubleCognitif, MEE, Etablissement
 from .tables import ListeEleveTableau
 # Une vue pour afficher les inscriptions filtées
 from .utils import PagedFilteredTableView, MediaStorage, coordonnees
@@ -143,9 +143,9 @@ class AutocompleteCommune(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = super(AutocompleteCommune, self).get_queryset()
         dep = self.forwarded.get('departement_naissance', None)
-
+        code = Departement.objects.get(id=dep).code
         if dep:
-            qs = qs.filter(departement_id=dep)
+            qs = qs.filter(departement_id=code)
         return qs
 
 
@@ -173,4 +173,38 @@ class AutocompleteMEE(autocomplete.Select2QuerySetView):
             qs = qs.filter(gb_an_passe=gb)
         if self.q:
             qs = qs.filter(prenom__istartswith=self.q)
+        return qs
+
+
+class AutocompleteEtablissement(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        qs = Etablissement.objects.all().order_by('nom_etablissement')
+        if self.q:
+            qs = qs.filter(Q(nom_etablissement__icontains=self.q)|Q(nom_commune__icontains=self.q))
+        return qs
+
+
+class AutocompleteAllergie(autocomplete.Select2QuerySetView):
+    create_field = 'allergene'    # Pour créer une entrée si non trouvée
+
+    def has_add_permission(self, request):
+        """On redéfinit cette fonction pour que n'importe qui puisse créer une nouvelle entrée"""
+        return True
+
+    def get_queryset(self):
+        qs = Allergie.objects.all().order_by('allergene')
+        if self.q:
+            qs = qs.filter(allergene__icontains=self.q)
+        return qs
+
+class AutocompleteDys(autocomplete.Select2QuerySetView):
+    create_field = 'trouble'    # On indique le champs à créer si non trouvé
+    def has_add_permission(self, request):
+        """On redéfinit cette fonction pour que n'importe qui puisse créer une nouvelle entrée"""
+        return True
+
+    def get_queryset(self):
+        qs = TroubleCognitif.objects.all().order_by('trouble')
+        if self.q:
+            qs = qs.filter(trouble__icontains=self.q)
         return qs
