@@ -37,14 +37,14 @@ lxml = ["lxml"]
 
 [[package]]
 name = "boto3"
-version = "1.20.49"
+version = "1.21.0"
 description = "The AWS SDK for Python"
 category = "main"
 optional = false
 python-versions = ">= 3.6"
 
 [package.dependencies]
-botocore = ">=1.23.49,<1.24.0"
+botocore = ">=1.24.0,<1.25.0"
 jmespath = ">=0.7.1,<1.0.0"
 s3transfer = ">=0.5.0,<0.6.0"
 
@@ -53,7 +53,7 @@ crt = ["botocore[crt] (>=1.21.0,<2.0a0)"]
 
 [[package]]
 name = "botocore"
-version = "1.23.49"
+version = "1.24.0"
 description = "Low-level, data-driven core of boto 3."
 category = "main"
 optional = false
@@ -107,7 +107,7 @@ pycparser = "*"
 
 [[package]]
 name = "charset-normalizer"
-version = "2.0.11"
+version = "2.0.12"
 description = "The Real First Universal Charset Detector. Open, modern and actively maintained alternative to Chardet."
 category = "main"
 optional = false
@@ -115,6 +115,25 @@ python-versions = ">=3.5.0"
 
 [package.extras]
 unicode_backport = ["unicodedata2"]
+
+[[package]]
+name = "cryptography"
+version = "3.4.5"
+description = "cryptography is a package which provides cryptographic recipes and primitives to Python developers."
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+cffi = ">=1.12"
+
+[package.extras]
+docs = ["sphinx (>=1.6.5,!=1.8.0,!=3.1.0,!=3.1.1)", "sphinx-rtd-theme"]
+docstest = ["doc8", "pyenchant (>=1.6.11)", "twine (>=1.12.0)", "sphinxcontrib-spelling (>=4.0.1)"]
+pep8test = ["black", "flake8", "flake8-import-order", "pep8-naming"]
+sdist = ["setuptools-rust (>=0.11.4)"]
+ssh = ["bcrypt (>=3.1.5)"]
+test = ["pytest (>=6.0)", "pytest-cov", "pytest-subtests", "pytest-xdist", "pretend", "iso8601", "pytz", "hypothesis (>=1.11.4,!=3.79.2)"]
 
 [[package]]
 name = "cssselect2"
@@ -285,11 +304,11 @@ django = ">=1.4"
 
 [[package]]
 name = "django-phonenumber-field"
-version = "6.0.0"
+version = "6.1.0"
 description = "An international phone number field for django models."
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.7"
 
 [package.dependencies]
 Django = ">=2.2"
@@ -464,7 +483,7 @@ python-versions = ">=3.5"
 
 [[package]]
 name = "phonenumberslite"
-version = "8.12.42"
+version = "8.12.43"
 description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
 category = "main"
 optional = false
@@ -676,11 +695,11 @@ python-versions = "*"
 
 [[package]]
 name = "whitenoise"
-version = "5.3.0"
+version = "6.0.0"
 description = "Radically simplified static file serving for WSGI applications"
 category = "main"
 optional = false
-python-versions = ">=3.5, <4"
+python-versions = ">=3.7"
 
 [package.extras]
 brotli = ["brotli"]
@@ -707,7 +726,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "41460c1cffb390acd5087c37f0a73749c964224cee53b2b8020a3cd391f83933"
+content-hash = "2ef327dde6cba7e1b50f556bdce96fd0e77f8acc48b2f4a2918cbbd49fe74d68"
 
 [metadata.files]
 asgiref = [
@@ -737,12 +756,12 @@ beautifulsoup4 = [
     {file = "beautifulsoup4-4.10.0.tar.gz", hash = "sha256:c23ad23c521d818955a4151a67d81580319d4bf548d3d49f4223ae041ff98891"},
 ]
 boto3 = [
-    {file = "boto3-1.20.49-py3-none-any.whl", hash = "sha256:09d7ffbbfcc212d22c92acf127ebc8c8ab89a2c03fa6360ab35b14d52b0df8ab"},
-    {file = "boto3-1.20.49.tar.gz", hash = "sha256:34d170d24d10adb8ffe2a907ff35878e22ed2ceb24d16d191f8070053f11fc18"},
+    {file = "boto3-1.21.0-py3-none-any.whl", hash = "sha256:25a76b7b530a124d9e526c62ff2b7da5782315195badb9a6273714898d689820"},
+    {file = "boto3-1.21.0.tar.gz", hash = "sha256:cc40566dec3f48611a82ace07b29489848e9bd35a51e3e992d1902a3c037e9fc"},
 ]
 botocore = [
-    {file = "botocore-1.23.49-py3-none-any.whl", hash = "sha256:3f72d20c65c89b694d9c7d164eb499877331783577f0207739088d11eaf315e7"},
-    {file = "botocore-1.23.49.tar.gz", hash = "sha256:b013b2911379d1de896eb6ef375126bb2fc2b77b3e0af75821661b7ea817d029"},
+    {file = "botocore-1.24.0-py3-none-any.whl", hash = "sha256:2bf4463513bd89817aa5d7341ed81c7c76d906e6c70672c8762d64ecf3275771"},
+    {file = "botocore-1.24.0.tar.gz", hash = "sha256:47723cef6112f451630bf2446cfd6be2782cc1d6b1b92acb12ff00797588c5f3"},
 ]
 brotli = [
     {file = "Brotli-1.0.9-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:268fe94547ba25b58ebc724680609c8ee3e5a843202e9a381f6f9c5e8bdb5c70"},
@@ -897,8 +916,17 @@ cffi = [
     {file = "cffi-1.15.0.tar.gz", hash = "sha256:920f0d66a896c2d99f0adbb391f990a84091179542c205fa53ce5787aff87954"},
 ]
 charset-normalizer = [
-    {file = "charset-normalizer-2.0.11.tar.gz", hash = "sha256:98398a9d69ee80548c762ba991a4728bfc3836768ed226b3945908d1a688371c"},
-    {file = "charset_normalizer-2.0.11-py3-none-any.whl", hash = "sha256:2842d8f5e82a1f6aa437380934d5e1cd4fcf2003b06fed6940769c164a480a45"},
+    {file = "charset-normalizer-2.0.12.tar.gz", hash = "sha256:2857e29ff0d34db842cd7ca3230549d1a697f96ee6d3fb071cfa6c7393832597"},
+    {file = "charset_normalizer-2.0.12-py3-none-any.whl", hash = "sha256:6881edbebdb17b39b4eaaa821b438bf6eddffb4468cf344f09f89def34a8b1df"},
+]
+cryptography = [
+    {file = "cryptography-3.4.5-cp36-abi3-macosx_10_10_x86_64.whl", hash = "sha256:18d6f3ac1da14a01c95f4590ee58e96aa6628d231ce738e9eca330b9997127b6"},
+    {file = "cryptography-3.4.5-cp36-abi3-manylinux2010_x86_64.whl", hash = "sha256:c8dc9859c5a046e1ca22da360dfd609c09064a4f974881cb5cba977c581088ec"},
+    {file = "cryptography-3.4.5-cp36-abi3-manylinux2014_aarch64.whl", hash = "sha256:0bf49d5b38e4f3745a0eab0597fa97720dd49b30d65f534b49a82e303f149deb"},
+    {file = "cryptography-3.4.5-cp36-abi3-manylinux2014_x86_64.whl", hash = "sha256:9c6f7552d4f2130542d488b9d9e5b1546204b5d1aa90c823d50cce8eed421363"},
+    {file = "cryptography-3.4.5-cp36-abi3-win32.whl", hash = "sha256:b0873ac0c0e6bc6882cd285930cc382ec4e78786be71bdc113c06246eea61294"},
+    {file = "cryptography-3.4.5-cp36-abi3-win_amd64.whl", hash = "sha256:8b3b79af57e12aabbc3db81e563eaa07870293a1ffdcc891d107035ce9a0dbff"},
+    {file = "cryptography-3.4.5.tar.gz", hash = "sha256:4f6761a82b51fe02cda8f45af1c2f698a10f50003dc9c2572d8a49eda2e6d35b"},
 ]
 cssselect2 = [
     {file = "cssselect2-0.4.1-py3-none-any.whl", hash = "sha256:2f4a9f20965367bae459e3bb42561f7927e0cfe5b7ea1692757cf67ef5d7dace"},
@@ -951,8 +979,8 @@ django-multiselectfield = [
     {file = "django_multiselectfield-0.1.12-py3-none-any.whl", hash = "sha256:c270faa7f80588214c55f2d68cbddb2add525c2aa830c216b8a198de914eb470"},
 ]
 django-phonenumber-field = [
-    {file = "django-phonenumber-field-6.0.0.tar.gz", hash = "sha256:9695d3beda772c503ad4e04a4f7012a8227e9e3e4fd0ea4ffb07c43245bf4a8d"},
-    {file = "django_phonenumber_field-6.0.0-py3-none-any.whl", hash = "sha256:bbb9cb2e6fc53c476de40428e1354c313a040e8b2fb69ea8ead4ba41a60f926a"},
+    {file = "django-phonenumber-field-6.1.0.tar.gz", hash = "sha256:b1ff950f90a8911ff323ccf77c8f6fe4299a9f671fa61c8734a6994359f07446"},
+    {file = "django_phonenumber_field-6.1.0-py3-none-any.whl", hash = "sha256:897b902a1654b0eb21f6268498a3359e2c4eb90af9585cb8693af186ede8c5bb"},
 ]
 django-ranged-response = [
     {file = "django-ranged-response-0.2.0.tar.gz", hash = "sha256:f71fff352a37316b9bead717fc76e4ddd6c9b99c4680cdf4783b9755af1cf985"},
@@ -1004,8 +1032,8 @@ mysqlclient = [
     {file = "mysqlclient-2.1.0.tar.gz", hash = "sha256:973235686f1b720536d417bf0a0d39b4ab3d5086b2b6ad5e6752393428c02b12"},
 ]
 phonenumberslite = [
-    {file = "phonenumberslite-8.12.42-py2.py3-none-any.whl", hash = "sha256:656230684742fa4bb24eda791e38f6766fd9197ea3f14fe940b1c1306aecbacc"},
-    {file = "phonenumberslite-8.12.42.tar.gz", hash = "sha256:dfa4947e6fddd92b95540400f447727c516fde18a0e7942993ec1274eb28f46e"},
+    {file = "phonenumberslite-8.12.43-py2.py3-none-any.whl", hash = "sha256:20de88db9cc615dca8696163513c7a0c4a075c3e1195e14c8a45589fafb92377"},
+    {file = "phonenumberslite-8.12.43.tar.gz", hash = "sha256:e64d3d7d9f23bc6e623e4bc29810cd686548553141bf42f5f7b2e4a98a982b6b"},
 ]
 pillow = [
     {file = "Pillow-9.0.1-1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:a5d24e1d674dd9d72c66ad3ea9131322819ff86250b30dc5821cbafcfa0b96b4"},
@@ -1122,8 +1150,8 @@ webencodings = [
     {file = "webencodings-0.5.1.tar.gz", hash = "sha256:b36a1c245f2d304965eb4e0a82848379241dc04b865afcc4aab16748587e1923"},
 ]
 whitenoise = [
-    {file = "whitenoise-5.3.0-py2.py3-none-any.whl", hash = "sha256:d963ef25639d1417e8a247be36e6aedd8c7c6f0a08adcb5a89146980a96b577c"},
-    {file = "whitenoise-5.3.0.tar.gz", hash = "sha256:d234b871b52271ae7ed6d9da47ffe857c76568f11dd30e28e18c5869dbd11e12"},
+    {file = "whitenoise-6.0.0-py3-none-any.whl", hash = "sha256:5a4aff543ee860fbe40d743e556adf92ccd41b7df45697cae074afdf657056b9"},
+    {file = "whitenoise-6.0.0.tar.gz", hash = "sha256:08c42bc535f9777eea1a599289d9433f081921f97887eaf6f559446b2a080374"},
 ]
 yarg = [
     {file = "yarg-0.1.9-py2.py3-none-any.whl", hash = "sha256:4f9cebdc00fac946c9bf2783d634e538a71c7d280a4d806d45fd4dc0ef441492"},
