@@ -186,7 +186,7 @@ class Etablissement(models.Model):
     nombre_d_eleves = models.CharField(max_length=50, null=True, blank=True)
     type_etablissement = models.CharField(max_length=50, null=True)
     libelle_nature = models.CharField(max_length=50, null=True)
-    nom_etablissement = models.CharField(max_length=50, null=True)
+    nom_etablissement = models.CharField(max_length=150, null=True)
     identifiant_de_l_etablissement = models.CharField(max_length=10, null=True)
     statut_public_prive = models.CharField(max_length=10, null=True)
 
