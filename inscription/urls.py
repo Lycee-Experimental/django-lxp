@@ -2,6 +2,8 @@ from django.conf.urls.static import static
 from django.contrib.auth.decorators import login_required
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
+
+from djangoLxp import settings
 from .views import InscriptionView, FormulaireInscription, fiche, fiche_pdf, carto, ajout_allergie, ajout_dys
 
 app_name = 'inscription'
@@ -17,8 +19,8 @@ urlpatterns = [
     path('dys', ajout_dys, name='dys'),
 ]
 # Serving the media files in development mode
-#if settings.DEBUG:
-#    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-#    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
-#else:
-urlpatterns += staticfiles_urlpatterns()
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+else:
+    urlpatterns += staticfiles_urlpatterns()
