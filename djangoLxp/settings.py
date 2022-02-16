@@ -170,6 +170,7 @@ if USE_S3:
     PUBLIC_MEDIA_LOCATION = 'media'
     MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
     DEFAULT_FILE_STORAGE = 'inscription.utils.MediaStorage'  # <-- here is where we reference it
+    MEDIA_ROOT = None
 else:
     STATIC_URL = '/static/'
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
