@@ -86,11 +86,11 @@ def nom_photo(instance, filename):
 
 
 def coordonnees(base):
-    """Renvoie un tuple contenant les coordonnées [latitude, longitude] de chaque élève.
+    """Renvoie une liste contenant les coordonnées [latitude, longitude] de chaque élève.
     Pour affichage avec leaflet."""
-    adresses=()
+    adresses=[]
     for eleve in base:
-        adresses += ([eleve.address.latitude, eleve.address.longitude],)
+        adresses.append([eleve.address.latitude, eleve.address.longitude])
     return adresses
 
 

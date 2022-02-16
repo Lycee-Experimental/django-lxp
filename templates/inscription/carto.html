@@ -14,8 +14,21 @@
 
 <script>
     function map_init_basic (map, options) {
+        // Un FeatureGroup pour ajuster le zoom en fonction des adresses
+        var myFGMarker = new L.FeatureGroup();
+        // markerClusterGroup pour regrouper les adresses s'il y en a plusieurs
+        var markers = new L.markerClusterGroup();
         {% for address in adresses %}
-            L.marker({{ address }}).addTo(map);
+            // On créer un marker pour chaque adresse
+            marker = L.marker({{ address }});
+            // On l'ajoute au cluster
+            markers.addLayer(marker);
+            // Et au groupe d'adresse
+            myFGMarker.addLayer(marker);
         {% endfor %}
+        // On ajoute les clusters à la carte
+        map.addLayer(markers);
+        // On ajuste le zoom en fonction du groupe d'adresse
+        map.fitBounds(myFGMarker.getBounds());
     }
 </script>
