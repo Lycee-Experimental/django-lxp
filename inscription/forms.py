@@ -28,7 +28,7 @@ class ListeEleveForm(FormHelper):
                 Div(
                     # les champs à chercher suivi de __filtre avec le nom du filtre déclaré pour chaque champ dans filter.py
                     # InlineField("birth_name__icontains", css_class='form-group col-4'),
-                    InlineField("prenom_icontains", wrapper_class='col'),
+                    InlineField("prenom__icontains", wrapper_class='col'),
                     InlineField("nom__icontains", wrapper_class='col'),
                     css_class="row",
                 ),
