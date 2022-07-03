@@ -13,8 +13,9 @@ class ListeEleveTableau(tables.Table):
         model = BaseEleve
         # Les champs à afficher
         fields = (
-            "last_name",
-            "first_name",
+            "nom",
+            "prenom",
+            "nom_usage"
         )
         # Le texte si aucune entrées
         empty_text = _(
