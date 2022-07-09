@@ -4,9 +4,11 @@
 
 {% block content %}
 <div class="container">
-  <h1>{{ titre }}</h1>
+  <h1>Inscriptions au Lycée Expérimental</h1>
   <hr />
+  <br />
 
+  {% crispy filter.form filter.form.helper %}
   <br />
   {% render_table table %}
 </div>

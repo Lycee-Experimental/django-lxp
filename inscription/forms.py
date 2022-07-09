@@ -14,38 +14,38 @@ class ListeEleveForm(FormHelper):
     Formulaire pour faire des recherches dans le tableau
     Voir https://django-crispy-forms.readthedocs.io/en/latest/form_helper.html
     """
-    form_class = "form-inline"
+    #form_class = "form-inline"
+    form_class = "form-horizontal"
+    use_custom_control = True
     form_id = "inscription-search-form"
     form_method = "GET"
     form_tag = True
+    label_class = 'col-md-3'
+    field_class = 'col-md-9'
     html5_required = True
-    # form_style = 'inline'
-    field_template = 'bootstrap4/layout/inline_field.html'
+    #form_show_labels = False
+    #form_style = 'inline'
+    #field_template = 'bootstrap4/layout/inline_field.html'
     layout = Layout(
-        Div(
-            Fieldset(
-                "<span class='fa fa-search'></span> " + str(_("Rechercher des élèves")),
-                Div(
-                    # les champs à chercher suivi de __filtre avec le nom du filtre déclaré pour chaque champ dans filter.py
-                    # InlineField("birth_name__icontains", css_class='form-group col-4'),
-                    InlineField("prenom__exact", wrapper_class='col'),
-                    InlineField("nom__icontains", wrapper_class='col'),
-                    css_class="row",
+                Fieldset(
+                  "<span class='fa fa-search'></span> " + str(_("Rechercher des élèves")),
+#                  _('prenom'),
+#                 'nom',
+                  # les champs à chercher suivi de __filtre avec le nom du filtre déclaré pour chaque champ dans filter.py
+                  Div(
+                "gb_annee_en_cours",
+                "nom",
+                "prenom",
+                css_class='row' 
                 ),
-                css_class="col-10 border p-3",
-            ),
-            FormActions(
-                Submit("submit", _("Filtrer")),
-                css_class="col-2 text-right align-self-center",
-            ),
-            css_class="row",
-        )
-    )
-    
-    class Meta:
-        # Définis le modèle utilisé et des données à enregistrer
-        model = BaseEleve
-        fields = ['nom', 'prenom']
+                # InlineField("nom__icontains", css_class='form-group'),
+                FormActions(
+                   Submit("submit", _("Filtrer")),
+                   css_class="text-right align-self-center",
+                ),
+               )
+            )
+
 
 class InscriptionForm1(forms.ModelForm):
     """

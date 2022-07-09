@@ -29,6 +29,8 @@ class PagedFilteredTableView(SingleTableView):
     def get_context_data(self, **kwargs):
         context = super(PagedFilteredTableView, self).get_context_data(**kwargs)
         context[self.context_filter_name] = self.filter
+        # On récupère le "titre" dans l'url pour l'afficher dans le template (context) 
+        context["titre"]=self.request.GET.get('titre')
         return context
 
 

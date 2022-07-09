@@ -118,7 +118,20 @@ class FormulaireInscription(SessionWizardView):
         return HttpResponseRedirect(url)
 
 
-class InscriptionView(PagedFilteredTableView):
+class InscriptionRechercheView(PagedFilteredTableView):
+    """ Une view pour afficher un tableau de recherche dans la base.
+    """
+    filter_class = ListeEleveFiltre
+    model = BaseEleve
+    table_class = ListeEleveTableau
+    template_name = "inscription/recherche_eleves.html"
+    formhelper_class = ListeEleveForm
+
+    def get_queryset(self):
+        return BaseEleve.objects.filter()
+
+
+class InscriptionTableView(PagedFilteredTableView):
     """ Une view pour afficher un tableau de recherche dans la base.
     """
     filter_class = ListeEleveFiltre
