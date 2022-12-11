@@ -67,4 +67,10 @@
             $(".is-invalid").removeClass('is-invalid');
         });
     </script>
+    <script>
+        // Fixe le bug de Select2 qui ne met pas le curseur dans le champs sélectionné
+        $(document).on('select2:open', () => {
+            (list => list[list.length - 1])(document.querySelectorAll('.select2-container--open .select2-search__field')).focus()
+        });
+    </script>
 {% endblock %}
