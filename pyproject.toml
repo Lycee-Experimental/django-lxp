@@ -5,7 +5,7 @@ description = ""
 authors = ["Davy39"]
 
 [tool.poetry.dependencies]
-python =  "^3.10"
+python =  "^3.9"
 asgiref = "*"
 beautifulsoup4 = "*"
 boto3 = "*"
@@ -16,7 +16,7 @@ charset-normalizer = "*"
 cssselect2 = "*"
 dj-database-url = "*"
 django-address = "*"
-django-autocomplete-light = {git = "https://github.com/yourlabs/django-autocomplete-light"}
+django-autocomplete-light = "*"
 django-bootstrap4 = "*"
 django-brotli = "*"
 django-crispy-forms = "*"

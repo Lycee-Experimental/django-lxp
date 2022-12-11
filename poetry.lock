@@ -494,13 +494,14 @@ Django = ">=2.1"
 
 [[package]]
 name = "django-autocomplete-light"
-version = "3.9.5-rc1"
-description = ""
+version = "3.9.4"
+description = "Fresh autocompletes for Django"
 category = "main"
 optional = false
 python-versions = "*"
-files = []
-develop = false
+files = [
+    {file = "django-autocomplete-light-3.9.4.tar.gz", hash = "sha256:0f6da75c1c7186698b867a467a8cdb359f0513fdd8e09288a0c2fb018ae3d94e"},
+]
 
 [package.dependencies]
 six = "*"
@@ -510,12 +511,6 @@ genericm2m = ["django-generic-m2m"]
 gfk = ["django-querysetsequence (>=0.11)"]
 nested = ["django-nested-admin (>=3.0.21)"]
 tags = ["django-taggit"]
-
-[package.source]
-type = "git"
-url = "https://github.com/yourlabs/django-autocomplete-light"
-reference = "HEAD"
-resolved_reference = "62ecb5f2200d31c776ccac7bbd06c31c12be58f2"
 
 [[package]]
 name = "django-bootstrap4"
@@ -591,24 +586,6 @@ files = [
 
 [package.dependencies]
 Django = ">=2.2"
-
-[[package]]
-name = "django-heroku"
-version = "0.3.1"
-description = "This is a Django library for Heroku apps."
-category = "main"
-optional = false
-python-versions = "*"
-files = [
-    {file = "django-heroku-0.3.1.tar.gz", hash = "sha256:6af4bc3ae4a9b55eaad6dbe5164918982d2762661aebc9f83d9fa49f6009514e"},
-    {file = "django_heroku-0.3.1-py2.py3-none-any.whl", hash = "sha256:2bc690aab89eedbe01311752320a9a12e7548e3b0ed102681acc5736a41a4762"},
-]
-
-[package.dependencies]
-dj-database-url = ">=0.5.0"
-django = "*"
-psycopg2 = "*"
-whitenoise = "*"
 
 [[package]]
 name = "django-leaflet"
@@ -1360,5 +1337,5 @@ test = ["pytest"]
 
 [metadata]
 lock-version = "2.0"
-python-versions = "^3.10"
-content-hash = "8f810a232696c3afeb68f2ebf64de1d5f60d5a8480c5f87c88cfd5b44d7aee64"
+python-versions = "^3.9"
+content-hash = "db3a77b95dbe39ae6c9a3cc75852300a95a866d26a44792e73f94596246806fa"
