@@ -20,7 +20,7 @@ urlpatterns = [
     path('dys', ajout_dys, name='dys'),
 ]
 # Serving the media files in development mode
-if settings.DEBUG:
+if settings.DEBUG and not settings.USE_ORACLE:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 else:

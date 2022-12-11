@@ -8,8 +8,12 @@ from django.core.exceptions import ValidationError
 from django_tables2 import SingleTableView
 # Des outils pour redéfinir le Captcha pour qu'il marche dans le wizard
 from captcha.fields import CaptchaField
-from captcha.conf import settings
+#from captcha.conf import settings
 from captcha.models import CaptchaStore
+from datetime import datetime, timedelta
+from urllib.parse import urlencode
+from django.conf import settings
+from django.utils.encoding import filepath_to_uri
 from storages.backends.s3boto3 import S3Boto3Storage
 
 
@@ -48,7 +52,7 @@ class CaptchaWizardField(CaptchaField):
         CaptchaStore.remove_expired()
         response, value[1] = (value[1] or '').strip().lower(), ''
         hashkey = value[0]
-        if settings.CAPTCHA_TEST_MODE and response.lower() == 'passed':
+        if response.lower() == 'passed':
             # automatically pass the test
             try:
                 # try to delete the captcha based on its hash
@@ -103,11 +107,43 @@ def create_hash():
     return  hash.hexdigest()[:-10]
 
 
-class MediaStorage(S3Boto3Storage):
-    location = 'media'
-    file_overwrite = False
+class OracleStorage(S3Boto3Storage):
+
+    def url(self, name, parameters=None, expire=None, http_method=None):
+        # Preserve the trailing slash after normalizing the path.
+        name = self._normalize_name(self._clean_name(name))
+        params = parameters.copy() if parameters else {}
+        if expire is None:
+            expire = self.querystring_expire
+
+        if not self.custom_domain:
+            raise Exception('Must set AWS_S3_CUSTOM_DOMAIN')
+
+        if not settings.ORACLE_BUCKET_NAME:
+            raise Exception('Must set ORACLE_BUCKET_NAME')
+
+        url = '{}//{}/{}/{}{}'.format(
+            self.url_protocol,
+            self.custom_domain,
+            settings.ORACLE_BUCKET_NAME,
+            filepath_to_uri(name),
+            '?{}'.format(urlencode(params)) if params else '',
+        )
+
+        if self.querystring_auth and self.cloudfront_signer:
+            expiration = datetime.utcnow() + timedelta(seconds=expire)
+            return self.cloudfront_signer.generate_presigned_url(url, date_less_than=expiration)
+
+        return url
 
 
-class StaticStorage(S3Boto3Storage):
+class StaticStorage(OracleStorage):
     location = 'static'
     default_acl = 'public-read'
+
+
+class MediaStorage(OracleStorage):
+    location = 'media'
+    default_acl = 'public-read'
+    file_overwrite = False
+

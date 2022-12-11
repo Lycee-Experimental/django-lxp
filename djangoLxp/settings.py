@@ -12,8 +12,8 @@ from dotenv import load_dotenv
 
 LOGIN_URL='/admin/login/'
 
-ALLOWED_HOSTS = ['davy39.pythonanywhere.com', '127.0.0.1', 'https://lxp-app.herokuapp.com', 'inscription.cf']
-CSRF_TRUSTED_ORIGINS = ['https://inscription.cf','https://main.inscription.cf','http://127.0.0.1', 'https://127.0.0.1',]
+ALLOWED_HOSTS = [os.getenv('HOST', 'localhost'),'127.0.0.1']
+CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'https://127.0.0.1',]
 
 MIGRATION_MODULES = {'captcha': 'migrations.captcha', 'address': 'migrations.address', 'inscription': 'migrations.inscription'}
 
@@ -32,16 +32,16 @@ DATE_FORMAT = "d-m-Y"
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(os.path.join(BASE_DIR, ".env")) # loads the configs from .env
-USE_S3 = os.getenv('USE_S3', False)
 
+# Utilise-t-on un stokage sur Oracle)
+USE_ORACLE = os.getenv('USE_ORACLE', False)
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
+# La clé pour avoir accès aux recherchs d'adresses sur google
 GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
-
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = int(os.environ.get("DEBUG", default=1))
-
 # Applications utilisées
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -96,23 +96,26 @@ TEMPLATES = [
 WSGI_APPLICATION = 'djangoLxp.wsgi.application'
 
 
-# Database
+# Base de donnée
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
-DATABASES = {
-    "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-        "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
-        "USER": os.environ.get("SQL_USER", "user"),
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-        "HOST": os.environ.get("SQL_HOST", "localhost"),
-        "PORT": os.environ.get("SQL_PORT", "5432"),
-        'OPTIONS': {'sslmode': 'False'},
-    }
-}
 
+DATABASES = {
+        "default": {
+            "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+            "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+            "USER": os.environ.get("SQL_USER", "user"),
+            "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+            #"HOST": os.environ.get("SQL_HOST", "localhost"),
+            #"PORT": os.environ.get("SQL_PORT", "5432"),
+            #'OPTIONS': {'sslmode': 'False'},
+        }
+}
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Configuration de la cartographie avec Leaflet
 LEAFLET_CONFIG = {
-    # Configuration de la cartographie
 # On centre sur la France avec un zoom qui permet de la voir en entier
 'DEFAULT_CENTER': (46.36, 1.52),
 'DEFAULT_ZOOM': 6,
@@ -147,46 +150,30 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
-if USE_S3:
-# Si stockage des fichiers statiques et média sur AWS S3
-    # Les codes secrets sont dans les variables d'environnement
-    AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID')
-    AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY')
-    AWS_STORAGE_BUCKET_NAME = 'django-lxp'
-    # Important, sinon access denied, et il faut activer l'ACL dans les propriétés des permissions du buket
-    AWS_DEFAULT_ACL = 'public-read'
-    AWS_S3_CUSTOM_DOMAIN = '%s.s3.amazonaws.com' % AWS_STORAGE_BUCKET_NAME
-    AWS_S3_OBJECT_PARAMETERS = {     'CacheControl': 'max-age=86400', }
-    # s3 static settings
-    STATIC_LOCATION = 'static'
-    STATIC_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{STATIC_LOCATION}/'
+if USE_ORACLE:
+    ORACLE_BUCKET_NAME = os.environ.get('ORACLE_BUCKET_NAME')
+    ORACLE_BUCKET_NAMESPACE = os.environ.get('ORACLE_BUCKET_NAMESPACE')
+    ORACLE_REGION = os.environ.get('ORACLE_REGION')
+    AWS_ACCESS_KEY_ID = os.environ.get('ORACLE_ACCESS_KEY')
+    AWS_SECRET_ACCESS_KEY = os.environ.get('ORACLE_CUSTOMER_SECRET_KEY')
+    AWS_STORAGE_BUCKET_NAME = ORACLE_BUCKET_NAME
+    AWS_S3_CUSTOM_DOMAIN = f"{ORACLE_BUCKET_NAMESPACE}.compat.objectstorage.{ORACLE_REGION}.oraclecloud.com"
+    AWS_S3_ENDPOINT_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}"
+    AWS_S3_OBJECT_PARAMETERS = {
+        'CacheControl': 'max-age=86400',
+    }
+    DEFAULT_FILE_STORAGE = 'inscription.utils.MediaStorage'
+    MEDIA_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{ORACLE_BUCKET_NAME}/media/"
     STATICFILES_STORAGE = 'inscription.utils.StaticStorage'
-    # s3 public media settings
-    PUBLIC_MEDIA_LOCATION = 'media'
-    MEDIA_URL = f'https://{AWS_S3_CUSTOM_DOMAIN}/{PUBLIC_MEDIA_LOCATION}/'
-    DEFAULT_FILE_STORAGE = 'inscription.utils.MediaStorage'  # <-- here is where we reference it
-    MEDIA_ROOT = None
-    STATIC_ROOT = None
-
+    STATICFILES_DIRS = [
+        os.path.join(BASE_DIR, 'static'),
+    ]
+    STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{ORACLE_BUCKET_NAME}/static/"
 else:
     STATIC_URL = '/static/'
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
-
-STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
-
-
-
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
-
-import django_heroku
-
-# Attention : s'il n'y a pas staticfiles=False le dossier par défaut static_root ou AWS n'est pas utilisé
-django_heroku.settings(locals(), staticfiles=False)
-del DATABASES['default']['OPTIONS']['sslmode']
+    STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
