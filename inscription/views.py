@@ -89,7 +89,7 @@ class FormulaireInscription(SessionWizardView):
     form_list = [InscriptionForm1, InscriptionForm2, InscriptionForm3, InscriptionForm4]
     template_name = 'inscription/formulaire_inscription.html'
     instance = None
-    if settings.USE_S3:
+    if settings.USE_ORACLE:
         file_storage = MediaStorage(location='tmp')
     else:
         file_storage = FileSystemStorage(location=os.path.join(settings.MEDIA_ROOT, 'tmp'))
