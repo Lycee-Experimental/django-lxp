@@ -37,6 +37,9 @@
 }
 .custom-select {
     background: none;
+    background-color: #3b3b3b !important;
+    border: 1px solid #515151 !important;
+    color: #b1b1b1 !important;
 }
 .select2-selection__rendered {
     color: #b1b1b1 !important;
