@@ -1,7 +1,6 @@
 # django-lxp
 Un site élaboré avec Django pour gérer les inscriptions au Lycée Expérimental.
 
-A tester ici : https://inscription.cf
 ## TODO
 - **Formulaire d'inscription [[#1]](https://github.com/Lycee-Experimental/django-lxp/issues/1)** :
 Aboutir à un formulaire permettant le renseignement de toutes les données nécessaires à l'inscription.
@@ -29,9 +28,11 @@ Exporter la base élève dans les formats convenant à un import dans les bases 
 
 Le **code** est hébergé sur **Github**, et l'intégration et le déploiement continu (**CI/CD**) est assuré par les **[Github Actions](https://github.com/features/actions)**.
 
-L'**application** est automatiquement déployée sur **[Heroku](https://www.heroku.com/)**, les **fichiers statiques** sont hébergés sur **[AWS S3](https://aws.amazon.com/fr/s3/)**, par la librarie storages (backends s3boto3), la **base de donnée Posgresql** sur **[AWS RDS]**(https://aws.amazon.com/fr/rds).
+~~L'**application** est automatiquement déployée sur **[Heroku](https://www.heroku.com/)**, les **fichiers statiques** sont hébergés sur **[AWS S3](https://aws.amazon.com/fr/s3/)**, par la librarie storages (backends s3boto3), la **base de donnée Posgresql** sur **[AWS RDS]**(https://aws.amazon.com/fr/rds).~~
 
-Le **nom de domaine** `inscription.cf` a été reservé chez **[Freenom](https://www.freenom.com/fr/index.html)** et transite par le **CDN** (content delivery network) **[Cloudflare](https://www.cloudflare.com/fr-fr/)** qui fournit le **SSL** (https) ainsi qu'une protection du site contre d'éventuelles attaques.
+Depuis qu'Heroku est devenu payant, l'application est déployée sur [Oracle](https://www.oracle.com/cloud/free/) qui offre des ressources gratuites.
+
+Le **nom de domaine** a été reservé chez **[Freenom](https://www.freenom.com/fr/index.html)** et transite par le **CDN** (content delivery network) **[Cloudflare](https://www.cloudflare.com/fr-fr/)** qui fournit le **SSL** (https) ainsi qu'une protection du site contre d'éventuelles attaques.
 
 Les js et css sont hébergés par [jsdelivr](https://www.jsdelivr.com/) :
 
@@ -42,6 +43,8 @@ Les js et css sont hébergés par [jsdelivr](https://www.jsdelivr.com/) :
 L'ensemble de ces services sont gratuits pour une utilisation basique.
 
 ### Django
+
+La gestion des dépendances se fait avec [Poetry](https://python-poetry.org/).
 
 L'application est contruite avec la version 4 du framework web [django](https://www.djangoproject.com/).
 
