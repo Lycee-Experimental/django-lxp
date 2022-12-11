@@ -22,7 +22,6 @@ django-brotli = "*"
 django-crispy-forms = "*"
 django-filter = "*"
 django-formtools = "*"
-django-heroku = "*"
 django-leaflet = "*"
 django-multiselectfield = "*"
 django-phonenumber-field = {version = "*", extras = ["phonenumberslite"]}
