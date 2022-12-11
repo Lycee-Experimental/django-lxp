@@ -5,9 +5,8 @@ description = ""
 authors = ["Davy39"]
 
 [tool.poetry.dependencies]
-python =  "^3.9"
+python =  "^3.10"
 asgiref = "*"
-"backports.zoneinfo" = "*"
 beautifulsoup4 = "*"
 boto3 = "*"
 botocore = "*"
@@ -62,3 +61,4 @@ Brotli = "*"
 Django = "*"
 Pillow = "*"
 mysqlclient = "*"
+cx-oracle = "^8.3.0"
