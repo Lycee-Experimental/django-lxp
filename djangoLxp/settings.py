@@ -10,6 +10,8 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+load_dotenv(os.path.join(BASE_DIR, ".env")) # loads the configs from .env
+
 LOGIN_URL='/admin/login/'
 
 ALLOWED_HOSTS = [os.getenv('HOST', 'localhost'),'127.0.0.1']
@@ -30,8 +32,6 @@ TIME_ZONE = 'Europe/Paris'
 DATE_FORMAT = "d-m-Y"
 
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-load_dotenv(os.path.join(BASE_DIR, ".env")) # loads the configs from .env
 
 # Utilise-t-on un stokage sur Oracle)
 USE_ORACLE = os.getenv('USE_ORACLE', False)
