@@ -42,4 +42,12 @@ jobs:
         repository: ${{ matrix.repo }}
         event-type: update
         client-payload: '{"ref": "${{ github.ref }}", "sha": "${{ github.sha }}", "module": "django-lxp", "branch": "master"}'
-
+    - name: Remote git pull
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.IP }}
+        username: ${{ secrets.NAME }}
+        key: ${{ secrets.KEY }}
+        script: |
+          cd block_volume/django-lxp/
+          git pull
