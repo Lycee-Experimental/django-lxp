@@ -10,6 +10,7 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
+BASE_DIR = Path(__file__).resolve().parent.parent
 load_dotenv(os.path.join(BASE_DIR, ".env")) # loads the configs from .env
 
 LOGIN_URL='/admin/login/'
@@ -30,8 +31,6 @@ USE_TZ = True
 LANGUAGE_CODE = 'fr'
 TIME_ZONE = 'Europe/Paris'
 DATE_FORMAT = "d-m-Y"
-
-BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Utilise-t-on un stokage sur Oracle)
 USE_ORACLE = os.getenv('USE_ORACLE', False)
