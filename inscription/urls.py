@@ -18,6 +18,8 @@ urlpatterns = [
     path('carto', carto, name='carto'),
     path('allergie', ajout_allergie, name='allergie'),
     path('dys', ajout_dys, name='dys'),
+    path('csv', export_csv, name='csv'),
+
 ]
 # Serving the media files in development mode
 if settings.DEBUG and not settings.USE_ORACLE:

@@ -28,7 +28,7 @@ from .forms import InscriptionForm1, InscriptionForm2, InscriptionForm3, Inscrip
 ### Librairie weasyprint pour la génération de PDF
 from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
-
+from .utils import download_csv
 
 def fiche(request, **kwargs):
     """
@@ -242,3 +242,11 @@ class AutocompleteDys(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(trouble__icontains=self.q)
         return qs
+
+
+## Pour télécharger un csv
+def export_csv(request):
+  # Create the HttpResponse object with the appropriate CSV header.
+  data = download_csv(request, BaseEleve.objects.all())
+  response = HttpResponse(data, content_type='text/csv')
+  return response
