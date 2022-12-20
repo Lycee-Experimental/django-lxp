@@ -176,7 +176,7 @@ class AutocompleteCommune(autocomplete.Select2QuerySetView):
     """Une vue pour permettre l'autocomplétion de recherche de commune par département."""
     def get_queryset(self):
         qs = super(AutocompleteCommune, self).get_queryset()
-        dep = self.forwarded.get('departement_naissance', None)
+        dep = self.forwarded.get('depCOM_naissance', None)
         code = Departement.objects.get(id=dep).code
         if dep:
             qs = qs.filter(departement_id=code)
