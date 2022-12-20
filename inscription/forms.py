@@ -79,14 +79,14 @@ class InscriptionForm1(forms.ModelForm):
         self.helper.use_custom_control = True
         # Liste des champs du modèle à afficher
         self.helper.layout = Layout(
-            Field('civility', template='inscription/my_select_template.html'),
+            Field('civilite', template='inscription/my_select_template.html'),
             Field('genre', template='inscription/my_select_template.html'),
-            'nom',
-            'prenom',
-            'nom_usage',
+            'nom_famille',
+            'prenoms',
+            'prenom_usage',
             Field('pays_naissance', template='inscription/my_select_template.html'),
             'ville_natale',
-            Field('departement_naissance', template='inscription/my_select_template.html'),
+            Field('depCOM_naissance', template='inscription/my_select_template.html'),
             Field('commune_naissance', template='inscription/my_select_template.html'),
             Field('date_naissance', css_class='input'),
             Field('nationalite', template='inscription/my_select_template.html'),
@@ -116,7 +116,7 @@ class InscriptionForm1(forms.ModelForm):
         msg = forms.ValidationError("Veuillez renseigner ce champs SVP.")
         if self.cleaned_data.get('pays_naissance').name == 'FRANCE':
             self.cleaned_data['ville_naissance_etrangere'] = None
-            if self.cleaned_data.get('departement_naissance', None) is None:
+            if self.cleaned_data.get('depCOM_naissance', None) is None:
                 self.add_error('depCOM_naissance', msg)
                 if self.cleaned_data.get('commune_naissance', None) is None:
                     self.add_error('commune_naissance', msg)
@@ -162,7 +162,7 @@ class InscriptionForm1(forms.ModelForm):
             'photo': FileUploadInput(),
             'date_naissance': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'commune_naissance': autocomplete.ModelSelect2(url='commune',
-                                                           forward=('departement_naissance',)),
+                                                           forward=('depCOM_naissance',)),
             'depCOM_naissance': autocomplete.ModelSelect2(url='departement'),
             'pays_naissance': autocomplete.ModelSelect2(url='pays'),
             'nationalite': autocomplete.ModelSelect2(url='pays'),
