@@ -113,7 +113,28 @@ class FormulaireInscription(SessionWizardView):
     def done(self, form_list, **kwargs):
         # On sauvegarde les données
         self.instance.save()
-        # On redirige vers le PDF
+        form_data = [form.cleaned_data for form in form_list]
+        print (form_data)
+        for value in form_data[3]['spe1']:
+            self.instance.spe1.add(value)
+        for value in form_data[3]['spe2']:
+            self.instance.spe2.add(value)  
+        for value in form_data[3]['spe3']:
+            self.instance.spe3.add(value)  
+        #form_data_dict = self.get_all_cleaned_data()
+        #Nécessaire de sauvegarder les manyToMany différemment
+        #spe_values = form_data_dict.pop('spe')
+        #for value in form_data_dict.pop('dys'):
+        #    self.instance.dys.add(value)
+        #for value in form_data_dict.pop('allergie'):
+        #    self.instance.allergie.add(value)
+        #for value in form_data_dict.pop('spe1'):
+        #    self.instance.spe1.add(value)
+        #for value in form_data_dict.pop('spe2'):
+        #    self.instance.spe2.add(value)  
+        #for value in form_data_dict.pop('spe3'):
+        #    self.instance.spe3.add(value)         
+        ## On redirige vers le PDF
         url = reverse('inscription:pdf', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
         return HttpResponseRedirect(url)
 
