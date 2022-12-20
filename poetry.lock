@@ -397,6 +397,25 @@ files = [
 ]
 
 [[package]]
+name = "crispy-bulma"
+version = "0.8.0"
+description = "Bulma template pack for django-crispy-forms"
+category = "main"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "crispy-bulma-0.8.0.tar.gz", hash = "sha256:d9bfb56636038becc3971fbd24c464cd9ee810db04667e9fd86fc58d299cc2b7"},
+    {file = "crispy_bulma-0.8.0-py3-none-any.whl", hash = "sha256:4f80291dfa38b738e44c21be43bffc9bb35540e54d9558186ea2fe958179b27f"},
+]
+
+[package.dependencies]
+Django = ">=2.2"
+django-crispy-forms = ">=1.12.0"
+
+[package.extras]
+test = ["pytest", "pytest-django"]
+
+[[package]]
 name = "cssselect2"
 version = "0.7.0"
 description = "CSS selectors for Python ElementTree"
@@ -1338,4 +1357,4 @@ test = ["pytest"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.9"
-content-hash = "db3a77b95dbe39ae6c9a3cc75852300a95a866d26a44792e73f94596246806fa"
+content-hash = "d29ab302db5b9f517b3eb86cf1ffb4732f29ba95fce0c2b3889986d42743b4d2"
