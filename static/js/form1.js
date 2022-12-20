@@ -6,11 +6,11 @@ function Hide() {
     }
     else {
         if(document.getElementById('select2-id_0-pays_naissance-container').textContent === "FRANCE") {
-            document.getElementById('div_id_0-departement_naissance').style.display = '';
+            document.getElementById('div_id_0-depCOM_naissance').style.display = '';
             document.getElementById('div_id_0-commune_naissance').style.display = '';
             document.getElementById('div_id_0-ville_natale').style.display = 'none';
         } else {
-            document.getElementById('div_id_0-departement_naissance').style.display = 'none';
+            document.getElementById('div_id_0-depCOM_naissance').style.display = 'none';
             document.getElementById('div_id_0-commune_naissance').style.display = 'none';
             document.getElementById('div_id_0-ville_natale').style.display = '';
         }
