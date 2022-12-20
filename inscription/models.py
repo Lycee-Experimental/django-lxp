@@ -60,7 +60,7 @@ class PaysManager(models.Manager):
 
 class Pays(models.Model):
     """Base de donnée des pays avec code INSEE.
-    Le données sont importées depuis le fichier CSV grâce à la commande python manage.py pays"""
+    Les données sont importées depuis le fichier CSV grâce à la commande python manage.py pays"""
     code = models.CharField(max_length=4, verbose_name="Code INSEE")
     name = models.CharField(max_length=50, verbose_name="Département")
     objects = PaysManager()
@@ -103,7 +103,7 @@ class CommuneManager(models.Manager):
 
 class Commune(models.Model):
     """Base de donnée des communes avec code INSEE et département d'appartenance.
-    Le données sont importées depuis le fichier CSV grâce à la commande python manage.py commune"""
+    Les données sont importées depuis le fichier CSV grâce à la commande python manage.py commune"""
     code = models.CharField(max_length=6, verbose_name="Code INSEE")
     name = models.CharField(max_length=50, verbose_name="Commune")
     departement = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département", to_field='code')
@@ -158,22 +158,24 @@ class MeeManager(models.Manager):
 
 
 class MEE(models.Model):
-    nom = models.CharField(max_length=20, verbose_name="Nom")
-    prenom = models.CharField(max_length=20, verbose_name="Prénom")
+    #nom = models.CharField(max_length=20, verbose_name="Nom")
+    prenom = models.CharField(max_length=20, verbose_name="Prénom", unique=True)
     gb_an_passe = models.IntegerField(choices=GB,
                                       verbose_name="GB de l'an passé", blank=True, null=True)
     gb_annee_en_cours = models.IntegerField(choices=GB,
                                             verbose_name="GB de cette année", blank=True, null=True)
-    email = models.EmailField(verbose_name="Email", max_length=30,  blank=True, null=True)
-    telephone = PhoneNumberField(verbose_name="Téléphone",  blank=True, null=True)
+    #email = models.EmailField(verbose_name="Email", max_length=30,  blank=True, null=True)
+    #telephone = PhoneNumberField(verbose_name="Téléphone",  blank=True, null=True)
     objects = MeeManager()
 
     def natural_key(self):
-        return [self.prenom, self.nom]
+    #    return [self.prenom, self.nom]
+        return self.prenom
+
     def __str__(self):
         return '%s' % self.prenom
-    class Meta:
-        unique_together = [['prenom', 'nom']]
+    #class Meta:
+    #    unique_together = [['prenom', 'nom']]
 
 class Etablissement(models.Model):
     nom_commune = models.CharField(max_length=50, null=True)
@@ -263,32 +265,38 @@ class BaseEleve(models.Model):
     )
 
     GENRE = (
-        ('il', 'il'),
-        ('elle', 'elle'),
-        ('iel', 'iel')
+        ('il', 'Il'),
+        ('elle', 'Elle'),
+        ('iel', 'Il, Elle, Iel ou autre')
     )
 
     date_naissance = models.DateField(verbose_name="Date de naissance")
     commune_naissance = models.ForeignKey(Commune, on_delete=models.CASCADE, verbose_name="Commune de naissance",
                                           blank=True, null=True)
-    ville_natale = models.CharField(max_length=50, verbose_name="Ville natale",blank=True, null=True)
-    departement_naissance = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département de naissance", blank=True, null=True)
+    ville_naissance_etrangere = models.CharField(max_length=50, verbose_name="Ville natale", blank=True, null=True)
+    depCOM_naissance = models.ForeignKey(Departement, on_delete=models.CASCADE, verbose_name="Département de naissance", blank=True, null=True)
     pays_naissance = models.ForeignKey(Pays, on_delete=models.CASCADE, verbose_name="Pays de naissance")
-    nationalite = models.ForeignKey(Pays, on_delete=models.CASCADE, verbose_name="Nationalité", related_name='nationalite',)
-    address = AddressField(verbose_name="Adresse", related_name='eleve')
-    civility = models.CharField(max_length=3, choices=CIVILITY_CHOICES, default='M.', verbose_name="Civilité",
+    nationalite = models.ForeignKey(Pays, on_delete=models.CASCADE, verbose_name="Nationalité", related_name='nationalite')
+    address = AddressField(verbose_name="Adresse", related_name='eleve', blank=True, null=True,
+                           help_text="Si tu n'as pas encore d'addresse dans les environs de Saint-Nazaire, laisse ce champ vide.")
+
+    civilite = models.CharField(max_length=3, choices=CIVILITY_CHOICES, default='MME', verbose_name="Civilité",
                                 help_text="Quel sexe t'est attribué dans les documents administratifs ?")
-    genre = models.CharField(max_length=5, choices=GENRE, verbose_name='Pronom', default='Iel',
-                             help_text="Veux-tu que l'on parle de toi en disant il, elle ou iel ?")
-    nom = models.CharField(max_length=255, verbose_name="Nom de famille")
-    prenom = models.CharField(max_length=255, verbose_name="Prénom")
-    nom_usage = models.CharField(max_length=255, verbose_name="Nom d'usage", blank=True, null=True,
-        help_text="Souhaites-tu être appelé par un nom différent de ton prénom ?")
-    email = models.EmailField(max_length=255, verbose_name="Email")
-    telephone = PhoneNumberField(verbose_name="Téléphone")
-    comments = models.TextField(blank=True, null=True, verbose_name="Commentaires")
+    genre = models.CharField(max_length=5, choices=GENRE, verbose_name='Pronom', default='elle',
+                             help_text="Veux-tu que l'on parle de toi en disant il, elle, iel ou autre ?")
+    nom_famille = models.CharField(max_length=255, verbose_name="Nom de famille")
+    prenoms = models.CharField(max_length=255, verbose_name="Prénom")
+    prenom_usage = models.CharField(max_length=255, verbose_name="Prénom d'usage", blank=True, null=True,
+                                    help_text="Souhaites-tu être appelé autrement que par ton prénom administratif ?")
+    adresse_mail = models.EmailField(max_length=255, verbose_name="Email",
+                                     help_text="Prends le temps de te créer une adresse email si tu n'en as pas encore.")
+    telephone_mobile = PhoneNumberField(verbose_name="Téléphone")
+    projet = models.TextField(verbose_name="Projet au LXP",
+                              help_text="Détaille ici ton projet : pourquoi faire le choix du Lycée Expérimental ?")
+
     hash = models.CharField(max_length=30, default=create_hash, unique=True)
-    photo = models.ImageField(upload_to=nom_photo, null=True)
+    photo = models.ImageField(upload_to=nom_photo, blank=True, null=True,
+                              help_text="Merci de téléverser une photo pour ta fiche d'inscription.")
     # RESPONSABLES
     RESP1 = (
         ('pere','Père'),
@@ -298,11 +306,12 @@ class BaseEleve(models.Model):
     RESP2 = (
         ('pere','Père'),
         ('mere', 'Mère'),
-        ('autre', 'Autre responsable légal ou référent'),
-        ('aucun', 'Aucun')
+        ('autre', 'Autre responsable légal ou référent·e'),
+        ('aucun', "Pas d'autre référent·e")
     )
     resp1 = models.CharField(max_length=5, choices=RESP1,
-                             default='mere', verbose_name="Lien de parenté")
+                             default='mere', verbose_name="Lien de parenté ou autre")
+    civilite_resp1 = models.CharField(max_length=3, choices=CIVILITY_CHOICES, default='M.', verbose_name="Civilité")
     nom_resp1 = models.CharField(max_length=255, verbose_name="Nom de famille")
     prenom_resp1 = models.CharField(max_length=255, verbose_name="Prénom")
     adresse_resp1 = AddressField(verbose_name="Adresse", related_name='resp1')
@@ -312,6 +321,8 @@ class BaseEleve(models.Model):
                                        on_delete=models.CASCADE, verbose_name="Profession")
     resp2 = models.CharField(max_length=5, choices=RESP2,
                                 default='pere', verbose_name="Lien de parenté")
+    civilite_resp2 = models.CharField(max_length=3, choices=CIVILITY_CHOICES, default='M.', verbose_name="Civilité",
+                                      blank=True, null=True)
     nom_resp2 = models.CharField(max_length=255, verbose_name="Nom de famille", blank=True, null=True)
     prenom_resp2 = models.CharField(max_length=255, verbose_name="Prénom", blank=True, null=True)
     adresse_resp2 = AddressField(verbose_name="Adresse", related_name='resp2', blank=True, null=True)
@@ -319,12 +330,11 @@ class BaseEleve(models.Model):
     tel_resp2 = PhoneNumberField(verbose_name="Numéro de téléphone", blank=True, null=True)
     sociopro_resp2 = models.ForeignKey(Sociopro, related_name='resp2',
                                        on_delete=models.CASCADE, verbose_name="Profession", blank=True, null=True)
-
-    spe1 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '1'}, blank=True, related_name='spe1')
-    spe2 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '2'}, blank=True, related_name='spe2')
-    spe3 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '3'}, blank=True, related_name='spe3')
+    spes = models.ManyToManyField(Spe, null=True, blank=True, related_name='spes')
+    spe1 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '1'}, null=True, blank=True, related_name='spe1')
+    spe2 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '2'}, null=True, blank=True, related_name='spe2')
+    spe3 = models.ManyToManyField(Spe, limit_choices_to={'groupe': '3'}, null=True, blank=True, related_name='spe3')
     NIVEAU = (
-        ('premiere', 'Première'),
         ('deter', 'Détermination (2nde)'),
         ('premiere', 'Première'),
         ('term', 'Terminale'),
@@ -332,15 +342,29 @@ class BaseEleve(models.Model):
     )
     niveau = models.CharField(max_length=10, choices=NIVEAU, verbose_name="Niveau d'inscription", default='deter')
     # Scolarité passée
-    dys = models.ManyToManyField(TroubleCognitif, verbose_name="Troubles de l'apprentissage",blank=True, null=True)
-    allergie = models.ManyToManyField(Allergie, verbose_name="Allergies", blank=True, null=True )
+    troubles = models.ManyToManyField(TroubleCognitif, verbose_name="Troubles de l'apprentissage", blank=True, null=True,
+                        help_text="As-tu des troubles de l'apprentissage ou une situation médicale impactant ta scolarité ?")
 
-    nouvelle = models.BooleanField(verbose_name='Première inscription au LXP', default=True)
+    amenagements = models.BooleanField(verbose_name="Aménagements d'épreuves", default=False,
+                                       help_text="As-tu déjà bénéficié d'aménagement d'épreuves pour ces troubles ?")
+
+    allergies = models.ManyToManyField(Allergie, verbose_name="Allergies", blank=True, null=True)
+
+    ancien = models.BooleanField(verbose_name='Réinscription au LXP', default=False,
+                                help_text = "Étais-tu inscrit·e au LXP l'an passé ?")
+
+    date_entretien = models.DateField(verbose_name="Date de ton entretien",
+                            help_text="Indique une date approximative si tu n'as plus la date exacte.")
+
+    mee_entretien = models.ForeignKey(MEE, on_delete=models.CASCADE, related_name='entretien',
+                                      verbose_name="MEE d'entretien", blank=True, null=True,
+                help_text="Laisse vide si tu ne te souviens plus du prénom du/de la MEE que tu as rencontré.")
+
     niveau_an_passe = models.CharField(max_length=10, choices=NIVEAU,
                                        verbose_name="Niveau d'inscription l'an passé", blank=True, null=True)
     gb_an_passe = models.IntegerField(choices=GB,
                                        verbose_name="Groupe de base", blank=True, null=True)
-    ecco_an_passe = models.ForeignKey(MEE, on_delete=models.CASCADE,
+    ecco_an_passe = models.ForeignKey(MEE, on_delete=models.CASCADE, related_name='ecco',
                                       verbose_name="MEE d'ECCO", blank=True, null=True)
 
     gb_annee_en_cours = models.IntegerField(choices=GB,

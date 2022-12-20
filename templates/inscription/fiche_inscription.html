@@ -18,7 +18,7 @@ Pour utiliser le tag créé dans templatetags/verbose_names
     <tbody>
     <tr>
         <td>
-            <h1> {{ fiche.prenom }} {{ fiche.nom }} </h1>
+            <h1> {{ fiche.prenoms }} {{ fiche.nom_famille }} </h1>
         </td>
         <td>
             <img width="170px"  src="{{ fiche.photo.url }}"/>
@@ -29,17 +29,17 @@ Pour utiliser le tag créé dans templatetags/verbose_names
     <tr>
       <td>
           <h4>Civilité</h4>
-                <p><u>Sexe (administratif):</u><span class="float-right">{{ fiche.civility}}</span></p>
+                <p><u>Sexe (administratif):</u><span class="float-right">{{ fiche.civilite }}</span></p>
                 <p><u>Pronom:</u><span class="float-right">{{ fiche.genre}}</span></p>
-                <p><u>Nom:</u><span class="float-right">{{ fiche.nom}}</span></p>
-                <p><u>Prénom:</u><span class="float-right">{{ fiche.prenom}}</span></p>
-                <p><u>Prénom d'usage:</u><span class="float-right">{{ fiche.nom_usage}}</span></p>
+                <p><u>Nom:</u><span class="float-right">{{ fiche.nom_famille }}</span></p>
+                <p><u>Prénom:</u><span class="float-right">{{ fiche.prenoms }}</span></p>
+                <p><u>Prénom d'usage:</u><span class="float-right">{{ fiche.prenom_usage }}</span></p>
       </td>
       <td>
            <h4>Coordonnées</h4>
                 <p><u>Adresse:</u><span class="float-right">{{ fiche.address}}</span></p>
-                <p><u>Téléphone:</u><span class="float-right">{{ fiche.telephone.as_national}}</span></p>
-                <p><u>Email:</u><span class="float-right">{{ fiche.email}}</span></p>
+                <p><u>Téléphone:</u><span class="float-right">{{ fiche.telephone_mobile.as_national}}</span></p>
+                <p><u>Email:</u><span class="float-right">{{ fiche.adresse_mail }}</span></p>
       </td>
     </tr>
     <tr>
@@ -49,13 +49,13 @@ Pour utiliser le tag créé dans templatetags/verbose_names
                 <p><u>Ville de naissance:</u>
                     <span class="float-right">
                         {% if fiche.pays_naissance_id == 1 %} {{ fiche.commune_naissance}}
-                        {% else %} {{ fiche.ville_natale}}
+                        {% else %} {{ fiche.ville_naissance_etrangere }}
                         {% endif %}
                     </span>
                 </p>
                 {% if fiche.pays_naissance_id == 1 %}
                     <p><u>Département de naissance:</u>
-                        <span class="float-right">{{ fiche.departement_naissance.name}}</span>
+                        <span class="float-right">{{ fiche.depCOM_naissance.name}}</span>
                     </p>
                 {% endif %}
                 <p><u>Pays de naissance:</u><span class="float-right">{{ fiche.pays_naissance}}</span></p>
