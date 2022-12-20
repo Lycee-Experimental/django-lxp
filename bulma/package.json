@@ -1,0 +1,22 @@
+{
+  "name": "bulma",
+  "version": "1.0.0",
+  "description": "Bulma template for DjangoLXP",
+  "main": "index.js",
+  "scripts": {
+    "css-build": "node-sass --omit-source-map-url sass/style.scss ../static/css/bulma.css",
+    "css-watch": "npm run css-build -- --watch",
+    "start": "npm run css-watch"
+  },
+  "author": "Davy39",
+  "license": "ISC",
+  "devDependencies": {
+    "bulma": "^0.9.4",
+    "node-sass": "^8.0.0"
+  },
+  "dependencies": {
+    "bulma-checkbox": "^1.2.1",
+    "bulma-o-steps": "^1.1.0",
+    "bulma-switch": "^2.0.4"
+  }
+}

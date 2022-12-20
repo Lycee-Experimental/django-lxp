@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.forms',
     'crispy_forms',
+    'crispy_bulma',
     'captcha',
     'inscription',
     'django_tables2',
@@ -61,6 +63,9 @@ INSTALLED_APPS = [
     'dal',
     "phonenumber_field",
 ]
+
+# Pour redéfinir des tempates de widget (avec 'django.forms' dans INSTALLED_APPS
+FORM_RENDERER = 'django.forms.renderers.TemplatesSetting'
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -149,7 +154,11 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-CRISPY_TEMPLATE_PACK = 'bootstrap4'
+#CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bulma"
+
+CRISPY_TEMPLATE_PACK = "bulma"
 
 if USE_ORACLE:
     ORACLE_BUCKET_NAME = os.environ.get('ORACLE_BUCKET_NAME')

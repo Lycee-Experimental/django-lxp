@@ -1,0 +1,13 @@
+{% extends "bulma/field.html" %}
+{% load crispy_forms_bulma_field %}
+{% block field-body %}
+<div class="control is-expanded">
+  <div class="select{% if field|is_selectmultiple %} is-multiple{%endif%} is-fullwidth">
+    {% if field.errors %}
+        {% crispy_field field "class" "is-danger" %}
+    {% else %}
+        {% crispy_field field %}
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

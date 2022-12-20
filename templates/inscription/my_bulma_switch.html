@@ -1,0 +1,66 @@
+{% load crispy_forms_bulma_field %}
+
+{% if field.is_hidden %}
+  {{ field }}
+{% else %}
+
+{# use a negated variable, so it get's rendered by default and we don't need to modify the FormHelper #}
+{% if not exclude_field_wrapper %}
+  <div
+    id="div_{{ field.auto_id }}"
+    class="field{% if wrapper_class %} {{ wrapper_class }}{% endif %}{% if form_horizontal %} is-horizontal{% endif %}"
+  >
+    {% if form_horizontal %}<div class="field-label">{% endif %}
+      {% if field.label %}
+        <label for="{{ field.id_for_label }}" class="label{% if label_class %} {{ label_class }}{% endif %}">
+          {{ field.label }}
+          {% if field.field.required %}
+            <span class="asterisk">*</span>
+          {% endif %}
+        </label>
+      {% endif %}
+    {% if form_horizontal %}</div>{% endif %}
+
+    {% if form_horizontal %}<div class="field-body"><div class="field">{% endif %}
+{% endif %}
+
+<div class="control {% if css_class %} {{ css_class }}{% endif %}{% if field.errors %} is-danger {% endif %}">
+    <div class="field">
+        <input id="{{ field.id_for_label }}" name="{{ field.html_name }}" type="checkbox" class="switch is-rounded">
+        <label for="{{ field.id_for_label }}"></label>
+    </div>
+</div>
+
+{% if not exclude_field_wrapper %}
+      {% if form_show_errors %}
+        {% for error in field.errors %}
+          <p id="error_{{ forloop.counter }}_{{ field.auto_id }}"
+             class="help is-danger">
+            {{ error }}
+          </p>
+        {% endfor %}
+      {% endif %}
+
+      {% include 'bulma/layout/help_text.html' %}
+    {% if form_horizontal %}</div></div>{% endif %}
+  </div>
+{% endif %}
+
+{% endif %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

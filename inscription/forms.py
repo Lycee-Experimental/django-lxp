@@ -2,11 +2,21 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from crispy_forms.bootstrap import FormActions, InlineField, FieldWithButtons, StrictButton
 from crispy_forms.helper import FormHelper
-from crispy_forms.layout import Div, Fieldset, Layout, Submit, Field, HTML, MultiField
+from crispy_forms.layout import Fieldset, Layout, Submit, HTML, MultiField
+from crispy_bulma.layout import Div, IconField, Field, UploadField
 from .models import BaseEleve, Allergie, TroubleCognitif, Spe
 from .utils import CaptchaWizardField
 # Pour l'autocomplétion de la commune en fonction du département choisi
 from dal import autocomplete
+from django.conf import settings
+
+from django.forms import ClearableFileInput
+
+
+class FileUploadInput(ClearableFileInput):
+    template_name = "inscription/my_file_upload_input.html"
+
+
 
 
 class ListeEleveForm(FormHelper):
@@ -23,9 +33,6 @@ class ListeEleveForm(FormHelper):
     label_class = 'col-md-3'
     field_class = 'col-md-9'
     html5_required = True
-    #form_show_labels = False
-    #form_style = 'inline'
-    #field_template = 'bootstrap4/layout/inline_field.html'
     layout = Layout(
                 Fieldset(
                   "<span class='fa fa-search'></span> " + str(_("Rechercher des élèves")),
@@ -43,6 +50,7 @@ class ListeEleveForm(FormHelper):
                    Submit("submit", _("Filtrer")),
                    css_class="text-right align-self-center",
                 ),
+                template='',
                )
             )
 
@@ -64,36 +72,36 @@ class InscriptionForm1(forms.ModelForm):
         # FormHelper pour customiser le formulaire
         self.helper = FormHelper()
         # Id et la classe bootstrap du formulaire
-        self.helper.form_class = 'form-horizontal'
+        self.helper.form_horizontal = True
         self.helper.form_id = 'BaseEleve-form'
-        # Largeur des labels et des champs sur la grille
-        self.helper.label_class = 'col-md-4'
+        self.helper.label_class = 'is-pulled-left'
         self.helper.field_class = 'col-md-8'
         self.helper.use_custom_control = True
         # Liste des champs du modèle à afficher
         self.helper.layout = Layout(
-            'civility',
-            'genre',
+            Field('civility', template='inscription/my_select_template.html'),
+            Field('genre', template='inscription/my_select_template.html'),
             'nom',
             'prenom',
             'nom_usage',
-            'pays_naissance',
+            Field('pays_naissance', template='inscription/my_select_template.html'),
             'ville_natale',
-            'departement_naissance',
-            'commune_naissance',
-            'date_naissance',
-            'nationalite',
-            'address',
-            'telephone',
-            'photo',
+            Field('departement_naissance', template='inscription/my_select_template.html'),
+            Field('commune_naissance', template='inscription/my_select_template.html'),
+            Field('date_naissance', css_class='input'),
+            Field('nationalite', template='inscription/my_select_template.html'),
+            IconField('address', icon_prepend="fa-solid fa-envelope",css_class='input address addresswidget pac-target-input'),
+            #, template='inscription/my_input_with_icon.html', css_class='input address addresswidget pac-target-input'),
+            Field('telephone', css_class='input'),
+            UploadField('photo', css_class='clearablefileinput'),
             'email',
             'confirmation_email',
         )
 
     def clean(self):
         """Fonction pour contrôler les entrées"""
-        nom = self.cleaned_data['nom']
-        prenom = self.cleaned_data['prenom']
+        nom = self.cleaned_data['nom_famille']
+        prenom = self.cleaned_data['prenoms']
         # On vérifie que le couple Nom/Prénom n'est pas déjà dans la base
         check = BaseEleve.objects.filter(nom=nom).filter(prenom=prenom)
         # On exlut l'entrée en cours de cette recherche pour permettre les updates
@@ -102,14 +110,14 @@ class InscriptionForm1(forms.ModelForm):
         # On affiche le message d'erreur
         if check.exists():
             msg = "{} {} est déjà dans la base.".format(nom, prenom)
-            self.add_error('nom', msg)
-            self.add_error('prenom', msg)
+            self.add_error('nom_famille', msg)
+            self.add_error('prenoms', msg)
         # On s'assure que le champs ville_natale ou communes et département sont remplis
         msg = forms.ValidationError("Veuillez renseigner ce champs SVP.")
         if self.cleaned_data.get('pays_naissance').name == 'FRANCE':
-            self.cleaned_data['ville_natale'] = None
+            self.cleaned_data['ville_naissance_etrangere'] = None
             if self.cleaned_data.get('departement_naissance', None) is None:
-                self.add_error('departement_naissance', msg)
+                self.add_error('depCOM_naissance', msg)
                 if self.cleaned_data.get('commune_naissance', None) is None:
                     self.add_error('commune_naissance', msg)
                 return
@@ -118,9 +126,9 @@ class InscriptionForm1(forms.ModelForm):
                 return
         else:
             self.cleaned_data['commune_naissance'] = None
-            self.cleaned_data['departement_naissance'] = None
+            self.cleaned_data['depCOM_naissance'] = None
             if self.cleaned_data.get('ville_natale', None) is None:
-                self.add_error('ville_natale', msg)
+                self.add_error('ville_naissance_etrangere', msg)
                 return
         return self.cleaned_data
 
@@ -130,11 +138,11 @@ class InscriptionForm1(forms.ModelForm):
         mail de confirmation lors de la validation du formulaire
         """
         confirmation_email = self.cleaned_data['confirmation_email']
-        mail = self.cleaned_data['email']
+        mail = self.cleaned_data['adresse_mail']
         # Si l'instance (model) a déjà une ID c'est à dire que c'est un Update d'une entrée existante
         if self.instance.id:
             # On vérifie juste que l'email n'a pas été changé
-            if mail == self.instance.email:
+            if mail == self.instance.adresse_mail:
                 return confirmation_email
         # Si c'est une nouvelle entrée ou si l'email à changé, on compare l'email et la confirmation
         if mail != confirmation_email:
@@ -145,26 +153,25 @@ class InscriptionForm1(forms.ModelForm):
     class Meta:
         # Modèle utilisé et entrées à renseigner
         model = BaseEleve
-        fields = ['address', 'civility', 'genre', 'nom', 'prenom', 'nom_usage', 'date_naissance', 'pays_naissance',
-                  'photo', 'commune_naissance', 'departement_naissance', 'telephone', 'email', 'confirmation_email',
-                  'nationalite', 'ville_natale']
+        fields = ['address', 'civilite', 'genre', 'nom_famille', 'prenoms', 'prenom_usage', 'date_naissance', 'pays_naissance',
+                  'photo', 'commune_naissance', 'depCOM_naissance', 'telephone_mobile', 'adresse_mail', 'confirmation_email',
+                  'nationalite', 'ville_naissance_etrangere']
         # Ajout d'un date picker au format='%Y-%m-%d' pour qu'il affiche les valeurs initiales lors des update
         # https://stackoverflow.com/questions/58294769/django-forms-dateinput-not-populating-from-instance
         widgets = {
-            'photo': forms.widgets.FileInput(),
+            'photo': FileUploadInput(),
             'date_naissance': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'commune_naissance': autocomplete.ModelSelect2(url='commune',
                                                            forward=('departement_naissance',)),
-            'departement_naissance': autocomplete.ModelSelect2(url='departement'),
+            'depCOM_naissance': autocomplete.ModelSelect2(url='departement'),
             'pays_naissance': autocomplete.ModelSelect2(url='pays'),
             'nationalite': autocomplete.ModelSelect2(url='pays'),
-
         }
 
     class Media:
-        css = {
-            'screen': ('css/custom-dark.css',),
-        }
+    #    css = {
+    #        'screen': ('css/my_custom_css.css',),
+    #    }
         js = (
             'js/form1.js',
         )
@@ -188,12 +195,28 @@ class InscriptionForm2(forms.ModelForm):
         self.helper.field_class = 'col-md-8'
         # Affichage de ton formulaire
         self.helper.layout = Layout(
-            Fieldset("Responsable 1",
-                'resp1', 'nom_resp1', 'prenom_resp1', 'adresse_resp1', 'tel_resp1', 'email_resp1', 'sociopro_resp1'
-                     ),
-            Fieldset("Responsable 2",
-                'resp2', 'nom_resp2', 'prenom_resp2', 'adresse_resp2', 'tel_resp2', 'email_resp2','sociopro_resp2'
-                     ),
+            Div(
+                Div(HTML("<h1>Responsable 1</h1>"),css_class="title"),
+                Field('resp1', template='inscription/my_select_template.html'), 
+                'nom_resp1', 
+                'prenom_resp1', 
+                IconField('adresse_resp1', icon_prepend="fa-solid fa-envelope",css_class='input address addresswidget pac-target-input'),
+                Field('tel_resp1', css_class='input'),
+                'email_resp1', 
+                Field('sociopro_resp1', template='inscription/my_select_template.html'), 
+                css_class='box'
+            ),
+            Div(
+                HTML("<h1>Responsable 2</h1>"),
+                Field('resp2', template='inscription/my_select_template.html'), 
+                'nom_resp2', 
+                'prenom_resp2', 
+                IconField('adresse_resp2', icon_prepend="fa-solid fa-envelope",css_class='input address addresswidget pac-target-input'),
+                Field('tel_resp2', css_class='input'),
+                'email_resp2', 
+                Field('sociopro_resp2', template='inscription/my_select_template.html'), 
+                css_class='box'
+            )
         )
 
     def clean(self):
@@ -220,9 +243,9 @@ class InscriptionForm2(forms.ModelForm):
 
     class Media:
         js = ('js/hide_resp2.js',)
-        css = {
-            'screen': ('css/custom-dark.css',),
-        }
+        ##css = {
+        ##    'screen': ('css/my_custom_css.css',),
+        ##}
 
 
 class InscriptionForm3(forms.ModelForm):
@@ -243,32 +266,28 @@ class InscriptionForm3(forms.ModelForm):
         self.helper.form_show_labels = True
         self.helper.use_custom_control = True
         self.helper.layout = Layout(
-            Field('dys', id='dys'),
-            Field('allergie', id='allerg'),
-            Field('etablissement_origine', id='etab'),
-            Field('nouvelle', id='nouvelle', wrapper_class="custom-control custom-switch custom-switch-lg",
-                 template='inscription/custom-field.html'),
-            'niveau_an_passe',
-            'gb_an_passe',
-            'ecco_an_passe',
+            Field('dys', template='inscription/my_select_template.html'),
+            Field('allergie',  template='inscription/my_select_template.html'),
+            Field('etablissement_origine', template='inscription/my_select_template.html'),
+            Field('nouvelle', template="inscription/my_bulma_switch.html"),#, wrapper_class="custom-control custom-switch custom-switch-lg",template='inscription/custom-field.html'),
+            Field('niveau_an_passe',template='inscription/my_select_template.html'),
+            Field('gb_an_passe',template='inscription/my_select_template.html'),
+            Field('ecco_an_passe',template='inscription/my_select_template.html'),
         )
 
     class Media:
         js = ('js/hide_lxp_an_passe.js',)
-        css = {
-            'screen': ('css/custom-dark.css',),
-        }
-
+       
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
-        fields = ['allergie', 'dys', 'nouvelle',  'niveau_an_passe', 'gb_an_passe', 'ecco_an_passe',
+        fields = ['allergies', 'troubles', 'ancien', 'niveau_an_passe', 'gb_an_passe', 'ecco_an_passe',
                   'etablissement_origine']
         widgets = {
             'ecco_an_passe': autocomplete.ModelSelect2(url='mee',
                                                            forward=('gb_an_passe',)),
-            'allergie': autocomplete.ModelSelect2Multiple('allergie_auto'),
-            'dys': autocomplete.ModelSelect2Multiple('dys_auto'),
+            'allergies': autocomplete.ModelSelect2Multiple('allergie_auto'),
+            'troubles': autocomplete.ModelSelect2Multiple('dys_auto'),
             'etablissement_origine': autocomplete.ModelSelect2(url='etablissement'),
         }
 
@@ -335,17 +354,19 @@ class InscriptionForm4(forms.ModelForm):
             # Liste des champs à afficher dont les champs supplémentaires
             'comments',
             'niveau',
-            Fieldset(
-                #HTML("""<label>Spécialités</label>"""),
-                'Spécialités',
-                Fieldset( 'Spé 1 ','spe1', css_class='col-4'),
-                Fieldset( 'Spé 2 ','spe2', css_class='col-4'),
-                Fieldset( 'Spé 3 ','spe3', css_class='col-4'),
-                Div(Field('confirm', wrapper_class="custom-control custom-switch custom-switch-lg",
-                      template='inscription/custom-field.html'), css_id='switch'),
-            css_class='row justify-content-center', css_id='champ-spe'),
+            Div(
+                HTML("""<a class=label>Spécialités</a>"""),
+                Div(
+                    Field('spe1', wrapper_class='column', css_class='is-success'),# template='inscription/my_bulma_checkbox.html'),
+                    Field('spe2', wrapper_class='column', css_class='is-success'),# template='inscription/my_bulma_checkbox.html'),
+                    Field('spe3', wrapper_class='column', css_class='is-success'),# template='inscription/my_bulma_checkbox.html'),
+                    Div(Field('confirm', template='inscription/my_bulma_switch.html')),
+                    css_class='columns justify-content-center'
+                    ),
+                css_class='box', css_id='champ-spe',
+                ), 
             'captcha',
-        )
+            )
 
     def check_spe(self,spes):
         if spes is not None:
@@ -364,8 +385,6 @@ class InscriptionForm4(forms.ModelForm):
     def nb_spe(self, data_spe, groupe_spe):
         nb = 0
         for spe in groupe_spe:
-            print(data_spe[spe])
-            print(len(data_spe[spe]))
             nb += len(data_spe[spe])
         return nb
 
@@ -414,7 +433,7 @@ class InscriptionForm4(forms.ModelForm):
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = [
-            'comments','spe1', 'spe2', 'spe3','niveau',
+            'projet', 'spe1', 'spe2', 'spe3', 'niveau',
         ]
 
     class Media:
