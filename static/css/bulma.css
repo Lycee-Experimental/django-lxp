@@ -1,4 +1,5 @@
-/* Bulma Checkbox */
+@charset "UTF-8";
+/* Attention : Bulma Checkbox est à importer avant bulma*/
 /* Bulma Utilities */
 .button, .input, .textarea, .select select, .file-cta,
 .file-name, .pagination-previous,
@@ -10046,12 +10047,16 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
       border-radius: 3px !important;
       font-size: 1rem;
       height: 2.25em;
-      box-shadow: inset 0 1px 2px rgba(10, 10, 10, 0.1);
+      box-shadow: inset 0 0.0625em 0.125em rgba(10, 10, 10, 0.05);
       max-width: 100%;
-      width: 100%;
-      border-radius: 3px !important; }
-  .select2-container .select2-dropdown .select2-results__options {
-    max-height: 200px !important; }
-    .select2-container .select2-dropdown .select2-results__options .select2-results__option {
-      padding: 0.37em 0.75em !important;
-      font-size: 1rem; }
+      width: 100%; }
+    .select2-container .select2-dropdown .select2-search .select2-search__field:focus {
+      outline: none !important;
+      border-color: #485fc7 !important;
+      box-shadow: 0 0 0 0.125em rgba(72, 95, 199, 0.25) !important; }
+  .select2-container .select2-dropdown .select2-results__option .select2-results__option {
+    max-height: 200px !important;
+    padding: 0.37em 0.75em !important;
+    font-size: 1rem; }
+    .select2-container .select2-dropdown .select2-results__option .select2-results__option.select2-container--default .select2-results__option[aria-selected=true] {
+      background-color: darkgray; }
