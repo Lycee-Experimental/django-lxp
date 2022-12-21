@@ -82,8 +82,8 @@ def nom_photo(instance, filename):
     upload_to = 'photos'
     ext = filename.split('.')[-1]
     # get filename
-    if instance.nom and instance.prenom:
-        filename = '{}_{}.{}'.format(instance.nom, instance.prenom, ext)
+    if instance.nom_famille and instance.prenoms:
+        filename = '{}_{}.{}'.format(instance.nom_famille, instance.prenoms, ext)
     else:
         # set filename as random string
         filename = '{}.{}'.format(uuid4().hex, ext)

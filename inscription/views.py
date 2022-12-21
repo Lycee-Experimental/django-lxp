@@ -52,7 +52,7 @@ def fiche_pdf(request, **kwargs):
     response = HttpResponse(content_type="application/pdf")
     response['Content-Disposition'] = "inline; filename=fiche-{name}-{date}.pdf".format(
         date=timezone.now().strftime('%Y-%m-%d'),
-        name=slugify(eleve.prenom),
+        name=slugify(eleve.prenoms),
     )
     html = render_to_string("inscription/fiche_inscription.html", {
         'fiche': eleve,

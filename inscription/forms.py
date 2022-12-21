@@ -91,7 +91,6 @@ class InscriptionForm1(forms.ModelForm):
             Field('date_naissance', css_class='input'),
             Field('nationalite', template='inscription/my_select_template.html'),
             IconField('address', icon_prepend="fa-solid fa-envelope", css_class='input address addresswidget pac-target-input'),
-            #, template='inscription/my_input_with_icon.html', css_class='input address addresswidget pac-target-input'),
             Field('telephone', css_class='input'),
             UploadField('photo', css_class='clearablefileinput'),
             'adresse_mail',
