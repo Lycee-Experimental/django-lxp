@@ -247,6 +247,6 @@ class AutocompleteDys(autocomplete.Select2QuerySetView):
 ## Pour télécharger un csv
 def export_csv(request):
   # Create the HttpResponse object with the appropriate CSV header.
-  data = download_csv(request, BaseEleve.objects.all())
+  data = download_csv(request, BaseEleve.objects.exclude(address=None))
   response = HttpResponse(data, content_type='text/csv')
   return response
