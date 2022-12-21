@@ -1,4 +1,5 @@
 .idea/
+bulma/node_modules
 data/
 mediafiles/
 staticfiles/
