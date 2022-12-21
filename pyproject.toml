@@ -61,4 +61,4 @@ Django = "*"
 Pillow = "*"
 mysqlclient = "*"
 cx-oracle = "^8.3.0"
-crispy-bulma = "^0.8.0"
+crispy-bulma = { git = "https://github.com/ckrybus/crispy-bulma.git" }
