@@ -3,7 +3,7 @@ import os
 import time
 from uuid import uuid4
 from django.utils import timezone
-from django.core.exceptions import ValidationError
+from django.core.exceptions import ValidationError, PermissionDenied
 # Une librairie pour gérer les tableaux
 from django_tables2 import SingleTableView
 # Des outils pour redéfinir le Captcha pour qu'il marche dans le wizard
@@ -15,7 +15,8 @@ from urllib.parse import urlencode
 from django.conf import settings
 from django.utils.encoding import filepath_to_uri
 from storages.backends.s3boto3 import S3Boto3Storage
-
+from django.http import HttpResponse
+import csv
 
 class PagedFilteredTableView(SingleTableView):
     """Actualise le tableau en fonction des filtres"""

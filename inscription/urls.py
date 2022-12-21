@@ -4,7 +4,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 
 from djangoLxp import settings
-from .views import InscriptionRechercheView, InscriptionTableView, FormulaireInscription, fiche, fiche_pdf, carto, ajout_allergie, ajout_dys
+from .views import InscriptionRechercheView, InscriptionTableView, FormulaireInscription, export_csv, fiche, fiche_pdf, carto, ajout_allergie, ajout_dys
 
 app_name = 'inscription'
 
