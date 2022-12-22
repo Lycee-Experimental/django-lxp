@@ -70,3 +70,6 @@ La possibilité d'avoir une sélection multiple de checkboxes est obtenue avec l
 Bootstrap est un framwork css / js développé initialement pour twitter qui permet l'afficahge de site web responsive. 
 On utilise ici un thème dark de bootstrap mis au point par [Vino Rodrigues](https://github.com/vinorodrigues/bootstrap-dark/)
 
+### Bulma
+
+npm install bulma-o-steps bulma-switch

@@ -7217,7 +7217,7 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
   .is-size-7-fullhd {
     font-size: 0.75rem !important; } }
 
-.has-text-centered {
+.has-text-centered, h1 {
   text-align: center !important; }
 
 .has-text-justified {
@@ -10024,7 +10024,9 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
     flex-direction: column-reverse; }
 
 .select2-container .select2-selection--single, .select2-container .select2-selection--multiple {
-  height: 2.5em !important;
+  font-size: 1rem !important;
+  height: 2.25em !important;
+  line-height: 1.5 !important;
   padding: 3px 0 !important;
   border: 1px solid #dbdbdb !important; }
   .select2-container .select2-selection--single .select2-selection__arrow, .select2-container .select2-selection--multiple .select2-selection__arrow {
