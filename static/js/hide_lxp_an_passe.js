@@ -1,13 +1,18 @@
 // Fonction permettant de cacher les champs inutiles du resp2
 function Hide() {
-    if(document.getElementById('nouvelle').checked) {
-    document.getElementById('div_id_2-niveau_an_passe').style.display = 'none';
-    document.getElementById('div_id_2-gb_an_passe').style.display = 'none';
-    document.getElementById('div_id_2-ecco_an_passe').style.display = 'none';
+    if(document.getElementById('ancien').checked) {
+        $("#id_2-niveau_an_passe").prop("disabled", false);
+        $("#id_2-gb_an_passe").prop("disabled", false);
+        $("#id_2-ecco_an_passe").prop("disabled", false);
+        $("#id_2-date_entretien").prop("disabled", true);
+        $("#id_2-mee_entretien").prop("disabled", true);
+
     } else {
-        document.getElementById('div_id_2-niveau_an_passe').style.display = '';
-        document.getElementById('div_id_2-gb_an_passe').style.display = '';
-        document.getElementById('div_id_2-ecco_an_passe').style.display = '';
+        $("#id_2-niveau_an_passe").prop("disabled", true);
+        $("#id_2-gb_an_passe").prop("disabled", true);
+        $("#id_2-ecco_an_passe").prop("disabled", true);
+        $("#id_2-date_entretien").prop("disabled", false);
+        $("#id_2-mee_entretien").prop("disabled", false);
     }
 }
 // Vérifie id_1-resp2 est à aucun (fonction Hide) après le chargement du document.
@@ -17,5 +22,5 @@ document.addEventListener("DOMContentLoaded", function() {
 });
 // Appelle la fonction quand on change le statut de resp2
 window.onload = function() {
-    document.getElementById('nouvelle').onchange = Hide;
+    document.getElementById('ancien').onchange = Hide;
 };

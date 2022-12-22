@@ -41,8 +41,8 @@ class ListeEleveForm(FormHelper):
                   # les champs à chercher suivi de __filtre avec le nom du filtre déclaré pour chaque champ dans filter.py
                   Div(
                 "gb_annee_en_cours",
-                "nom",
-                "prenom",
+                "nom_famille",
+                "prenoms",
                 css_class='row' 
                 ),
                 # InlineField("nom__icontains", css_class='form-group'),
@@ -85,13 +85,13 @@ class InscriptionForm1(forms.ModelForm):
             'prenoms',
             'prenom_usage',
             Field('pays_naissance', template='inscription/my_select_template.html'),
-            'ville_natale',
+            'ville_naissance_etrangere',
             Field('depCOM_naissance', template='inscription/my_select_template.html'),
             Field('commune_naissance', template='inscription/my_select_template.html'),
             Field('date_naissance', css_class='input'),
             Field('nationalite', template='inscription/my_select_template.html'),
             IconField('address', icon_prepend="fa-solid fa-envelope", css_class='input address addresswidget pac-target-input'),
-            Field('telephone', css_class='input'),
+            Field('telephone_mobile', css_class='input'),
             UploadField('photo', css_class='clearablefileinput'),
             'adresse_mail',
             'confirmation_email',
@@ -102,7 +102,7 @@ class InscriptionForm1(forms.ModelForm):
         nom = self.cleaned_data['nom_famille']
         prenom = self.cleaned_data['prenoms']
         # On vérifie que le couple Nom/Prénom n'est pas déjà dans la base
-        check = BaseEleve.objects.filter(nom=nom).filter(prenom=prenom)
+        check = BaseEleve.objects.filter(nom_famille=nom).filter(prenoms=prenom)
         # On exlut l'entrée en cours de cette recherche pour permettre les updates
         if self.instance:
             check = check.exclude(id=self.instance.id)
@@ -111,7 +111,7 @@ class InscriptionForm1(forms.ModelForm):
             msg = "{} {} est déjà dans la base.".format(nom, prenom)
             self.add_error('nom_famille', msg)
             self.add_error('prenoms', msg)
-        # On s'assure que le champs ville_natale ou communes et département sont remplis
+        # On s'assure que le champs ville_naissance_etrangere ou communes et département sont remplis
         msg = forms.ValidationError("Veuillez renseigner ce champs SVP.")
         if self.cleaned_data.get('pays_naissance').name == 'FRANCE':
             self.cleaned_data['ville_naissance_etrangere'] = None
@@ -126,7 +126,7 @@ class InscriptionForm1(forms.ModelForm):
         else:
             self.cleaned_data['commune_naissance'] = None
             self.cleaned_data['depCOM_naissance'] = None
-            if self.cleaned_data.get('ville_natale', None) is None:
+            if self.cleaned_data.get('ville_naissance_etrangere', None) is None:
                 self.add_error('ville_naissance_etrangere', msg)
                 return
         return self.cleaned_data
@@ -196,7 +196,8 @@ class InscriptionForm2(forms.ModelForm):
         self.helper.layout = Layout(
             Div(
                 Div(HTML("<h1>Responsable 1</h1>"),css_class="title"),
-                Field('resp1', template='inscription/my_select_template.html'), 
+                Field('resp1', template='inscription/my_select_template.html'),
+                Field('civilite_resp1', template='inscription/my_select_template.html'),
                 'nom_resp1', 
                 'prenom_resp1', 
                 IconField('adresse_resp1', icon_prepend="fa-solid fa-envelope",css_class='input address addresswidget pac-target-input'),
@@ -207,7 +208,8 @@ class InscriptionForm2(forms.ModelForm):
             ),
             Div(
                 HTML("<h1>Responsable 2</h1>"),
-                Field('resp2', template='inscription/my_select_template.html'), 
+                Field('resp2', template='inscription/my_select_template.html'),
+                Field('civilite_resp2', template='inscription/my_select_template.html'),
                 'nom_resp2', 
                 'prenom_resp2', 
                 IconField('adresse_resp2', icon_prepend="fa-solid fa-envelope",css_class='input address addresswidget pac-target-input'),
@@ -220,7 +222,7 @@ class InscriptionForm2(forms.ModelForm):
 
     def clean(self):
         resp2 = self.cleaned_data.get('resp2')
-        required = ['nom_resp2', 'prenom_resp2', 'adresse_resp2', 'tel_resp2', 'email_resp2',
+        required = ['nom_resp2', 'civilite_resp2','prenom_resp2', 'adresse_resp2', 'tel_resp2', 'email_resp2',
                     'sociopro_resp2']
         if resp2 == 'aucun':
             for field in required:
@@ -238,7 +240,7 @@ class InscriptionForm2(forms.ModelForm):
         model = BaseEleve
         fields = ['nom_resp1', 'prenom_resp1', 'nom_resp2', 'prenom_resp2', 'adresse_resp1', 'adresse_resp2',
                   'tel_resp1', 'tel_resp2', 'email_resp1', 'email_resp2', 'sociopro_resp1', 'sociopro_resp2',
-                  'resp1', 'resp2', ]
+                  'resp1', 'resp2', 'civilite_resp2','civilite_resp1']
 
     class Media:
         js = ('js/hide_resp2.js',)
@@ -265,10 +267,15 @@ class InscriptionForm3(forms.ModelForm):
         self.helper.form_show_labels = True
         self.helper.use_custom_control = True
         self.helper.layout = Layout(
-            Field('dys', template='inscription/my_select_template.html'),
-            Field('allergie',  template='inscription/my_select_template.html'),
+            Field('troubles', template='inscription/my_select_template.html'),
+            Field('amenagements', template="inscription/my_bulma_switch.html"),
+            Field('allergies',  template='inscription/my_select_template.html'),
+            Field('desco', template="inscription/my_bulma_switch.html"),
+            Field('boursier', template="inscription/my_bulma_switch.html"),
             Field('etablissement_origine', template='inscription/my_select_template.html'),
-            Field('nouvelle', template="inscription/my_bulma_switch.html"),#, wrapper_class="custom-control custom-switch custom-switch-lg",template='inscription/custom-field.html'),
+            Field('ancien', id='ancien', template="inscription/my_bulma_switch.html"),#, wrapper_class="custom-control custom-switch custom-switch-lg",template='inscription/custom-field.html'),
+            'date_entretien',
+            Field('mee_entretien', template='inscription/my_select_template.html'),
             Field('niveau_an_passe',template='inscription/my_select_template.html'),
             Field('gb_an_passe',template='inscription/my_select_template.html'),
             Field('ecco_an_passe',template='inscription/my_select_template.html'),
@@ -281,7 +288,7 @@ class InscriptionForm3(forms.ModelForm):
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = ['allergies', 'troubles', 'ancien', 'niveau_an_passe', 'gb_an_passe', 'ecco_an_passe',
-                  'etablissement_origine']
+                  'etablissement_origine', 'amenagements', 'date_entretien','mee_entretien', 'desco', 'boursier']
         widgets = {
             'ecco_an_passe': autocomplete.ModelSelect2(url='mee',
                                                            forward=('gb_an_passe',)),
@@ -291,8 +298,8 @@ class InscriptionForm3(forms.ModelForm):
         }
 
     def clean(self):
-        nouvelle = self.cleaned_data.get('nouvelle')
-        if nouvelle:
+        ancien = self.cleaned_data.get('ancien')
+        if not ancien:
             self.cleaned_data['ecco_an_passe'] = None
             self.cleaned_data['gb_an_passe'] = None
             self.cleaned_data['niveau_an_passe'] = None
@@ -351,7 +358,7 @@ class InscriptionForm4(forms.ModelForm):
         # Affichage du formulaire
         self.helper.layout = Layout(
             # Liste des champs à afficher dont les champs supplémentaires
-            'comments',
+            'projet',
             'niveau',
             Div(
                 HTML("""<a class=label>Spécialités</a>"""),
@@ -359,11 +366,13 @@ class InscriptionForm4(forms.ModelForm):
                     Field('spe1', wrapper_class='column', css_class='is-success'),# template='inscription/my_bulma_checkbox.html'),
                     Field('spe2', wrapper_class='column', css_class='is-success'),# template='inscription/my_bulma_checkbox.html'),
                     Field('spe3', wrapper_class='column', css_class='is-success'),# template='inscription/my_bulma_checkbox.html'),
-                    Div(Field('confirm', template='inscription/my_bulma_switch.html')),
                     css_class='columns justify-content-center'
                     ),
-                css_class='box', css_id='champ-spe',
-                ), 
+                Field('confirm', template='inscription/my_bulma_switch.html'),
+                css_class='box', css_id='champ-spe'
+            ),
+            Field('lv1', template='inscription/my_select_template.html'),
+            Field('lv2', template='inscription/my_select_template.html'),
             'captcha',
             )
 
@@ -390,8 +399,14 @@ class InscriptionForm4(forms.ModelForm):
     def clean(self):
         niveau = self.cleaned_data.get('niveau')
         confirm = self.cleaned_data.get('confirm')
+        lv1 = self.cleaned_data.get('lv1')
+        lv2 = self.cleaned_data.get('lv2')
+
         groupe_spe = ['spe1', 'spe2', 'spe3']
         data_spe={}
+        if lv1 == lv2:
+            msg = forms.ValidationError("Tes deux langues doivent être différentes.")
+            self.add_error(['lv1','lv2'], msg)
         for spe in groupe_spe:
             data_spe[spe] = self.cleaned_data.get(spe) or []
         if niveau == 'crepa' or niveau == 'deter' :
@@ -423,8 +438,6 @@ class InscriptionForm4(forms.ModelForm):
                     self.add_error('spe1', msg)
                     self.add_error('spe2', msg)
                     self.add_error('spe3', msg)
-
-
         return self.cleaned_data
 
 
@@ -432,7 +445,7 @@ class InscriptionForm4(forms.ModelForm):
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = [
-            'projet', 'spe1', 'spe2', 'spe3', 'niveau',
+            'projet', 'spe1', 'spe2', 'spe3', 'niveau', 'lv1', 'lv2'
         ]
 
     class Media:
