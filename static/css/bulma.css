@@ -10023,6 +10023,9 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
     display: flex;
     flex-direction: column-reverse; }
 
+.pac-logo::after {
+  background-image: none; }
+
 .select2-container .select2-selection--single, .select2-container .select2-selection--multiple {
   font-size: 1rem !important;
   height: 2.25em !important;
