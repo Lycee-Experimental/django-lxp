@@ -274,7 +274,7 @@ class InscriptionForm3(forms.ModelForm):
             Field('boursier', template="inscription/my_bulma_switch.html"),
             Field('etablissement_origine', template='inscription/my_select_template.html'),
             Field('ancien', id='ancien', template="inscription/my_bulma_switch.html"),#, wrapper_class="custom-control custom-switch custom-switch-lg",template='inscription/custom-field.html'),
-            'date_entretien',
+            Field('date_entretien', css_class='input'),
             Field('mee_entretien', template='inscription/my_select_template.html'),
             Field('niveau_an_passe',template='inscription/my_select_template.html'),
             Field('gb_an_passe',template='inscription/my_select_template.html'),
@@ -292,6 +292,7 @@ class InscriptionForm3(forms.ModelForm):
         widgets = {
             'ecco_an_passe': autocomplete.ModelSelect2(url='mee',
                                                            forward=('gb_an_passe',)),
+            'date_entretien': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'allergies': autocomplete.ModelSelect2Multiple('allergie_auto'),
             'troubles': autocomplete.ModelSelect2Multiple('dys_auto'),
             'etablissement_origine': autocomplete.ModelSelect2(url='etablissement'),
