@@ -10,11 +10,9 @@ $input-border-color : $border;
 h1, h2, h3, h4, h5, h6 {
   @extend .title;
 }
-
 h1 {
   @extend .is-1;
   @extend .has-text-centered;
-
 }
 h2 {
   @extend .is-2;
@@ -28,7 +26,10 @@ h4 {
 h5 {
   @extend .is-5;
 }
-
+// Pour enlever le logo google lors de la recherche
+.pac-logo::after {
+    background-image: none;
+}
 // FIX FOR SELECT2
 .select2-container {
   .select2-selection--single, .select2-selection--multiple {
