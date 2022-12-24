@@ -364,9 +364,9 @@ class InscriptionForm4(forms.ModelForm):
             Div(
                 HTML("""<a class=label>Spécialités</a>"""),
                 Div(
-                    Field('spe1', wrapper_class='column', css_class='is-success'),# template='inscription/my_bulma_checkbox.html'),
-                    Field('spe2', wrapper_class='column', css_class='is-success'),# template='inscription/my_bulma_checkbox.html'),
-                    Field('spe3', wrapper_class='column', css_class='is-success'),# template='inscription/my_bulma_checkbox.html'),
+                    Field('spe1', wrapper_class='column', css_class='is-success', template='inscription/my_bulma_checkbox.html'),
+                    Field('spe2', wrapper_class='column', css_class='is-success', template='inscription/my_bulma_checkbox.html'),
+                    Field('spe3', wrapper_class='column', css_class='is-success', template='inscription/my_bulma_checkbox.html'),
                     css_class='columns justify-content-center'
                     ),
                 Field('confirm', template='inscription/my_bulma_switch.html'),
