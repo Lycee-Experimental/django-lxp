@@ -39,31 +39,28 @@ h5 {
     line-height: 1.5 !important;
     padding: 3px 0 !important;
     border: 1px solid $border !important;
-
     .select2-selection__arrow {
       visibility: collapse !important;
     }
-
     .select2-selection__placeholder {
       color: #dbdbdb !important;
+    }
+    .select2-selection__choice {
+      margin-top: 1px;
     }
   }
   .select2-dropdown {
     border: 1px solid $border !important;
-
     &.select2-dropdown--below {
       border-top: 0 !important;
       box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
     }
-
     &.select2-dropdown--above {
       border-bottom: 0 !important;
       box-shadow: 0 -0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
     }
-
     .select2-search {
       margin: 5px;
-
       .select2-search__field {
         padding: 10px !important;
         border-radius: 3px !important;
