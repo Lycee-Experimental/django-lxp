@@ -407,7 +407,9 @@ class InscriptionForm4(forms.ModelForm):
         data_spe={}
         if lv1 == lv2:
             msg = forms.ValidationError("Tes deux langues doivent être différentes.")
-            self.add_error(['lv1','lv2'], msg)
+            self.add_error('lv1', msg)
+            self.add_error('lv2', msg)
+
         for spe in groupe_spe:
             data_spe[spe] = self.cleaned_data.get(spe) or []
         if niveau == 'crepa' or niveau == 'deter' :
