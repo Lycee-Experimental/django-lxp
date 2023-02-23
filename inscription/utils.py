@@ -1,6 +1,7 @@
 import hashlib
 import os
 import time
+from abc import ABC
 from uuid import uuid4
 from django.utils import timezone
 from django.core.exceptions import ValidationError, PermissionDenied
@@ -8,7 +9,7 @@ from django.core.exceptions import ValidationError, PermissionDenied
 from django_tables2 import SingleTableView
 # Des outils pour redéfinir le Captcha pour qu'il marche dans le wizard
 from captcha.fields import CaptchaField
-#from captcha.conf import settings
+# from captcha.conf import settings
 from captcha.models import CaptchaStore
 from datetime import datetime, timedelta
 from urllib.parse import urlencode
@@ -17,6 +18,7 @@ from django.utils.encoding import filepath_to_uri
 from storages.backends.s3boto3 import S3Boto3Storage
 from django.http import HttpResponse
 import csv
+from storages.utils import clean_name
 
 class PagedFilteredTableView(SingleTableView):
     """Actualise le tableau en fonction des filtres"""
@@ -35,7 +37,7 @@ class PagedFilteredTableView(SingleTableView):
         context = super(PagedFilteredTableView, self).get_context_data(**kwargs)
         context[self.context_filter_name] = self.filter
         # On récupère le "titre" dans l'url pour l'afficher dans le template (context) 
-        context["titre"]=self.request.GET.get('titre')
+        context["titre"] = self.request.GET.get('titre')
         return context
 
 
@@ -95,7 +97,7 @@ def nom_photo(instance, filename):
 def coordonnees(base):
     """Renvoie une liste contenant les coordonnées [latitude, longitude] de chaque élève.
     Pour affichage avec leaflet."""
-    adresses=[]
+    adresses = []
     for eleve in base:
         adresses.append([eleve.address.latitude, eleve.address.longitude])
     return adresses
@@ -105,63 +107,62 @@ def create_hash():
     """Génère une chaine de 10 caractères aléatoires"""
     hash = hashlib.sha1()
     hash.update(str(time.time()).encode('utf-8'))
-    return  hash.hexdigest()[:-10]
+    return hash.hexdigest()[:-10]
+
 
 ## Export de la base en csc
 def download_csv(request, queryset):
-  #if not request.user.is_staff:
-  #  raise PermissionDenied
+    # if not request.user.is_staff:
+    #  raise PermissionDenied
 
-  model = queryset.model
-  model_fields = model._meta.fields
-  field_names = [field.name for field in model_fields]
-  model_fields_many = model._meta.many_to_many
-  field_names_many = [field.name for field in model_fields_many]
-  response = HttpResponse(content_type='text/csv')
-  response['Content-Disposition'] = 'attachment; filename="export.csv"'
+    model = queryset.model
+    model_fields = model._meta.fields
+    field_names = [field.name for field in model_fields]
+    model_fields_many = model._meta.many_to_many
+    field_names_many = [field.name for field in model_fields_many]
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="export.csv"'
 
-  # the csv writer
-  writer = csv.writer(response, delimiter=";")
-  # Write a first row with header information
-  writer.writerow(field_names)
-  # Write data rows
-  for row in queryset:
-      values = []
-      for field in field_names:
-          value = getattr(row, field)
-          if callable(value):
-              try:
-                  value = value() or ''
-              except:
-                  value = 'Error retrieving value'
-          if value is None:
-              value = ''
-          values.append(value)
-      for field in field_names_many:
-          value = getattr(row, field)
-          if callable(value):
-              try:
-                  value = list(getattr(row, field).all().values_list('intitule', flat=True))  or ''
-                  print (value)
+    # the csv writer
+    writer = csv.writer(response, delimiter=";")
+    # Write a first row with header information
+    writer.writerow(field_names)
+    # Write data rows
+    for row in queryset:
+        values = []
+        for field in field_names:
+            value = getattr(row, field)
+            if callable(value):
+                try:
+                    value = value() or ''
+                except:
+                    value = 'Error retrieving value'
+            if value is None:
+                value = ''
+            values.append(value)
+        for field in field_names_many:
+            value = getattr(row, field)
+            if callable(value):
+                try:
+                    value = list(getattr(row, field).all().values_list('intitule', flat=True)) or ''
+                    print(value)
 
-              except:
-                  value = 'Error retrieving value'
-          if value is None:
-              value = ''
-          values.append(value)
-      writer.writerow(values)
-  return response
-
-
+                except:
+                    value = 'Error retrieving value'
+            if value is None:
+                value = ''
+            values.append(value)
+        writer.writerow(values)
+    return response
 
 
 ## Gestion du stockage sur Oracle
 
-class OracleStorage(S3Boto3Storage):
+class OracleStorage(S3Boto3Storage, ABC):
 
     def url(self, name, parameters=None, expire=None, http_method=None):
         # Preserve the trailing slash after normalizing the path.
-        name = self._normalize_name(self._clean_name(name))
+        name = self._normalize_name(clean_name(name))
         params = parameters.copy() if parameters else {}
         if expire is None:
             expire = self.querystring_expire
@@ -196,4 +197,3 @@ class MediaStorage(OracleStorage):
     location = 'media'
     default_acl = 'public-read'
     file_overwrite = False
-
