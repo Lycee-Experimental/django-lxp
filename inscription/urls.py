@@ -4,7 +4,7 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 
 from djangoLxp import settings
-from .views import InscriptionRechercheView, InscriptionTableView, FormulaireInscription, export_csv, fiche, fiche_pdf, carto, ajout_allergie, ajout_dys
+from .views import InscriptionRechercheView, InscriptionTableView, FormulaireInscription, export_csv, fiche, fiche_pdf, carto, ajout_allergie, ajout_dys, validation
 
 app_name = 'inscription'
 
@@ -15,6 +15,7 @@ urlpatterns = [
     path('<int:id>/<hash>', FormulaireInscription.as_view(), name='update'),
     path('fiche/<int:id>/<hash>', fiche, name='fiche'),
     path('pdf/<int:id>/<hash>', fiche_pdf, name='pdf'),
+    path('validation/<int:id>/<hash>', validation, name='validation'),
     path('carto', carto, name='carto'),
     path('allergie', ajout_allergie, name='allergie'),
     path('dys', ajout_dys, name='dys'),

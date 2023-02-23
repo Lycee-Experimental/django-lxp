@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<section class="hero is-success is-fullheight">
+    <div class="hero-body has-text-centered">
+        <div class="container">
+            <div class="box has-text-black">
+                <h1 class="title is-1 has-text-black">Félicitation {% if fiche.prenom_usage %}{{ fiche.prenom_usage }}{% else %}{{ fiche.prenom }}{% endif %}, tu as complété ton dossier !</h1>
+                <span class="icon has-text-success is-large">
+                    <i class="fas fa-2x fa-check-square"></i>
+                </span>
+                <br><br>
+                <p>La dernière étape est d'imprimer et faire signer ta fiche d'inscription.</p>
+                <br><br>
+                <a href="/pdf/{{ fiche.id }}/{{ fiche.hash }}" class="button is-large is-fullwidth is-danger is-outlined">Télécharger</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}

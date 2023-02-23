@@ -30,6 +30,17 @@ from weasyprint import HTML
 from weasyprint.text.fonts import FontConfiguration
 from .utils import download_csv
 
+
+def validation(request, **kwargs):
+    """
+    Page de téléchargement de la fiche d'inscription
+    """
+    id=kwargs['id']
+    hash=kwargs['hash']
+    eleve = get_object_or_404(BaseEleve, id=id, hash=hash)
+    return render(request, 'inscription/validation.html', {'fiche': eleve})
+
+
 def fiche(request, **kwargs):
     """
     Affichage d'une fiche d'inscription
@@ -135,8 +146,12 @@ class FormulaireInscription(SessionWizardView):
         #for value in form_data_dict.pop('spe3'):
         #    self.instance.spe3.add(value)         
         ## On redirige vers le PDF
-        url = reverse('inscription:pdf', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
+        #url = reverse('inscription:pdf', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
+        url = reverse('inscription:validation', kwargs={'id': self.instance.id, 'hash': self.instance.hash})
         return HttpResponseRedirect(url)
+
+
+
 
 
 class InscriptionRechercheView(PagedFilteredTableView):
