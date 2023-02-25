@@ -4,7 +4,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import path
 
 from djangoLxp import settings
-from .views import InscriptionRechercheView, InscriptionTableView, FormulaireInscription, export_csv, fiche, fiche_pdf, carto, ajout_allergie, ajout_dys, validation
+from .views import InscriptionRechercheView, InscriptionTableView, FormulaireInscription, export_csv, fiche, fiche_pdf, \
+    carto, ajout_allergie, ajout_dys, validation, table
 
 app_name = 'inscription'
 
@@ -20,6 +21,7 @@ urlpatterns = [
     path('allergie', ajout_allergie, name='allergie'),
     path('dys', ajout_dys, name='dys'),
     path('csv', export_csv, name='csv'),
+    path('table', table, name="table"),
 
 ]
 # Serving the media files in development mode

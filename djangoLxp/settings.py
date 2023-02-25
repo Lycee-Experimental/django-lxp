@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.forms',
+    'ajax_datatable',
     'crispy_forms',
     'crispy_bulma',
     'captcha',

@@ -1,0 +1,132 @@
+{% extends 'base.html' %}
+{% block stylesheet %}
+    {% load static %}
+    <link href="{% static 'ajax_datatable/css/style.css' %}" rel="stylesheet" />
+    <link href="https://cdn.datatables.net/v/bm/dt-1.13.2/b-2.3.4/b-colvis-2.3.4/b-html5-2.3.4/cr-1.6.1/r-2.4.0/sb-1.4.0/sp-2.1.1/datatables.min.css"/>
+{% endblock stylesheet %}
+
+{% block head-javascript %}
+    <script type="text/javascript" src="{% static 'ajax_datatable/js/utils.js' %}"></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.36/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bm/dt-1.13.2/b-2.3.4/b-colvis-2.3.4/b-html5-2.3.4/cr-1.6.1/r-2.4.0/sb-1.4.0/sp-2.1.1/datatables.min.js"></script>
+{% endblock head-javascript %}
+
+{% block content %}
+<!-- https://bulma.io/documentation/elements/table/ -->
+    <section class="section">
+        <div class="container">
+            <div class="b-table">
+                <div class="table-wrapper has-mobile-cards">
+                    <table id="datatable_eleves"  class="table is-fullwidth is-striped is-hoverable">
+                    </table>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock %}
+
+{% block foot-javascript %}
+<script>
+    $(document).ready(function() {
+        AjaxDatatableViewUtils.initialize_table(
+            $('#datatable_eleves'),
+            "{% url 'ajax_datatable_eleves' %}",
+            {
+                language: {
+                    url: 'https://cdn.datatables.net/plug-ins/1.13.2/i18n/fr-FR.json'
+                },
+                // extra_options (example)
+                dom: 'fitrplB',
+                //B - buttons
+                //l - length changing input control
+                //f - filtering input
+                //t - The table!
+                //i - Table information summary
+                //p - pagination control
+                //r - processing display element
+                autoWidth: false, //needed for bulma responsiveness
+                //full_row_select: true,
+                scrollX: false,
+                //responsive: true,
+                colReorder: true,
+                buttons: [
+                    'colvis',
+                    {
+                        extend: 'pdfHtml5',
+                        orientation: 'portrait',
+                        pageSize: 'A4',
+                        className: 'is-danger',
+                        title: 'Un titre à customiser avec un input',
+                        // https://pdfmake.github.io/docs/0.1/
+                        exportOptions: { columns: [':visible:not(.dataTables_row-tools)']},
+                        customize: function (doc) {
+                            doc.content[1].table.widths = Array(doc.content[1].table.body[0].length).fill('*');
+                            //doc.content[1].table.widths[0] = '*';
+                                doc.defaultStyle.fontSize = 16; //<-- set fontsize to 16 instead of 10
+                            var tblBody = doc.content[1].table.body;
+                            for(var i=0;i<tblBody[0].length;i++){
+                                tblBody[0][i].fillColor = '#FFFFFF';
+                                tblBody[0][i].color = 'black';
+                            }
+                            var now = new Date();
+                            var jsDate = now.toGMTString();
+
+                            doc['footer']=(function(page) {
+                                return [
+                                    {canvas: [ { type: 'line', x1: 10, y1: 15, x2: 1190-10, y2: 15, lineWidth:
+                                                1,color:'black' } ]},
+                                    {
+                                        columns: [
+                                            {
+                                                alignment: 'left',
+                                                fontSize:'7',
+                                                text: ['Version: 1.0'],
+                                            },
+                                            {
+                                                alignment: 'center',
+                                                fontSize:'7',
+                                                text: ['page ', { text: page.toString() }]
+                                            },
+                                            {
+                                                alignment: 'right',
+                                                fontSize:'7',
+                                                text: ['Generated on: ', { text: jsDate}]
+                                            },
+
+                                        ],
+                                        margin:10
+
+                                    },
+                                ]
+                            });
+
+                            var objLayout = {};
+                            objLayout['hLineWidth'] = function() { return .5; };
+                            objLayout['vLineWidth'] = function() { return .5; };
+                            objLayout['hLineColor'] = function() { return '#aaa'; };
+                            objLayout['vLineColor'] = function() { return '#aaa'; };
+                            objLayout['paddingLeft'] = function() { return 5; };
+                            objLayout['paddingRight'] = function() { return 5; };
+                            doc.content[1].layout = objLayout;
+                            doc.content[1].margin = [ 5, 0, 5, 5 ];
+                        }
+                        //customize: function(doc) {
+                        //    age = table.column(3).data().toArray();
+                        //    for (var i = 0; i < age.length; i++) {
+                        //        if (age[i] < 40) {
+                        //            doc.content[1].table.body[i+1][3].fillColor = 'blue';
+                        //        }
+                        //    }
+                        //}
+                    }
+                ],
+            }, {
+                // extra_data
+                // ...
+            },
+        );
+    });
+</script>
+{% endblock %}
