@@ -1,7 +1,5 @@
 from __future__ import unicode_literals
-
 import os
-
 from dal import autocomplete
 from django.core.files.storage import FileSystemStorage
 from django.db.models import Q
@@ -26,9 +24,8 @@ from .utils import PagedFilteredTableView, MediaStorage, coordonnees
 # Nos différents formulaires
 from .forms import InscriptionForm1, InscriptionForm2, InscriptionForm3, InscriptionForm4, ListeEleveForm
 ### Librairie weasyprint pour la génération de PDF
-from weasyprint import HTML
-from weasyprint.text.fonts import FontConfiguration
-from .utils import download_csv
+from .utils import download_csv, generate_pdf
+from ajax_datatable.views import AjaxDatatableView
 
 
 def validation(request, **kwargs):
@@ -54,23 +51,18 @@ def fiche(request, **kwargs):
 # Un décorateur pour authoriser le téléchargement aux utilisateurs authentifiés
 # @login_required(login_url='/admin/login/')
 def fiche_pdf(request, **kwargs):
-    """
-        Affichage d'une fiche d'inscription en PDF avec weasyprint
-    """
     id=kwargs['id']
     hash=kwargs['hash']
     eleve = get_object_or_404(BaseEleve, id=id, hash=hash)
-    response = HttpResponse(content_type="application/pdf")
+    html = render_to_string("inscription/fiche_inscription.html", {
+        'fiche': eleve,
+    })
+    pdf=generate_pdf(html)
+    response = HttpResponse(pdf, content_type="application/pdf")
     response['Content-Disposition'] = "inline; filename=fiche-{name}-{date}.pdf".format(
         date=timezone.now().strftime('%Y-%m-%d'),
         name=slugify(eleve.prenoms),
     )
-    html = render_to_string("inscription/fiche_inscription.html", {
-        'fiche': eleve,
-    })
-    font_config = FontConfiguration()
-    HTML(string=html, base_url=request.build_absolute_uri()).write_pdf(response, stylesheets=[
-        'https://cdn.jsdelivr.net/npm/bootstrap@4/dist/css/bootstrap.min.css'], font_config=font_config, presentational_hints=True)
     return response
 
 
@@ -265,3 +257,26 @@ def export_csv(request):
   data = download_csv(request, BaseEleve.objects.exclude(address=None))
   response = HttpResponse(data, content_type='text/csv')
   return response
+
+
+class ElevesAjaxDatatableView(AjaxDatatableView):
+    model = BaseEleve
+    title = 'Eleves'
+    initial_order = [["nom_famille", "asc"], ]
+    length_menu = [[10, 20, 50, 100, -1], [10, 20, 50, 100, 'all']]
+    search_values_separator = '+'
+
+    column_defs = [
+        AjaxDatatableView.render_row_tools_column_def(),
+        {'name': 'id', 'visible': False, }, #quand même visible à l'export pdf
+        {'name': 'nom_famille', 'visible': True, },
+        {'name': 'prenoms', 'visible': True, },
+        {'name': 'prenom_usage', 'visible': True, },
+        {'name': 'address',  'foreign_field': 'address__locality__state__name', 'visible': True, },
+    ]
+
+def table(request, **kwargs):
+    """
+    Page de téléchargement de la fiche d'inscription
+    """
+    return render(request, 'inscription/datatable.html')

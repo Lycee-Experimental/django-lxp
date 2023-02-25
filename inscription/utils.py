@@ -4,7 +4,7 @@ import time
 from abc import ABC
 from uuid import uuid4
 from django.utils import timezone
-from django.core.exceptions import ValidationError, PermissionDenied
+from django.core.exceptions import ValidationError
 # Une librairie pour gérer les tableaux
 from django_tables2 import SingleTableView
 # Des outils pour redéfinir le Captcha pour qu'il marche dans le wizard
@@ -19,6 +19,10 @@ from storages.backends.s3boto3 import S3Boto3Storage
 from django.http import HttpResponse
 import csv
 from storages.utils import clean_name
+import base64
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+
 
 class PagedFilteredTableView(SingleTableView):
     """Actualise le tableau en fonction des filtres"""
@@ -39,6 +43,32 @@ class PagedFilteredTableView(SingleTableView):
         # On récupère le "titre" dans l'url pour l'afficher dans le template (context) 
         context["titre"] = self.request.GET.get('titre')
         return context
+
+
+def generate_pdf(html):
+    chrome_options = Options()
+    chrome_options.add_argument("--disable-infobars")
+    chrome_options.add_argument("--disable-extensions")
+    chrome_options.add_argument("--disable-popup-blocking")
+    chrome_options.add_argument('--headless')
+
+    browser = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_options)
+    print(html)
+    browser.get("data:text/html;charset=utf-8,"+html)
+
+    # use can defined additional parameters if needed : https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-printToPDF
+    params = {'landscape': False,
+              'paperWidth': 8.27,
+              'paperHeight': 11.69,
+              'printBackground': True,
+              'scale': 0.55
+              }
+              # displayHeaderFooter
+              # headerTemplate ( date,title, url, pageNumber, totalPages)
+              # footerTemplate
+    data = browser.execute_cdp_cmd("Page.printToPDF", params)
+    browser.quit()
+    return base64.b64decode(data['data'])
 
 
 class CaptchaWizardField(CaptchaField):
@@ -156,10 +186,8 @@ def download_csv(request, queryset):
     return response
 
 
-## Gestion du stockage sur Oracle
-
 class OracleStorage(S3Boto3Storage, ABC):
-
+    """Gestion du stockage sur Oracle"""
     def url(self, name, parameters=None, expire=None, http_method=None):
         # Preserve the trailing slash after normalizing the path.
         name = self._normalize_name(clean_name(name))
