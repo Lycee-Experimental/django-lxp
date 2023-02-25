@@ -1,84 +1,457 @@
+{% extends 'base.html' %}
 {% load verbose_names %}
 {% load static %}
  {% load i18n %}
+{% block stylesheet %}
+    <style>
+        @media print {
+            html, body {
+                width:  fit-content;
+                height: fit-content;
+                margin:  20px;
+                padding: 20px;
+            }
+         }
+        .longer-label.field-label {
+            flex-grow: 2; /* overwrites previous value of 1 */
+        }
+    </style>
+{% endblock stylesheet %}
+{% comment %}      <link href="{% static 'css/fiche_inscription.css' %}" rel="stylesheet">     {%  endcomment %}
 {% block head-javascript %}
-    <link href="{% static 'css/fiche_inscription.css' %}" rel="stylesheet">
 
 {% endblock %}
 
 {% block content %}
- {% comment %}
-Pour utiliser le tag créé dans templatetags/verbose_names
-{% get_verbose_field_name fiche "last_name" %} :  {{ fiche.last_name }}
-{% endcomment %}
+    <div class="columns">
+        <div class="column is-three-fifths">
+            <div class="card">
+                <div class="columns is-vcentered">
+                    <div class="column is-two-fifths has-text-centered">
+                        <p class="title is-1">{% if fiche.prenom_usage %}{{ fiche.prenom_usage|title }}{% else %}{{ fiche.prenom|title }}{% endif %}</p>
+                        <p class="title is-3">({{ fiche.genre }})</p>
 
-    <h1 class="header"> Fiche d'inscription </h1>    <h2 class="header"> Année 2022-2023</h2>
-    <div class="container">
-    <table>
-    <tbody>
-    <tr>
-        <td>
-            <h1> {{ fiche.prenoms }} {{ fiche.nom_famille }} </h1>
-        </td>
-        <td>
-            <img width="170px"  src="{{ fiche.photo.url }}"/>
-
-        </td>
-    </tr>
-
-    <tr>
-      <td>
-          <h4>Civilité</h4>
-                <p><u>Sexe (administratif):</u><span class="float-right">{{ fiche.civilite }}</span></p>
-                <p><u>Pronom:</u><span class="float-right">{{ fiche.genre}}</span></p>
-                <p><u>Nom:</u><span class="float-right">{{ fiche.nom_famille }}</span></p>
-                <p><u>Prénom:</u><span class="float-right">{{ fiche.prenoms }}</span></p>
-                <p><u>Prénom d'usage:</u><span class="float-right">{{ fiche.prenom_usage }}</span></p>
-      </td>
-      <td>
-           <h4>Coordonnées</h4>
-                <p><u>Adresse:</u><span class="float-right">{{ fiche.address}}</span></p>
-                <p><u>Téléphone:</u><span class="float-right">{{ fiche.telephone_mobile.as_national}}</span></p>
-                <p><u>Email:</u><span class="float-right">{{ fiche.adresse_mail }}</span></p>
-      </td>
-    </tr>
-    <tr>
-      <td>
-          <h4>Naissance</h4>
-                <p><u>Date de naissance:</u><span class="float-right">{{ fiche.date_naissance}}</span></p>
-                <p><u>Ville de naissance:</u>
-                    <span class="float-right">
-                        {% if fiche.pays_naissance_id == 1 %} {{ fiche.commune_naissance}}
-                        {% else %} {{ fiche.ville_naissance_etrangere }}
+                        <figure class="image">
+                                <img  class="is-rounded" src="{{ fiche.photo.url }}" alt="Placeholder image">
+                        </figure>
+                    </div>
+                    <div class="column">
+                        <div class="content ">
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Nom</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.nom_famille|upper }} {{ fiche.prenoms|title }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Né·e le</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.date_naissance }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Adresse</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.address }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Téléphone</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.telephone_mobile.as_national }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Email</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            <input class="input is-static" type="email" value="{{ fiche.adresse_mail }}" readonly>
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="card">
+                 <div class="columns is-vcentered">
+                    <div class="column has-text-centered">
+                        <p class="title is-3">Fiche d'inscription</p>
+                        <p class="title is-3">Année 2023 - 2024</p>
+                    </div>
+                    <div class="column is-narrow">
+                        <figure class="image is-128x128 is-pulled-right">
+                            <img src="{% static 'logolxp.jpeg' %}" alt="Placeholder image">
+                        </figure>
+                    </div>
+                </div>
+                <div class="columns has-text-centered">
+                    <div class="column">
+                        <p class="title is-4">Groupe de base</p>
+                        <p class="title is-2">G3</p>
+                    </div>
+                    <div class="column">
+                        <p class="title is-4">Groupe ECCO</p>
+                        <p class="title is-2">Davy</p>
+                    </div>
+                </div>
+                <div class="has-text-centered">
+                    <p>Version du {% now 'l d F Y à G\hi' %}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="columns">
+        <div class="column">
+            <div class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="title is-3">
+                            <p>Représentant·e·s légaux</p>
+                        </div>
+                        <div class="title is-4">
+                            <p>{{ fiche.get_resp1_display }}</p>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Nom</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="input is-static">
+                                        {{ fiche.civilite_resp1 }} {{ fiche.prenom_resp1|title }} {{ fiche.nom_resp1|upper }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Téléphone</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="input is-static">
+                                        {{ fiche.tel_resp1.as_national }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Email</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="input is-static">
+                                        {{ fiche.email_resp1 }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal">
+                                <label class="label">Adresse</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="input is-static">
+                                        {{ fiche.adresse_resp1 }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% if fiche.resp2 != "aucun" %}
+                            <div class="title is-4">
+                                <p>{{ fiche.get_resp2_display }}</p>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Nom</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.civilite_resp2 }} {{ fiche.prenom_resp2|title }} {{ fiche.nom_resp2|upper }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Téléphone</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.tel_resp2.as_national }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Email</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.email_resp2 }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal">
+                                    <label class="label">Adresse</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.adresse_resp2 }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         {% endif %}
-                    </span>
-                </p>
-                {% if fiche.pays_naissance_id == 1 %}
-                    <p><u>Département de naissance:</u>
-                        <span class="float-right">{{ fiche.depCOM_naissance.name}}</span>
-                    </p>
-                {% endif %}
-                <p><u>Pays de naissance:</u><span class="float-right">{{ fiche.pays_naissance}}</span></p>
-                <p><u>Nationalité:</u><span class="float-right">{{ fiche.nationalite}}</span></p>
-      </td>
-      <td>
-          <h4>Responsables</h4>
-                <h5>{{ fiche.get_resp1_display}} : {{ fiche.nom_resp1}}  {{ fiche.prenom_resp1}} </h5>
-                <p><u>Adresse:</u><span class="float-right">{{ fiche.adresse_resp1}}</span></p>
-                <p><u>Téléphone:</u><span class="float-right">{{ fiche.tel_resp1.as_national}}</span></p>
-                <p><u>Email:</u><span class="float-right">{{ fiche.email_resp1}}</span></p>
-                <p><u>Profession:</u><span class="float-right">{{ fiche.sociopro_resp1}}</span></p>
-                {% if fiche.resp2 != 'aucun' %}
-                    <h5>{{ fiche.get_resp2_display}} :  {{ fiche.nom_resp2}}  {{ fiche.prenom_resp2}}  </h5>
-                    <p><u>Adresse:</u><span class="float-right">{{ fiche.adresse_resp2}}</span></p>
-                    <p><u>Téléphone:</u><span class="float-right">{{ fiche.tel_resp2.as_national}}</span></p>
-                    <p><u>Email:</u><span class="float-right">{{ fiche.email_resp2}}</span></p>
-                    <p><u>Profession:</u><span class="float-right">{{ fiche.sociopro_resp2}}</span></p>
-                {% endif %}
-      </td>
-    </tr>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="card">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="title is-3">
+                            <p>Scolarité</p>
+                        </div>
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal longer-label">
+                                <label class="label">Statut</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="input is-static">{% if fiche.ancien %}Ré-inscription{% else %}Nouvelle inscription{% endif %} ({{ fiche.created_at|date:'d F Y' }})</p>
+                                </div>
+                            </div>
+                        </div>
+                        {% if fiche.etablissement_origine %}
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal longer-label">
+                                    <label class="label">Etablissement d'origine</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">{{ fiche.etablissement_origine|safe }}</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if fiche.desco %}
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal longer-label">
+                                    <label class="label">Etablissement d'origine</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">Déscolarisé·e</p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if fiche.mee_entretien %}
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal longer-label">
+                                    <label class="label">Entretien avec</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.mee_entretien }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if fiche.ecco_an_passe %}
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal longer-label">
+                                    <label class="label">Entretien avec</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.ecco_an_passe }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        {% if fiche.niveau_an_passe %}
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal longer-label">
+                                    <label class="label">Niveau de l'an passé</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.get_niveau_an_passe_display }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="field is-horizontal">
+                            <div class="field-label is-normal longer-label">
+                                <label class="label">Niveau cette année</label>
+                            </div>
+                            <div class="field-body">
+                                <div class="field">
+                                    <p class="input is-static">
+                                        {{ fiche.get_niveau_display }}
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        {% if fiche.niveau != "deter" and  fiche.niveau != "crepa" %}
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal longer-label">
+                                    <label class="label">Spécialités</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {% if fiche.spe1.all %}{{ fiche.spe1.all|join:", " }}{% endif %}{% if fiche.spe2.all %}, {{ fiche.spe2.all|join:", " }}{% endif %}{% if fiche.spe3.all %}, {{ fiche.spe3.all|join:", " }}{% endif %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="field is-horizontal">
+                                <div class="field-label is-normal longer-label">
+                                    <label class="label">Langues vivantes</label>
+                                </div>
+                                <div class="field-body">
+                                    <div class="field">
+                                        <p class="input is-static">
+                                            {{ fiche.lv1 }}, {{ fiche.lv2 }}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% if fiche.troubles.all or fiche.allergies.all %}
+                <div class="card">
+                    <div class="card-content">
+                        <div class="content">
+                            <div class="title is-3">
+                                <p>Situation médicale</p>
+                            </div>
+                            {% if fiche.allergies.all %}
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">Allergies</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <p class="input is-static">
+                                                {{ fiche.allergies.all|join:", " }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                            {% if fiche.troubles.all %}
+                                <div class="field is-horizontal">
+                                    <div class="field-label is-normal">
+                                        <label class="label">Troubles de l'apprentissage</label>
+                                    </div>
+                                    <div class="field-body">
+                                        <div class="field">
+                                            <p class="input is-static">
+                                                {{ fiche.troubles.all|join:", " }}
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-content">
+            <div class="content">
+                <div class="title is-3">
+                    <p>Projet au Lycée Expérimental</p>
+                </div>
+                <p class="is-size-3">{{ fiche.projet }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="columns">
+            <div class="column">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="title is-3">
+                            <p>Engagement de l'élève</p>
+                        </div>
+                        <p class="is-size-5">Je sousigné {{ fiche.prenom_usage}}, déclare avoir lu le projet d'établissement et m'inscrire au lycée expérimental pour participer à sa mise en oeuvre.</p>
+                        <p class="is-size-5">"Lu et approuvé", date et signature.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="column">
+                <div class="card-content">
+                    <div class="content">
+                        <div class="title is-3">
+                            <p>Engagement du responsable légal</p>
+                        </div>
+                        <p class="is-size-5">Je sousigné {{ fiche.prenom_resp1|title}} {{ fiche.nom_resp1|upper }}, déclare avoir pris connaissance du projet d'établissement et accepter que {{ fiche.prenom_usage}} s'inscrive au Lycée Expérimental.</p>
+                        <p class="is-size-5">"Lu et approuvé", date et signature.</p>
+                        <br><br><br><br><br><br><br><br>
 
-  </tbody>
-    </table>
-</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
 {% endblock %}

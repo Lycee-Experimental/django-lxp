@@ -1,6 +1,7 @@
 @charset "utf-8";
 /* Attention : Bulma Checkbox est à importer avant bulma*/
 @import "../node_modules/bulma-checkbox/bulma-checkbox.scss";
+@import "../node_modules/bulma-responsive-tables/bulma-responsive-tables.scss";
 @import "../node_modules/bulma/bulma.sass";
 @import "../node_modules/bulma-switch/src/sass/index.sass";
 @import "../node_modules/bulma-o-steps/bulma-steps.sass";
@@ -30,6 +31,10 @@ h5 {
 .pac-logo::after {
     background-image: none;
 }
+.longer-label.field-label {
+    flex-grow: 2; /* overwrites previous value of 1 */
+  }
+
 // FIX FOR SELECT2
 .select2-container {
   .select2-selection--single, .select2-selection--multiple {
