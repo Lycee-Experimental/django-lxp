@@ -409,3 +409,5 @@ class BaseEleve(models.Model):
     etablissement_origine = models.ForeignKey(Etablissement, on_delete=models.CASCADE,
                                               verbose_name="Etablissement d'origine", blank=True, null=True,
                                               help_text="Où étiez-vous avant de vous inscrire au Lycée Expérimental ?")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
