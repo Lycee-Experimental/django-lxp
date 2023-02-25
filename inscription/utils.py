@@ -61,7 +61,7 @@ def generate_pdf(html):
               'paperWidth': 8.27,
               'paperHeight': 11.69,
               'printBackground': True,
-              'scale': 0.55
+              'scale': 0.5
               }
               # displayHeaderFooter
               # headerTemplate ( date,title, url, pageNumber, totalPages)
