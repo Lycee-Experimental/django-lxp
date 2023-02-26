@@ -1,4 +1,5 @@
 import hashlib
+import signal
 import os
 import time
 from abc import ABC
@@ -67,6 +68,7 @@ def generate_pdf(html):
               # headerTemplate ( date,title, url, pageNumber, totalPages)
               # footerTemplate
     data = driver.execute_cdp_cmd("Page.printToPDF", params)
+    driver.service.process.send_signal(signal.SIGTERM)
     driver.quit()
     return base64.b64decode(data['data'])
 
