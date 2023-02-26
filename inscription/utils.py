@@ -54,7 +54,6 @@ def generate_pdf(html):
     chrome_options.add_argument('--headless')
     service = Service(executable_path='/usr/bin/chromedriver')
     driver = webdriver.Chrome(service=service, options=chrome_options)
-    driver.implicitly_wait(2) # seconds
     driver.get("data:text/html;charset=utf-8,"+html)
 
     # use can defined additional parameters if needed : https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-printToPDF
