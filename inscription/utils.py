@@ -22,7 +22,7 @@ from storages.utils import clean_name
 import base64
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
-
+from selenium.webdriver.chrome.service import Service
 
 class PagedFilteredTableView(SingleTableView):
     """Actualise le tableau en fonction des filtres"""
@@ -51,10 +51,9 @@ def generate_pdf(html):
     chrome_options.add_argument("--disable-extensions")
     chrome_options.add_argument("--disable-popup-blocking")
     chrome_options.add_argument('--headless')
-
-    browser = webdriver.Chrome('/usr/bin/chromedriver', options=chrome_options)
-    print(html)
-    browser.get("data:text/html;charset=utf-8,"+html)
+    service = Service(executable_path='/usr/bin/chromedriver')
+    driver = webdriver.Chrome(service=service, options=chrome_options)
+    driver.get("data:text/html;charset=utf-8,"+html)
 
     # use can defined additional parameters if needed : https://chromedevtools.github.io/devtools-protocol/tot/Page/#method-printToPDF
     params = {'landscape': False,
@@ -66,8 +65,8 @@ def generate_pdf(html):
               # displayHeaderFooter
               # headerTemplate ( date,title, url, pageNumber, totalPages)
               # footerTemplate
-    data = browser.execute_cdp_cmd("Page.printToPDF", params)
-    browser.quit()
+    data = driver.execute_cdp_cmd("Page.printToPDF", params)
+    driver.quit()
     return base64.b64decode(data['data'])
 
 
