@@ -105,17 +105,6 @@ WSGI_APPLICATION = 'djangoLxp.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 
-DATABASES = {
-        "default": {
-            "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
-            "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
-            "USER": os.environ.get("SQL_USER", "user"),
-            "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
-            #"HOST": os.environ.get("SQL_HOST", "localhost"),
-            #"PORT": os.environ.get("SQL_PORT", "5432"),
-            #'OPTIONS': {'sslmode': 'False'},
-        }
-}
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
@@ -180,9 +169,29 @@ if USE_ORACLE:
         os.path.join(BASE_DIR, 'static'),
     ]
     STATIC_URL = f"https://{AWS_S3_CUSTOM_DOMAIN}/{ORACLE_BUCKET_NAME}/static/"
+    DATABASES = {
+        "default": {
+            "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+            "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+            "USER": os.environ.get("SQL_USER", "user"),
+            "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+            #"HOST": os.environ.get("SQL_HOST", "localhost"),
+            #"PORT": os.environ.get("SQL_PORT", "5432"),
+        }
+    }
 else:
     STATIC_URL = '/static/'
     STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
     MEDIA_URL = '/media/'
     MEDIA_ROOT = os.path.join(BASE_DIR, 'mediafiles')
     STATICFILES_DIRS = (os.path.join(BASE_DIR, 'static'),)
+    DATABASES = {
+        "default": {
+            "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),
+            "NAME": os.environ.get("SQL_DATABASE", BASE_DIR / "db.sqlite3"),
+            "USER": os.environ.get("SQL_USER", "user"),
+            "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),
+            "HOST": os.environ.get("SQL_HOST", "localhost"),
+            "PORT": os.environ.get("SQL_PORT", "5432"),
+        }
+    }
