@@ -5,11 +5,11 @@ from phonenumber_field.modelfields import PhoneNumberField
 from .utils import nom_photo, create_hash
 
 GB = (
-    (1, 'G1'),
-    (2, 'G2'),
-    (3, 'G3'),
-    (4, 'G4'),
-    (5, 'G5'),
+    ('G1', 'G1'),
+    ('G2', 'G2'),
+    ('G3', 'G3'),
+    ('G4', 'G4'),
+    ('G5', 'G5'),
 )
 
 class LVManager(models.Manager):
@@ -29,6 +29,7 @@ class LV(models.Model):
     def __str__(self):
         """Indique ce que donne l'affichage de la classe, notamment dans les menus déroulants"""
         return u'%s' % self.langue
+
 
 class SpeManager(models.Manager):
     def get_by_natural_key(self, code):
@@ -177,6 +178,7 @@ class MeeManager(models.Manager):
 class MEE(models.Model):
     # nom = models.CharField(max_length=20, verbose_name="Nom")
     prenom = models.CharField(max_length=20, verbose_name="Prénom", unique=True)
+    gb = models.JSONField(default=dict)
     gb_an_passe = models.IntegerField(choices=GB,
                                       verbose_name="GB de l'an passé", blank=True, null=True)
     gb_annee_en_cours = models.IntegerField(choices=GB,
@@ -290,7 +292,31 @@ class BaseEleve(models.Model):
         ('elle', 'Elle'),
         ('iel', 'Il, Elle, Iel ou autre')
     )
-
+    RESP1 = (
+        ('pere', 'Père'),
+        ('mere', 'Mère'),
+        ('autre', 'Autre responsable légal ou référent'),
+    )
+    RESP2 = (
+        ('pere', 'Père'),
+        ('mere', 'Mère'),
+        ('autre', 'Autre responsable légal ou référent·e'),
+        ('aucun', "Pas d'autre référent·e")
+    )
+    NIVEAU_AN_PASSE = (
+        ('3eme', 'Troisième'),
+        ('deter', 'Détermination (2nde)'),
+        ('premiere', 'Première'),
+        ('term', 'Terminale'),
+        ('crepa', 'CREPA'),
+        ('autre', 'Autre')
+    )
+    NIVEAU = (
+        ('deter', 'Détermination (2nde)'),
+        ('premiere', 'Première'),
+        ('term', 'Terminale'),
+        ('crepa', 'CREPA'),
+    )
     date_naissance = models.DateField(verbose_name="Date de naissance")
     commune_naissance = models.ForeignKey(Commune, on_delete=models.CASCADE, verbose_name="Commune de naissance",
                                           blank=True, null=True)
@@ -321,17 +347,7 @@ class BaseEleve(models.Model):
     photo = models.ImageField(upload_to=nom_photo, blank=True, null=True,
                               help_text="Merci de téléverser une photo pour ta fiche d'inscription.")
     # RESPONSABLES
-    RESP1 = (
-        ('pere', 'Père'),
-        ('mere', 'Mère'),
-        ('autre', 'Autre responsable légal ou référent'),
-    )
-    RESP2 = (
-        ('pere', 'Père'),
-        ('mere', 'Mère'),
-        ('autre', 'Autre responsable légal ou référent·e'),
-        ('aucun', "Pas d'autre référent·e")
-    )
+
     resp1 = models.CharField(max_length=5, choices=RESP1,
                              default='mere', verbose_name="Lien de parenté ou autre")
     civilite_resp1 = models.CharField(max_length=3, choices=CIVILITY_CHOICES, default='M.', verbose_name="Civilité")
@@ -362,13 +378,6 @@ class BaseEleve(models.Model):
                                        on_delete=models.CASCADE, verbose_name="Première langue vivante")
     lv2 = models.ForeignKey(LV, related_name='lv2',
                             on_delete=models.CASCADE, verbose_name="Deuxième langue vivante")
-
-    NIVEAU = (
-        ('deter', 'Détermination (2nde)'),
-        ('premiere', 'Première'),
-        ('term', 'Terminale'),
-        ('crepa', 'CREPA'),
-    )
     niveau = models.CharField(max_length=10, choices=NIVEAU, verbose_name="Niveau d'inscription", default='deter')
     # Scolarité passée
     troubles = models.ManyToManyField(TroubleCognitif, verbose_name="Troubles de l'apprentissage", blank=True,
@@ -396,11 +405,11 @@ class BaseEleve(models.Model):
                                       verbose_name="MEE d'entretien", blank=True, null=True,
                                       help_text="Laisse vide si tu ne te souviens plus du prénom du/de la MEE que tu as rencontré.")
 
-    niveau_an_passe = models.CharField(max_length=10, choices=NIVEAU,
+    niveau_an_passe = models.CharField(max_length=10, choices=NIVEAU_AN_PASSE,
                                        verbose_name="Niveau d'inscription l'an passé", blank=True, null=True)
     gb_an_passe = models.IntegerField(choices=GB,
                                       verbose_name="Groupe de base", blank=True, null=True)
-    ecco_an_passe = models.ForeignKey(MEE, on_delete=models.CASCADE, related_name='ecco',
+    ecco_an_passe = models.ForeignKey(MEE, on_delete=models.CASCADE, related_name='ecco_an_passe',
                                       verbose_name="MEE d'ECCO", blank=True, null=True)
 
     gb_annee_en_cours = models.IntegerField(choices=GB,

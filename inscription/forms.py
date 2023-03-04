@@ -7,9 +7,7 @@ from crispy_bulma.layout import Div, IconField, Field, UploadField
 from .models import BaseEleve, Allergie, TroubleCognitif, Spe
 from .utils import CaptchaWizardField
 # Pour l'autocomplétion de la commune en fonction du département choisi
-from dal import autocomplete
-from django.conf import settings
-
+from dal import autocomplete, forward
 from django.forms import ClearableFileInput
 
 
@@ -198,24 +196,24 @@ class InscriptionForm2(forms.ModelForm):
                 Div(HTML("<h1>Responsable 1</h1>"),css_class="title"),
                 Field('resp1', template='inscription/my_select_template.html'),
                 Field('civilite_resp1', template='inscription/my_select_template.html'),
-                'nom_resp1', 
-                'prenom_resp1', 
+                'nom_resp1',
+                'prenom_resp1',
                 IconField('adresse_resp1', icon_prepend="fa-solid fa-envelope",css_class='input address addresswidget pac-target-input'),
                 Field('tel_resp1', css_class='input'),
-                'email_resp1', 
-                Field('sociopro_resp1', template='inscription/my_select_template.html'), 
+                'email_resp1',
+                Field('sociopro_resp1', template='inscription/my_select_template.html'),
                 css_class='box'
             ),
             Div(
                 HTML("<h1>Responsable 2</h1>"),
                 Field('resp2', template='inscription/my_select_template.html'),
                 Field('civilite_resp2', template='inscription/my_select_template.html'),
-                'nom_resp2', 
-                'prenom_resp2', 
+                'nom_resp2',
+                'prenom_resp2',
                 IconField('adresse_resp2', icon_prepend="fa-solid fa-envelope",css_class='input address addresswidget pac-target-input'),
                 Field('tel_resp2', css_class='input'),
-                'email_resp2', 
-                Field('sociopro_resp2', template='inscription/my_select_template.html'), 
+                'email_resp2',
+                Field('sociopro_resp2', template='inscription/my_select_template.html'),
                 css_class='box'
             )
         )
@@ -283,15 +281,17 @@ class InscriptionForm3(forms.ModelForm):
 
     class Media:
         js = ('js/hide_lxp_an_passe.js',)
-       
+
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer
         model = BaseEleve
         fields = ['allergies', 'troubles', 'ancien', 'niveau_an_passe', 'gb_an_passe', 'ecco_an_passe',
                   'etablissement_origine', 'amenagements', 'date_entretien','mee_entretien', 'desco', 'boursier']
         widgets = {
+            'mee_entretien' : autocomplete.ModelSelect2(url='mee',
+                                                        forward=(forward.Const('2023', 'annee'),)),
             'ecco_an_passe': autocomplete.ModelSelect2(url='mee',
-                                                           forward=('gb_an_passe',)),
+                                                           forward=('gb_an_passe', forward.Const('2023', 'annee'))),
             'date_entretien': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'allergies': autocomplete.ModelSelect2Multiple('allergie_auto'),
             'troubles': autocomplete.ModelSelect2Multiple('dys_auto'),
