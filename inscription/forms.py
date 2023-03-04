@@ -15,8 +15,6 @@ class FileUploadInput(ClearableFileInput):
     template_name = "inscription/my_file_upload_input.html"
 
 
-
-
 class ListeEleveForm(FormHelper):
     """
     Formulaire pour faire des recherches dans le tableau
@@ -41,7 +39,7 @@ class ListeEleveForm(FormHelper):
                 "gb_annee_en_cours",
                 "nom_famille",
                 "prenoms",
-                css_class='row' 
+                css_class='row'
                 ),
                 # InlineField("nom__icontains", css_class='form-group'),
                 FormActions(
@@ -442,7 +440,6 @@ class InscriptionForm4(forms.ModelForm):
                     self.add_error('spe2', msg)
                     self.add_error('spe3', msg)
         return self.cleaned_data
-
 
     class Meta:
         # Définis le modèle utilisé et des données à enregistrer
