@@ -210,8 +210,9 @@ class AutocompleteMEE(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         qs = MEE.objects.all().order_by('prenom')
         gb = self.forwarded.get('gb_an_passe', None)
+        annee = self.forwarded.get('annee', '2023')
         if gb:
-            qs = qs.filter(gb_an_passe=gb)
+            qs = qs.filter(gb__contains={annee: gb})
         if self.q:
             qs = qs.filter(prenom__istartswith=self.q)
         return qs

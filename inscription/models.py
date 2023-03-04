@@ -286,7 +286,6 @@ class BaseEleve(models.Model):
         ('M.', 'M.'),
         ('MME', 'Mme')
     )
-
     GENRE = (
         ('il', 'Il'),
         ('elle', 'Elle'),
