@@ -48,6 +48,7 @@ class PagedFilteredTableView(SingleTableView):
 
 def generate_pdf(html):
     chrome_options = Options()
+    chrome_options.add_argument("--no-sandbox")
     chrome_options.add_argument("--disable-infobars")
     chrome_options.add_argument("--disable-extensions")
     chrome_options.add_argument("--disable-popup-blocking")
