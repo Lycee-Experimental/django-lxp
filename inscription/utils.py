@@ -131,7 +131,8 @@ def coordonnees(base):
     Pour affichage avec leaflet."""
     adresses = []
     for eleve in base:
-        adresses.append([eleve.address.latitude, eleve.address.longitude])
+        if eleve.address:
+            adresses.append([eleve.address.latitude, eleve.address.longitude])
     return adresses
 
 
