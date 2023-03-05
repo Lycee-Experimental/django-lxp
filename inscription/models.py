@@ -410,10 +410,8 @@ class BaseEleve(models.Model):
                                       verbose_name="Groupe de base", blank=True, null=True)
     ecco_an_passe = models.ForeignKey(MEE, on_delete=models.CASCADE, related_name='ecco_an_passe',
                                       verbose_name="MEE d'ECCO", blank=True, null=True)
-
     gb_annee_en_cours = models.IntegerField(choices=GB,
                                             verbose_name="Groupe de base", blank=True, null=True)
-
     etablissement_origine = models.ForeignKey(Etablissement, on_delete=models.CASCADE,
                                               verbose_name="Etablissement d'origine", blank=True, null=True,
                                               help_text="Où étiez-vous avant de vous inscrire au Lycée Expérimental ?")

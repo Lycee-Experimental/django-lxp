@@ -270,9 +270,18 @@ class ElevesAjaxDatatableView(AjaxDatatableView):
         AjaxDatatableView.render_row_tools_column_def(),
         {'name': 'id', 'visible': False, }, #quand même visible à l'export pdf
         {'name': 'nom_famille', 'visible': True, },
-        {'name': 'prenoms', 'visible': True, },
         {'name': 'prenom_usage', 'visible': True, },
+        {'name': 'genre', 'visible': False, },
+        {'name': 'prenoms', 'visible': True, },
+        {'name': 'telephone_mobile', 'visible': True, },
+        {'name': 'niveau', 'visible': True, },
+        {'name': 'adresse_mail', 'visible': False, },
         {'name': 'address',  'foreign_field': 'address__locality__state__name', 'visible': True, },
+        {'name': 'spe1', 'm2m_foreign_field': 'spe1__intitule', 'visible': False, },
+        {'name': 'spe2', 'm2m_foreign_field': 'spe2__intitule', 'visible': False, },
+        {'name': 'spe3', 'm2m_foreign_field': 'spe3__intitule', 'visible': False, },
+        {'name': 'lv1', 'visible': False, },
+        {'name': 'lv2', 'visible': False, },
     ]
 
 def table(request, **kwargs):

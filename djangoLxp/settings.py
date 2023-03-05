@@ -23,6 +23,7 @@ MIGRATION_MODULES = {'captcha': 'migrations.captcha', 'address': 'migrations.add
 # Format des numeros de téléphone avec django-phonenumber-field
 PHONENUMBER_DB_FORMAT = 'NATIONAL'
 PHONENUMBER_DEFAULT_REGION = 'FR'
+PHONENUMBER_DEFAULT_FORMAT = 'NATIONAL'
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
