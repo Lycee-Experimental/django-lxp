@@ -1,14 +1,12 @@
 // Fonction permettant de cacher les champs inutiles du resp2
 function HideAncien() {
     if(document.getElementById('ancien').checked) {
-        $("#id_2-niveau_an_passe").prop("disabled", false);
         $("#id_2-gb_an_passe").prop("disabled", false);
         $("#id_2-ecco_an_passe").prop("disabled", false);
         $("#id_2-date_entretien").prop("disabled", true);
         $("#id_2-mee_entretien").prop("disabled", true);
 
     } else {
-        $("#id_2-niveau_an_passe").prop("disabled", true);
         $("#id_2-gb_an_passe").prop("disabled", true);
         $("#id_2-ecco_an_passe").prop("disabled", true);
         $("#id_2-date_entretien").prop("disabled", false);
@@ -18,8 +16,11 @@ function HideAncien() {
 function HideDesco() {
     if(document.getElementById('desco').checked) {
         $("#id_2-etablissement_origine").prop("disabled", true);
+        $("#id_2-niveau_an_passe").prop("disabled", true);
+
     } else {
         $("#id_2-etablissement_origine").prop("disabled", false);
+        $("#id_2-niveau_an_passe").prop("disabled", false);
     }
 }
 // Vérifie id_1-resp2 est à aucun (fonction Hide) après le chargement du document.

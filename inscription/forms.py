@@ -269,10 +269,10 @@ class InscriptionForm3(forms.ModelForm):
             Field('boursier', template="inscription/my_bulma_switch.html"),
             Field('desco', id='desco',template="inscription/my_bulma_switch.html"),
             Field('etablissement_origine', template='inscription/my_select_template.html'),
+            Field('niveau_an_passe',template='inscription/my_select_template.html'),
             Field('ancien', id='ancien', template="inscription/my_bulma_switch.html"),#, wrapper_class="custom-control custom-switch custom-switch-lg",template='inscription/custom-field.html'),
             Field('date_entretien', css_class='input'),
             Field('mee_entretien', template='inscription/my_select_template.html'),
-            Field('niveau_an_passe',template='inscription/my_select_template.html'),
             Field('gb_an_passe',template='inscription/my_select_template.html'),
             Field('ecco_an_passe',template='inscription/my_select_template.html'),
         )
@@ -287,9 +287,9 @@ class InscriptionForm3(forms.ModelForm):
                   'etablissement_origine', 'amenagements', 'date_entretien','mee_entretien', 'desco', 'boursier']
         widgets = {
             'mee_entretien' : autocomplete.ModelSelect2(url='mee',
-                                                        forward=(forward.Const('2023', 'annee'),)),
+                                                        forward=(forward.Const('2022', 'annee'),)),
             'ecco_an_passe': autocomplete.ModelSelect2(url='mee',
-                                                           forward=('gb_an_passe', forward.Const('2023', 'annee'))),
+                                                           forward=('gb_an_passe', forward.Const('2022', 'annee'))),
             'date_entretien': forms.DateInput(format='%Y-%m-%d', attrs={'type': 'date'}),
             'allergies': autocomplete.ModelSelect2Multiple('allergie_auto'),
             'troubles': autocomplete.ModelSelect2Multiple('dys_auto'),
