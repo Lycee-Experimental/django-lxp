@@ -211,7 +211,7 @@ class AutocompleteMEE(autocomplete.Select2QuerySetView):
         gb = self.forwarded.get('gb_an_passe', None)
         annee = self.forwarded.get('annee', '2023')
         if gb:
-            qs = qs.filter(gb__contains={annee: gb})
+            qs = qs.filter(gb__contains={annee: int(gb)})
         if self.q:
             qs = qs.filter(prenom__istartswith=self.q)
         return qs
