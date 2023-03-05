@@ -1,0 +1,35 @@
+[
+  {
+    "model": "inscription.LV",
+    "fields": {
+      "langue": "Anglais",
+      "siecle": {
+        "LVA": "",
+        "LVB": ""
+      },
+      "cyclades": "0002"
+    }
+  },
+  {
+    "model": "inscription.LV",
+    "fields": {
+      "langue": "Espagnol",
+      "siecle": {
+        "LVA": "",
+        "LVB": ""
+      },
+      "cyclades": "0007"
+    }
+  },
+  {
+    "model": "inscription.LV",
+    "fields": {
+      "langue": "Allemand",
+      "siecle": {
+        "LVA": "",
+        "LVB": ""
+      },
+      "cyclades": "0001"
+    }
+  }
+]

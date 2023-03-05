@@ -5,11 +5,11 @@ from phonenumber_field.modelfields import PhoneNumberField
 from .utils import nom_photo, create_hash
 
 GB = (
-    ('G1', 'G1'),
-    ('G2', 'G2'),
-    ('G3', 'G3'),
-    ('G4', 'G4'),
-    ('G5', 'G5'),
+    (1, 'G1'),
+    (2, 'G2'),
+    (3, 'G3'),
+    (4, 'G4'),
+    (5, 'G5'),
 )
 
 class LVManager(models.Manager):
@@ -19,7 +19,7 @@ class LVManager(models.Manager):
 
 class LV(models.Model):
     langue = models.CharField(max_length=10, verbose_name="Langue", unique=True)
-    siecle = models.CharField(max_length=2, verbose_name="Code Siecle")
+    siecle = models.JSONField(verbose_name="Code Siecle", default=dict)
     cyclades = models.CharField(max_length=10, verbose_name="Code Cyclades")
     objects = LVManager()
 
@@ -179,10 +179,10 @@ class MEE(models.Model):
     # nom = models.CharField(max_length=20, verbose_name="Nom")
     prenom = models.CharField(max_length=20, verbose_name="Prénom", unique=True)
     gb = models.JSONField(default=dict)
-    gb_an_passe = models.IntegerField(choices=GB,
-                                      verbose_name="GB de l'an passé", blank=True, null=True)
-    gb_annee_en_cours = models.IntegerField(choices=GB,
-                                            verbose_name="GB de cette année", blank=True, null=True)
+    #gb_an_passe = models.IntegerField(choices=GB,
+    #                                   verbose_name="GB de l'an passé", blank=True, null=True)
+    #gb_annee_en_cours = models.IntegerField(choices=GB,
+    #                                        verbose_name="GB de cette année", blank=True, null=True)
     # email = models.EmailField(verbose_name="Email", max_length=30,  blank=True, null=True)
     # telephone = PhoneNumberField(verbose_name="Téléphone",  blank=True, null=True)
     objects = MeeManager()

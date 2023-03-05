@@ -2,7 +2,7 @@ from django.core.management import call_command
 from django.db import migrations
 
 def forwards_func(apps, schema_editor):
-    fixtures = ['mee', 'sociopro', 'spe', 'pays', 'departement',  'commune', 'etablissement']
+    fixtures = ['mee', 'sociopro', 'spe', 'pays', 'departement',  'commune', 'etablissement', 'lv']
     for fixture in fixtures:
         try:
             call_command('loaddata', fixture, verbosity=2)

@@ -4,8 +4,7 @@
   "pk": 1,
   "fields": {
     "prenom": "Davy",
-    "gb_an_passe": 3,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 3}
   }
 },
 {
@@ -13,8 +12,7 @@
   "pk": 2,
   "fields": {
     "prenom": "Marie",
-    "gb_an_passe": 5,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 5}
   }
 },
 {
@@ -22,8 +20,7 @@
   "pk": 3,
   "fields": {
     "prenom": "Adèle",
-    "gb_an_passe": 5,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 5}
   }
 },
 {
@@ -31,8 +28,7 @@
   "pk": 4,
   "fields": {
     "prenom": "Benjamin",
-    "gb_an_passe": 1,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 1}
   }
 },
 {
@@ -40,8 +36,7 @@
   "pk": 5,
   "fields": {
     "prenom": "Clémentine",
-    "gb_an_passe": 1,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 1}
   }
 },
 {
@@ -49,8 +44,7 @@
   "pk": 6,
   "fields": {
     "prenom": "Fanny",
-    "gb_an_passe": 4,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 4}
   }
 },
 {
@@ -58,8 +52,7 @@
   "pk": 7,
   "fields": {
     "prenom": "Flora",
-    "gb_an_passe": 4,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 4}
    }
 },
 {
@@ -67,8 +60,7 @@
   "pk": 8,
   "fields": {
     "prenom": "Jean-Noel",
-    "gb_an_passe": 5,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 5}
   }
 },
 {
@@ -76,8 +68,7 @@
   "pk": 9,
   "fields": {
     "prenom": "Julie",
-    "gb_an_passe": 2,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 2}
   }
 },
 {
@@ -85,8 +76,7 @@
   "pk": 10,
   "fields": {
     "prenom": "Maude",
-    "gb_an_passe": 3,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 3}
   }
 },
 {
@@ -94,8 +84,7 @@
   "pk": 11,
   "fields": {
     "prenom": "Maria Sathya",
-    "gb_an_passe": 3,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 3}
   }
 },
 {
@@ -103,8 +92,7 @@
   "pk": 12,
   "fields": {
     "prenom": "Mikaël",
-    "gb_an_passe": 4,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 4}
   }
 },
 {
@@ -112,8 +100,7 @@
   "pk": 13,
   "fields": {
     "prenom": "Nathalie",
-    "gb_an_passe": 1,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 1}
   }
 },
 {
@@ -121,8 +108,7 @@
   "pk": 14,
   "fields": {
     "prenom": "Ludmir",
-    "gb_an_passe": 2,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 2}
   }
 },
 {
@@ -130,8 +116,7 @@
   "pk": 15,
   "fields": {
     "prenom": "Renaud",
-    "gb_an_passe": 5,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 5}
   }
 },
 {
@@ -139,8 +124,7 @@
   "pk": 16,
   "fields": {
     "prenom": "Valentin",
-    "gb_an_passe": 2,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 2}
   }
 },
 {
@@ -148,8 +132,7 @@
   "pk": 17,
   "fields": {
     "prenom": "Enoch",
-    "gb_an_passe": 4,
-    "gb_annee_en_cours": null
+    "gb": {"2022": 4}
   }
 }
 ]
