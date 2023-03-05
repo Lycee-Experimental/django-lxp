@@ -117,12 +117,11 @@ class FormulaireInscription(SessionWizardView):
         # On sauvegarde les données
         self.instance.save()
         form_data = [form.cleaned_data for form in form_list]
-        print (form_data)
-        for value in form_data[3]['spe1']:
+        for value in form_data[3]['spe1'] or []:
             self.instance.spe1.add(value)
-        for value in form_data[3]['spe2']:
+        for value in form_data[3]['spe2'] or []:
             self.instance.spe2.add(value)  
-        for value in form_data[3]['spe3']:
+        for value in form_data[3]['spe3'] or []:
             self.instance.spe3.add(value)  
         #form_data_dict = self.get_all_cleaned_data()
         #Nécessaire de sauvegarder les manyToMany différemment
