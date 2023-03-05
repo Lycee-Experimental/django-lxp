@@ -54,9 +54,8 @@ def fiche_pdf(request, **kwargs):
     id=kwargs['id']
     hash=kwargs['hash']
     eleve = get_object_or_404(BaseEleve, id=id, hash=hash)
-    html = render_to_string("inscription/fiche_inscription.html", {
-        'fiche': eleve,
-    })
+    html = render_to_string("inscription/fiche_inscription.html",
+                            {'fiche': eleve,}, request=request)
     pdf=generate_pdf(html)
     response = HttpResponse(pdf, content_type="application/pdf")
     response['Content-Disposition'] = "inline; filename=fiche-{name}-{date}.pdf".format(

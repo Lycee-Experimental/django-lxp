@@ -20,6 +20,8 @@ CSRF_TRUSTED_ORIGINS = ['http://127.0.0.1', 'https://127.0.0.1',]
 
 MIGRATION_MODULES = {'captcha': 'migrations.captcha', 'address': 'migrations.address', 'inscription': 'migrations.inscription'}
 
+USE_X_FORWARDED_HOST = True
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # Format des numeros de téléphone avec django-phonenumber-field
 PHONENUMBER_DB_FORMAT = 'NATIONAL'
 PHONENUMBER_DEFAULT_REGION = 'FR'

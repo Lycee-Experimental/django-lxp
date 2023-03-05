@@ -17,7 +17,6 @@
         }
     </style>
 {% endblock stylesheet %}
-{% comment %}      <link href="{% static 'css/fiche_inscription.css' %}" rel="stylesheet">     {%  endcomment %}
 {% block head-javascript %}
 
 {% endblock %}
@@ -35,7 +34,7 @@
                                 <p class="title is-3">({{ fiche.genre }})</p>
 
                                 <figure class="image">
-                                        <img  class="is-rounded" src="{{ fiche.photo.url }}" alt="Placeholder image">
+                                        <img  class="is-rounded" src="{{ request.scheme }}://{{ request.get_host }}{{ fiche.photo.url }}" alt="Placeholder image">
                                 </figure>
                             </div>
                             <div class="column">
@@ -114,7 +113,7 @@
                             </div>
                             <div class="column is-narrow">
                                 <figure class="image is-128x128 is-pulled-right">
-                                    <img src="{% static 'logolxp-nb.svg' %}" alt="Placeholder image">
+                                    <img src="{{ request.scheme }}://{{ request.get_host }}{% static 'logolxp-nb.svg' %}" alt="Placeholder image">
                                 </figure>
                             </div>
                         </div>
