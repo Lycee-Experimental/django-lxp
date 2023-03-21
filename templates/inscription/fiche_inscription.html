@@ -34,7 +34,7 @@
                                 <p class="title is-3">({{ fiche.genre }})</p>
 
                                 <figure class="image">
-                                        <img  class="is-rounded" src="{{ request.scheme }}://{{ request.get_host }}{{ fiche.photo.url }}" alt="Placeholder image">
+                                        <img  class="is-rounded" src="{{ request.scheme }}://{{ request.get_host }}{% if fiche.photo %}{{ fiche.photo.url }}{% else %}/static/images/anonym.jpg"{% endif %}" alt="Placeholder image">
                                 </figure>
                             </div>
                             <div class="column">
@@ -417,7 +417,7 @@
                     <div class="title is-3">
                         <p>Engagement de l'élève</p>
                     </div>
-                    <p class="is-size-5">Je sousigné {% if fiche.prenom_usage %}{{ fiche.prenom_usage|title }}{% else %}{{ fiche.prenoms|title }}, déclare avoir lu le projet d'établissement et m'inscrire au lycée expérimental pour participer à sa mise en oeuvre.</p>
+                    <p class="is-size-5">Je sousigné {% if fiche.prenom_usage %}{{ fiche.prenom_usage|title }}{% else %}{{ fiche.prenoms|title }}{% endif %}, déclare avoir lu le projet d'établissement et m'inscrire au lycée expérimental pour participer à sa mise en oeuvre.</p>
                     <p class="is-size-5">"Lu et approuvé", date et signature.</p>
                 </div>
         </div>
@@ -426,7 +426,7 @@
                     <div class="title is-3">
                         <p>Engagement du responsable</p>
                     </div>
-                    <p class="is-size-5">Je sousigné {{ fiche.prenom_resp1|title}} {{ fiche.nom_resp1|upper }}, déclare avoir pris connaissance du projet d'établissement et accepter que {% if fiche.prenom_usage %}{{ fiche.prenom_usage|title }}{% else %}{{ fiche.prenoms|title }} s'inscrive au Lycée Expérimental.</p>
+                    <p class="is-size-5">Je sousigné {{ fiche.prenom_resp1|title}} {{ fiche.nom_resp1|upper }}, déclare avoir pris connaissance du projet d'établissement et accepter que {% if fiche.prenom_usage %}{{ fiche.prenom_usage|title }}{% else %}{{ fiche.prenoms|title }}{% endif %} s'inscrive au Lycée Expérimental.</p>
                     <p class="is-size-5">"Lu et approuvé", date et signature.</p>
                     <br><br><br><br><br><br><br><br>
                 </div>
